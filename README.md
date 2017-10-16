@@ -1,2 +1,7 @@
-# fara.github.io
-Fara website for CS 353 project
+## CS 353 Course Project
+
+#Team:<br />
+-Figali Taho <br />
+-Dias Alymbekov <br />
+-Elena Cina <br />
+-Erkam Berker Senol <br />
