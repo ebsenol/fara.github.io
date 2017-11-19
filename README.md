@@ -5,3 +5,7 @@ Team:<br />
 -Dias Alymbekov <br />
 -Elena Cina <br />
 -Erkam Berker Senol <br />
+
+## Reports
+
+[Project proposal report](https://github.com/ebsenol/fara.github.io/blob/master/database-proposal.pdf)
