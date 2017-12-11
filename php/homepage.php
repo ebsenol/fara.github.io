@@ -34,7 +34,8 @@
 	echo "</br>";
 	echo "<table class='table table-striped' style='width:95%'; align = 'center';  align='center' cellpadding='10'>";
 	echo "<thead class='thead-inverse'>";
-	echo 	"<th style='padding: 10px' > Title</th>".
+	echo 	"<th style='padding: 10px' > Votes</th>".
+			"<th style='padding: 10px' > Title</th>".
 			"<th style='padding: 10px'> Date </th>".
 			"<th style='padding: 10px'> Category</th>".
 			"<th style='padding: 10px'> Topic</th>".
@@ -43,15 +44,34 @@
 		 "</tr>".
 		 "</thead>";
 	echo "<tbody>";
+	$voteIdCount = 0;
 	foreach($res_array as $req)
 	{
 		echo "<tr>";
-		echo "<td  width='70%' style='padding: 10px'>".
-		"<a href='viewcontent.php?id=". $req['cont_id'] ."'>" .$req['post_title']. " </a></td>";
-		
-				//	"<a href='profile.php?account_id=".$req['account_ID']. "'>" .$req['name']. " " .$req['surname']. "</a></td>";
-					
-					
+
+		$voteIdCount++;
+		$sql =  "SELECT ".
+					"(SELECT count(*) " .
+					"FROM Vote  ".
+					"WHERE vote = true AND cont_id = " .$req['cont_id']. " ) - ".
+					"(SELECT count(*) " .
+					"FROM Vote  ".
+					"WHERE vote != true AND cont_id = " .$req['cont_id']. " ) AS dif;";
+
+		$result = mysqli_query($db, $sql);
+		$res_arr =  mysqli_fetch_array($result);
+		$vote = $res_arr['dif'];
+		// echo $result['dif'];
+
+      	echo "<td  width='10%' style='padding:0px''> ".
+      			"<div id='vote".$voteIdCount."' class = 'upvote upvote-programmers' > ".
+      				"<a class='upvote'></a> ".
+      				"<span class='count'>".$vote."</span> ".
+      				"<a class='downvote'></a> ".
+      			"</div>";
+
+		echo "<td  width='60%'  style='padding: 10px'>".
+		"<a href='viewcontent.php?id=". $req['cont_id'] ."'>" .$req['post_title']. " </a></td>";	
 		echo "<td  width='6%' align = 'center' style='padding: 10px'>". ($req['timestamp']) . "</td>";
 		echo "<td  width='8%' align = 'center' style='padding: 10px'>". ($req['category_name']) . "</td>";
 		echo "<td   width='8%' align = 'center' style='padding: 10px'>". ($req['belongs']) . "</td>";
@@ -82,7 +102,6 @@
 	<link rel="stylesheet" href="/css/upvote/jquery.upvote.css" type="text/css" media="screen">
 	<script type="text/javascript" src="/css/upvote/jquery.upvote.js"></script>
 
-	
 	<script type="text/javascript" src="/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
 	<link rel="stylesheet" href="/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
 	<title>CnC</title>
@@ -104,7 +123,7 @@
 
 		<div id="navbar" class="navbar-collapse collapse">
 		<ul class="nav navbar-nav">
-			<li class ="active"><a href="index.php">Home</a></li>
+			<li class ="active"><a href="homepage.php">Home</a></li>
 			<li <input type="text" name="search" placeholder="Search.."> </li> 
 			<li class="dropdown">
 				<a class="dropdown-toggle" data-toggle="dropdown" href="#">Categories
@@ -126,45 +145,54 @@
 
 						}
 					 ?>
-        </ul>
-      </li>
-	  <ul class="dropdown-menu">
-    <li><a href="#">HTML</a></li>
-    <li><a href="#">CSS</a></li>
-    <li><a href="#">JavaScript</a></li>
-  </ul>
-
-
+				</ul>
+			</li>
+			<li onclick="addCategory()" class ="active"><a href="homepage.php"><b>+</b> Add Category</a></li>
      </ul>
-     <ul class="nav navbar-nav navbar-right">
-		<li
-			<form class="navbar-form navbar-left" role="search">
-			<div class="form-group">
-				<input type="text" class="form-control" placeholder="Search">
-			</div>
-			<button type="submit" class="btn btn-default">
-				<span class="glyphicon glyphicon-search"></span>
-			</button>
-			</form>
-		</li>
-		<li> <p class="navbar-text"> Logged in as <?php echo "berku" ?>,  </p></li>
-		<li><a href="logout.php">Log out</a></li>
+	     <ul class="nav navbar-nav navbar-right">
+			<li
+				<form class="navbar-form navbar-left" role="search">
+				<div class="form-group">
+					<input type="text" class="form-control" placeholder="Search">
+				</div>
+				<button type="submit" class="btn btn-default">
+					<span class="glyphicon glyphicon-search"></span>
+				</button>
+				</form>
+			</li>
+			<li> <p class="navbar-text"> Logged in as <?php echo "berku" ?>,  </p></li>
+			<li><a href="logout.php">Log out</a></li>
 
-     </ul>
-</div>
-</div>
+	     </ul>
+	</div>
+	</div>
 </nav>
 
-	 <div id="demo1" class="upvote upvote-serverfault">
-		<a class="upvote"></a>
-		<span class="count">6</span>
-		<a class="downvote"></a>
-		</div> 
 		
-		<script> 
-			$('#demo1').click(upvote({count: 5, upvoted: 1}));
+		<script>
+		function addCategory() {
+			var person = prompt("Please enter the category you want to create:", "");
+			if (person != null) {
+				document.getElementById("demo").innerHTML =
+				"Hello " + person + "! How are you today?";
+			}
+		}
 		</script>
 		
+		
+
+					
+		
+		<script>
+			$('#vote1').upvote();
+			$('#vote2').upvote();
+			$('#vote3').upvote();
+
+		</script>
+		
+	
+
+
 		</body>
 </html>
 <?php ob_end_flush(); ?>
