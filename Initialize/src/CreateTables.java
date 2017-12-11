@@ -66,18 +66,6 @@ public class CreateTables {
             stmt.executeUpdate(sql);
             System.out.println("Admin created!");
 
-
-            //MODERATOR
-            sql = "CREATE TABLE Moderator (" +
-                    "username VARCHAR(32) PRIMARY KEY," +
-                    "password VARCHAR(32) NOT NULL," +
-                    "email_address VARCHAR(32) NOT NULL," +
-                    "joined_date DATE) ENGINE = InnoDB;";
-
-            stmt.executeUpdate(sql);
-            System.out.println("Moderator created!");
-
-
             //CONTENT
             sql = "CREATE TABLE Content (" +
                     "cont_id  INT AUTO_INCREMENT PRIMARY KEY, "+
@@ -91,6 +79,13 @@ public class CreateTables {
             stmt.executeUpdate(sql);
             System.out.println("Content created!");
 
+            //CATEGORY
+            sql = "CREATE TABLE Category ("+
+                    "name VARCHAR(100) PRIMARY KEY) ENGINE = InnoDB;";
+
+            stmt.executeUpdate(sql);
+            System.out.println("Category created!");
+
 
             //TOPIC
             sql = "CREATE TABLE Topic ("+
@@ -98,6 +93,18 @@ public class CreateTables {
 
             stmt.executeUpdate(sql);
             System.out.println("Topic created!");
+
+            //MODERATOR
+            sql = "CREATE TABLE Moderator (" +
+                    "username VARCHAR(32) PRIMARY KEY," +
+                    "password VARCHAR(32) NOT NULL," +
+                    "email_address VARCHAR(32) NOT NULL," +
+                    "joined_date DATE,"+
+                    "category_name VARCHAR(100),"+
+                    "FOREIGN KEY (category_name) REFERENCES Category(name))ENGINE = InnoDB;";
+
+            stmt.executeUpdate(sql);
+            System.out.println("Moderator created!");
 
 
             // POST
@@ -113,25 +120,20 @@ public class CreateTables {
             System.out.println("Post created!");
 
 
+            //COMMENT
             sql = "CREATE TABLE Comment (" +
                     "cont_id INT NOT NULL," +
                     "username VARCHAR(32) NOT NULL," +
                     "dst_cont_id INT," +
+                    "timestamp DATE,"+
+                    "comment VARCHAR(800) NOT NULL,"+
                     "PRIMARY KEY (cont_id, username)," +
-                    "FOREIGN KEY (cont_id) REFERENCES Content(cont_id)," +
+                    //"FOREIGN KEY (cont_id) REFERENCES Content(cont_id)," +
                     "FOREIGN KEY (dst_cont_id) REFERENCES Content(cont_id)," +
                     "FOREIGN KEY (username) REFERENCES User(username)) ENGINE = InnoDB;";
 
             stmt.executeUpdate(sql);
             System.out.println("Comment created!");
-
-
-            //CATEGORY
-            sql = "CREATE TABLE Category ("+
-                    "name VARCHAR(100) PRIMARY KEY) ENGINE = InnoDB;";
-
-            stmt.executeUpdate(sql);
-            System.out.println("Category created!");
 
 
             //MESSAGE
@@ -163,7 +165,7 @@ public class CreateTables {
             sql = "CREATE TABLE Vote ("+
                     "username varchar(32) NOT NULL,"+
                     "cont_id INT NOT NULL,"+
-                    //"vote BOOLEAN NOT NULL,"+
+                    "vote BOOLEAN NOT NULL,"+
                     "PRIMARY KEY(username, cont_id),"+
                     "FOREIGN KEY (username) REFERENCES User(username),"+
                     "FOREIGN KEY (cont_id) REFERENCES Content(cont_id))ENGINE = InnoDB;";

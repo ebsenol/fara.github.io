@@ -92,6 +92,12 @@ public class InsertEntries {
             sql = "INSERT INTO Banned VALUES ('toxic', 'Science');";
             stmt.executeUpdate(sql);
 
+            //Add votes
+            sql = "INSERT INTO Vote VALUES ('berku',1231, True);";
+            stmt.executeUpdate(sql);
+            sql = "INSERT INTO Vote VALUES ('dias',1231, True);";
+            stmt.executeUpdate(sql);
+
             System.out.println("\n\nAll tables are created!");
         } catch (SQLException e) {
         throw new IllegalStateException( e.getMessage(), e);
