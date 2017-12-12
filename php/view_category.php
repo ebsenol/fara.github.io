@@ -5,24 +5,23 @@
 	
 	//set to 1 if user logged in, 0 if guest mode
 	$usermode = 1;
-
 	if ( !isset($_SESSION['user']))
 	{
 		//guest mode
 		$usermode = 0;
-		$username = "";
+		$username = -1;
 	}
 	else{
 		$username = $_SESSION['user'];
-		
 	}
+
+	$category = $_GET["category"];
 	
 	$sql =  "SELECT * " .
 			"FROM Post AS P, Content AS C, Category_Topic AS CT  ".
-			"WHERE P.cont_id = C.cont_id AND P.belongs = CT.topic_name ".
+			"WHERE P.cont_id = C.cont_id AND P.belongs = CT.topic_name AND CT.category_name = '".$category."'".
 			"ORDER BY P.post_title 	".
 			"LIMIT 10;";
-	
 	$result = mysqli_query($db, $sql);
 	$res_array = array();
 
@@ -81,8 +80,7 @@
 	echo"</tbody>";
 	echo '</table></p></br></br>';
 
-?>
-
+	?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -103,11 +101,10 @@
 
 	<script type="text/javascript" src="/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
 	<link rel="stylesheet" href="/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
-	<title>Fara</title>
+	<title>reditula</title>
 
 </head>
 <body style="padding-top: 65px;">
-   <!-- Fixed navbar -->
    <nav id="navbarmain"  class="navbar navbar-inverse navbar-fixed-top">
        <div class="container">
          <div class="navbar-header">
@@ -140,11 +137,7 @@
 								
 							foreach($res_array as $req)
 							{
-								$catName = $req['name'];
-								echo "<li><a href='view_category.php?'>". ($catName) . "</a></li>";
-
-								//echo "<li><a href='view_category.php?category='".($catName)."'>". ($catName) . "</a></li>";
-
+								echo "<li><a href='view_category.php'>". ($req['name']) . "</a></li>";
 
 							}
 						 ?>
@@ -163,7 +156,7 @@
 					</button>
 					</form>
 				</li>
-				<li> <p class="navbar-text"> <?php if ($usermode == 1) echo "Logged in as ".$username.""; else echo "Guest"; ?>  </p></li>
+				<li> <p class="navbar-text"> Logged in as <?php echo "berku" ?>,  </p></li>
 				<li><a href="logout.php">Log out</a></li>
 
 		     </ul>
@@ -171,7 +164,12 @@
 		</div>
 	</nav>
 
-		
+		<script>
+		$.get("homepage.php", function(data){
+		    $("#navbarmain").replaceWith(data);
+		});
+		</script>
+
 		<script>
 		function addCategory() {
 			var person = prompt("Please enter the category you want to create:", "");
@@ -181,17 +179,17 @@
 			}
 		}
 		</script>
-		
+		<div id="nav-placeholder">
+
+			</div>
+
+			<script>
+			$(function(){
+			  $("#navbarmain").load("homepage.php");
+			});
+			</script>
 		
 
-					
-		
-		<script>
-			$('#vote1').upvote();
-			$('#vote2').upvote();
-			$('#vote3').upvote();
-
-		</script>
 		
 	
 
