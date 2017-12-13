@@ -29,7 +29,7 @@
 		while($row = mysqli_fetch_array($result))
 			array_push($res_array, $row);
 
-	echo "<h2 align='center'><b> Most recent posts: </b></h2>";
+	echo "<h2 align='center'><b> ".$category.": </b></h2>";
 	echo "</br>";
 	echo "<table class='table table-striped' style='width:95%'; align = 'center';  align='center' cellpadding='10'>";
 	echo "<thead class='thead-inverse'>";
@@ -68,12 +68,15 @@
       				"<span class='count'>".$vote."</span> ".
       				"<a class='downvote'></a> ".
       			"</div>";
+		echo "<script> $('#vote".$voteIdCount."').upvote(); </script>"; 	
 
 		echo "<td  width='60%'  style='padding: 10px'>".
 		"<a href='viewcontent.php?id=". $req['cont_id'] ."'>" .$req['post_title']. " </a></td>";	
 		echo "<td  width='6%' align = 'center' style='padding: 10px'>". ($req['timestamp']) . "</td>";
-		echo "<td  width='8%' align = 'center' style='padding: 10px'>". ($req['category_name']) . "</td>";
-		echo "<td   width='8%' align = 'center' style='padding: 10px'>". ($req['belongs']) . "</td>";
+		echo "<td  width='8%' align = 'center' style='padding: 10px'>".
+		"<a href='view_category.php?category=". $req['category_name'] ."'>". ($req['category_name']) . "</td>";
+		echo "<td   width='8%' align = 'center' style='padding: 10px'>".
+		"<a href='view_topic.php?topic=". $req['belongs'] ."'>". ($req['belongs']) . "</td>";
 		echo "<td   width='8%' align = 'center' style='padding: 10px'>". ($req['username']) . "</td>";
 		echo "</tr>";
 	}
@@ -105,6 +108,15 @@
 
 </head>
 <body style="padding-top: 65px;">
+  <!-- Initialize vote buttons -->
+	<?php 
+		$counter = 0;
+		while ($counter <= $voteIdCount){
+			$counter++;
+			echo "<script type='text/javascript'> $('#vote".$counter."').upvote();</script>";
+		}	
+	?>
+   <!-- Fixed navbar -->
    <nav id="navbarmain"  class="navbar navbar-inverse navbar-fixed-top">
        <div class="container">
          <div class="navbar-header">
@@ -137,9 +149,9 @@
 								
 							foreach($res_array as $req)
 							{
-								echo "<li><a href='view_category.php'>". ($req['name']) . "</a></li>";
-
-							}
+								$catName = $req['name'];
+								echo "<li><a href='view_category.php?category=".$catName."'>". ($catName) . "</a></li>";
+         					}
 						 ?>
 						</ul>
 				</li>
@@ -156,39 +168,22 @@
 					</button>
 					</form>
 				</li>
-				<li> <p class="navbar-text"> Logged in as <?php echo "berku" ?>,  </p></li>
-				<li><a href="logout.php">Log out</a></li>
+				<li> <p class="navbar-text"> <?php if ($usermode == 1) echo "Logged in as ".$username.""; else echo "Guest"; ?>  </p></li>
+				<?php if ($usermode == 1) echo "<li><a href='logout.php'>Log out</a></li>"; ?>
+				
 
 		     </ul>
 			</div>
 		</div>
 	</nav>
 
-		<script>
-		$.get("homepage.php", function(data){
-		    $("#navbarmain").replaceWith(data);
-		});
-		</script>
 
 		<script>
 		function addCategory() {
-			var person = prompt("Please enter the category you want to create:", "");
-			if (person != null) {
-				document.getElementById("demo").innerHTML =
-				"Hello " + person + "! How are you today?";
-			}
+			//todo
 		}
 		</script>
-		<div id="nav-placeholder">
 
-			</div>
-
-			<script>
-			$(function(){
-			  $("#navbarmain").load("homepage.php");
-			});
-			</script>
-		
 
 		
 	

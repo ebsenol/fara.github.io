@@ -5,24 +5,30 @@
 	
 	//set to 1 if user logged in, 0 if guest mode
 	$usermode = 1;
-
 	if ( !isset($_SESSION['user']))
 	{
 		//guest mode
 		$usermode = 0;
-		$username = "";
+		$username = -1;
 	}
 	else{
 		$username = $_SESSION['user'];
-		
 	}
+
+	$topic = $_GET["topic"];
 	
+	$sql =  "SELECT category_name " .
+			"FROM Category_Topic  ".
+			"WHERE topic_name = '".$topic."'";
+		
+	$result = mysqli_query($db, $sql);	
+	$category =implode(" ",mysqli_fetch_assoc($result));
+
 	$sql =  "SELECT * " .
 			"FROM Post AS P, Content AS C, Category_Topic AS CT  ".
-			"WHERE P.cont_id = C.cont_id AND P.belongs = CT.topic_name ".
+			"WHERE P.cont_id = C.cont_id AND P.belongs = CT.topic_name AND CT.topic_name = '".$topic."'".
 			"ORDER BY P.post_title 	".
 			"LIMIT 10;";
-	
 	$result = mysqli_query($db, $sql);
 	$res_array = array();
 
@@ -30,7 +36,7 @@
 		while($row = mysqli_fetch_array($result))
 			array_push($res_array, $row);
 
-	echo "<h2 align='center'><b> Most recent posts: </b></h2>";
+	echo "<h2 align='center'><b>".$category."/".$topic.": </b></h2>";
 	echo "</br>";
 	echo "<table class='table table-striped' style='width:95%'; align = 'center';  align='center' cellpadding='10'>";
 	echo "<thead class='thead-inverse'>";
@@ -62,15 +68,12 @@
 		$res_arr =  mysqli_fetch_array($result);
 		$vote = $res_arr['dif'];
 
-      	echo "<td  width='10%' style='padding:0px''> ".
+ 	echo "<td  width='10%' style='padding:0px''> ".
       			"<div id='vote".$voteIdCount."' class = 'upvote upvote-programmers' > ".
       				"<a class='upvote'></a> ".
       				"<span class='count'>".$vote."</span> ".
       				"<a class='downvote'></a> ".
       			"</div>";
-
-		//activate vote button
-		//echo "<script type='text/javascript'> $('#vote".$voteIdCount."').upvote(); </script>"; 	
 
 		echo "<td  width='60%'  style='padding: 10px'>".
 		"<a href='viewcontent.php?id=". $req['cont_id'] ."'>" .$req['post_title']. " </a></td>";	
@@ -83,10 +86,9 @@
 		echo "</tr>";
 	}
 	echo"</tbody>";
-	echo '</table></p></br></br>';
+	echo '</table></p></br></br>';	
 
-?>
-
+	?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -107,12 +109,11 @@
 
 	<script type="text/javascript" src="/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
 	<link rel="stylesheet" href="/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
-	<title>Fara</title>
+	<title>reditula</title>
 
 </head>
 <body style="padding-top: 65px;">
-   
-   <!-- Initialize vote buttons -->
+ <!-- Initialize vote buttons -->
 	<?php 
 		$counter = 0;
 		while ($counter <= $voteIdCount){
@@ -181,17 +182,27 @@
 		</div>
 	</nav>
 
-		
+
+	<?php
+		echo "<div class='container'> ".
+		  "<h3>Post</h3> ".
+		  "<a href='postapost.php?category=".$category."&topic=".$topic."' style='margin-right: 30px' class='btn btn-info' role='button'>Text post</a> " .
+		  "<a href='postalink.php?category=".$category."&topic=".$topic."' style='margin-right: 30px' class='btn btn-info' role='button'>Link post</a> " .
+		"</div>";
+	?>
+
+
 		<script>
 		function addCategory() {
-			var person = prompt("Please enter the category you want to create:", "");
-			if (person != null) {
-				document.getElementById("demo").innerHTML =
-				"Hello " + person + "! How are you today?";
-			}
+			//todo
 		}
 		</script>
+
+
 		
+	
+
+
 		</body>
 </html>
 <?php ob_end_flush(); ?>
