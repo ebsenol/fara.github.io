@@ -6,17 +6,16 @@
 	//set to 1 if user logged in, 0 if guest mode
 	$usermode = 1;
 
-	if ( !isset($_SESSION['user']))
+	if ( !isset($_SESSION['username']))
 	{
 		//guest mode
 		$usermode = 0;
 		$username = "";
 	}
 	else{
-		$username = $_SESSION['user'];
-		
+		$username = $_SESSION['username'];		
 	}
-	$username = "berku";
+
 	$sql =  "SELECT * " .
 			"FROM Post AS P, Content AS C, Category_Topic AS CT  ".
 			"WHERE P.cont_id = C.cont_id AND P.belongs = CT.topic_name ".
@@ -45,7 +44,9 @@
 		 "</thead>";
 	echo "<tbody>";
 	$voteIdCount = 0;
-	$from = "homepage.php?username=".$username."";
+	$from = "homepage.php";
+	$_SESSION['username'] = $username; //start session
+
 	foreach($res_array as $req)
 	{
 		echo "<tr>";
@@ -136,6 +137,7 @@
 	        header("location: congrats.php");
 	    }
     }
+    
 
 ?>
 

@@ -1,4 +1,23 @@
 
+<?php
+	include_once 'dbconnect.php';
+	session_start();
+	ob_start();
+	$username = $_SESSION['username'];		
+	$topic = $_SESSION["topic"];
+
+	if( isset($_POST['btn-post']) ) { 
+		$title = $_POST['title'];
+		$link = $_POST['text'];
+		$sql = "INSERT INTO Content VALUES (NULL, now(), '".$text."', 'post', '".$username."', 0);";
+		$res = mysqli_query($db,$sql);
+		$sql = "INSERT INTO Post VALUES (LAST_INSERT_ID(), '".$title."', 'link', '".$topic."');";
+		$res = mysqli_query($db,$sql);
+		header("location: homepage.php");
+	}
+	
+	$category = $_GET["category"];
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -35,30 +54,24 @@
 
 	  
 	  	echo "<p><i>Posting to ".$category." / ".$topic."</i></p>";
-	  	echo "<form action='addlinkpost_todb.php?category=".$category."&topic=".$topic."' method='post' onsubmit='return isValid()'>";
 	  ?>
-	    <div class="form-group" method="get" >
+	 <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" autocomplete="off">
+	    <div class="form-group">
 	      <label for="title">Title:</label>
-	      <input type="text" id="title" class="form-control" >
+	      <input type="text" name="title" class="form-control" >
 	    </div>
 	    <div class="form-group">
 	      <label for="url">Url:</label>
-	      <input type="text" id="link" class="form-control" >
+	      <input type="text" name="link" class="form-control" >
 	    </div>
 
-	   <div class="container"> 
-	    <input id="Submit" value="Submit" type="submit" style="margin-right: 30px">	    	  	    
-		</div>
-		
+		<div class="form-group">
+		<?php
+			echo  "<button type='post' class='btn btn-primary center-block'  name='btn-post'}>Post</button>";
+		?>
+		</div>		
 
 	  </form>
-	<?php
-		/*echo "<div class='container'> ".
-		  "<a href='postapost.php?category=".$category."&topic=".$topic."' style='margin-right: 30px' onClick='isValid()' " .
-		  																"	class='btn btn-info' role='button'>Submit</a> " .
-		  "<a href='view_topic.php?topic=".$topic."' style='margin-right: 30px' class='btn btn-info' role='button'>Back</a> " .
-		"</div>";*/
-	?>
 	</div>
 	
 	<script>

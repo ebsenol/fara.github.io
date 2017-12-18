@@ -1,5 +1,23 @@
 
+<?php
+	include_once 'dbconnect.php';
+	session_start();
+	ob_start();
+	$username = $_SESSION['username'];		
+	$topic = $_SESSION["topic"];
 
+	if( isset($_POST['btn-post']) ) { 
+		$title = $_POST['title'];
+		$text = $_POST['text'];
+		$sql = "INSERT INTO Content VALUES (NULL, now(), '".$text."', 'post', '".$username."', 0);";
+		$res = mysqli_query($db,$sql);
+		$sql = "INSERT INTO Post VALUES (LAST_INSERT_ID(), '".$title."', 'text', '".$topic."');";
+		$res = mysqli_query($db,$sql);
+		header("location: homepage.php");
+	}
+	
+	$category = $_GET["category"];
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,6 +27,11 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+		
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -25,8 +48,6 @@
 <body style="padding-top: 65px;">	
 	<div class="container">
 	  <?php
-	  	$topic = $_GET["topic"];
-		$category = $_GET["category"];
 
 	  	echo "<a href='view_topic.php?topic=".$topic."' class='btn btn-info'> Go back</a>";
 	  	echo "<br>";
@@ -35,21 +56,24 @@
 
 	  
 	  	echo "<p><i>Posting to ".$category." / ".$topic."</i></p>";
-	  	echo "<form action='addlinkpost_todb.php?category=".$category."&topic=".$topic."' method='post' onsubmit='return isValid()'>";
+	  	//echo "<form action='addlinkpost_todb.php?category=".$category."&topic=".$topic."' method='post' onsubmit='return isValid()'>";
 	  ?>
-	    <div class="form-group" method="get" >
+	  <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" autocomplete="off">
+
+	    <div class="form-group" >
 	      <label for="title">Title:</label>
-	      <input type="text" id="title" class="form-control" >
+	      <input type="text" name="title" class="form-control">
 	    </div>
 	    <div class="form-group">
 	      <label for="text">Text:</label>
-	       <textarea class="form-control" id="text" rows="5" id="comment"></textarea>
+	       <textarea class="form-control" name="text" rows="5" id="comment"></textarea>
 	    </div>
 
-	   <div class="container"> 
-	    <input id="Submit" value="Submit" type="submit" style="margin-right: 30px">	    	  	    
-		</div>
-		
+		<div class="form-group">
+		<?php
+			echo  "<button type='post' class='btn btn-primary center-block'  name='btn-post'}>Post</button>";
+		?>
+		</div>		
 
 	  </form>
 

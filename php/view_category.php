@@ -5,16 +5,15 @@
 	
 	//set to 1 if user logged in, 0 if guest mode
 	$usermode = 1;
-	if ( !isset($_SESSION['user']))
+	if ( !isset($_SESSION['username']))
 	{
 		//guest mode
 		$usermode = 0;
 		$username = -1;
 	}
 	else{
-		$username = $_SESSION['user'];
+		$username = $_SESSION['username'];
 	}
-	$username = "berku";
 	$category = $_GET["category"];
 	
 	$sql =  "SELECT * " .
