@@ -8,7 +8,7 @@ public class InsertEntries {
     public static void main(String[] args) {
         String url = "jdbc:mysql://localhost:3306/cs353db";
         String username = "root";
-        String password = "";
+        String password = "figalA!1";
 
         try (Connection con = DriverManager.getConnection(url, username, password)) {
             System.out.println("Connected!");
@@ -69,9 +69,9 @@ public class InsertEntries {
             stmt.executeUpdate(sql);
 
             //Add moderator
-            sql = "INSERT INTO Moderator VALUES ('messici', '123123', 'messi@barca.com', '2017-11-11','Sports');";
+            sql = "INSERT INTO Moderator VALUES ('messici', '123123', 'messi@barca.com', '2017-11-11', 'asdfgh', 'Sports');";
             stmt.executeUpdate(sql);
-            sql = "INSERT INTO Moderator VALUES ('darwin', '123123', 'adnan@oktar.com', '2017-11-11','Science');";
+            sql = "INSERT INTO Moderator VALUES ('darwin', '123123', 'adnan@oktar.com', '2017-11-11', 'weerrurjjr', 'Science');";
             stmt.executeUpdate(sql);
 
             //Add post
@@ -83,9 +83,9 @@ public class InsertEntries {
             stmt.executeUpdate(sql);
 
             //Add comment
-            sql = "INSERT INTO Comment VALUES (21230, 'berku', 1230, '2017-07-16', 'wow, nice post!');";
+            sql = "INSERT INTO Comment VALUES (21230, 'berku', 1230, '2017-07-16', 'wow, nice post!',1232);";
             stmt.executeUpdate(sql);
-            sql = "INSERT INTO Comment VALUES (21231, 'berku', 1231, '2017-11-16', 'hmmm such a post!');";
+            sql = "INSERT INTO Comment VALUES (21231, 'berku', 1231, '2017-11-16', 'hmmm such a post!',1230);";
             stmt.executeUpdate(sql);
 
             //Add banned

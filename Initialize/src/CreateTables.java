@@ -12,7 +12,7 @@ public class CreateTables {
 
         String url = "jdbc:mysql://localhost:3306/cs353db";
         String username = "root";
-        String password = "";
+        String password = "figalA!1";
 
         try (
             Connection con = DriverManager.getConnection(url, username, password)) {
@@ -20,7 +20,7 @@ public class CreateTables {
 
             Statement stmt = con.createStatement();
 
-		    // Drop tables
+            // Drop tables
             System.out.println("\nDeleting previous tables (if any)...");
             DatabaseMetaData metadata = con.getMetaData();
             String sql = null;
@@ -100,6 +100,7 @@ public class CreateTables {
                     "password VARCHAR(32) NOT NULL," +
                     "email_address VARCHAR(32) NOT NULL," +
                     "joined_date DATE,"+
+                    "moderator_token VARCHAR(32) NOT NULL,"+
                     "category_name VARCHAR(100),"+
                     "FOREIGN KEY (category_name) REFERENCES Category(name))ENGINE = InnoDB;";
 
@@ -122,15 +123,15 @@ public class CreateTables {
 
             //COMMENT
             sql = "CREATE TABLE Comment (" +
-                    "cont_id INT NOT NULL," +
-                    "username VARCHAR(32) NOT NULL," +
-                    "dst_cont_id INT," +
-                    "timestamp DATE,"+
+                    "cont_id INT NOT NULL, " +
+                    "username VARCHAR(32) NOT NULL, " +
+                    "dst_cont_id INT, " +
+                    "timestamp DATE, "+
                     "comment VARCHAR(800) NOT NULL," +
-                    "parent_post INT"+
-                    "PRIMARY KEY (cont_id, username)," +
-                    //"FOREIGN KEY (cont_id) REFERENCES Content(cont_id)," +
-                    "FOREIGN KEY (parent_post) REFFERENCES Post(cont_id)," +
+                    "parent_post INT,"+
+                    "PRIMARY KEY (cont_id, username), " +
+//                    "FOREIGN KEY (cont_id) REFERENCES Content(cont_id)," +
+                    "FOREIGN KEY (parent_post) REFERENCES Post(cont_id)," +
                     "FOREIGN KEY (dst_cont_id) REFERENCES Content(cont_id)," +
                     "FOREIGN KEY (username) REFERENCES User(username)) ENGINE = InnoDB;";
 
