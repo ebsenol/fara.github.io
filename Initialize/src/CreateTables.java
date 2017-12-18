@@ -126,9 +126,11 @@ public class CreateTables {
                     "username VARCHAR(32) NOT NULL," +
                     "dst_cont_id INT," +
                     "timestamp DATE,"+
-                    "comment VARCHAR(800) NOT NULL,"+
+                    "comment VARCHAR(800) NOT NULL," +
+                    "parent_post INT"+
                     "PRIMARY KEY (cont_id, username)," +
                     //"FOREIGN KEY (cont_id) REFERENCES Content(cont_id)," +
+                    "FOREIGN KEY (parent_post) REFFERENCES Post(cont_id)," +
                     "FOREIGN KEY (dst_cont_id) REFERENCES Content(cont_id)," +
                     "FOREIGN KEY (username) REFERENCES User(username)) ENGINE = InnoDB;";
 

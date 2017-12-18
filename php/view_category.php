@@ -14,7 +14,7 @@
 	else{
 		$username = $_SESSION['user'];
 	}
-
+	$username = "berku";
 	$category = $_GET["category"];
 	
 	$sql =  "SELECT * " .
@@ -44,34 +44,73 @@
 		 "</thead>";
 	echo "<tbody>";
 	$voteIdCount = 0;
+	$from = "view_category.php?category=".$category."";
+
 	foreach($res_array as $req)
 	{
 		echo "<tr>";
-
 		$voteIdCount++;
+		$currentContentID = $req['cont_id'];
 		$sql =  "SELECT ".
 					"(SELECT count(*) " .
-					"FROM Vote  ".
-					"WHERE vote = true AND cont_id = " .$req['cont_id']. " ) - ".
+					"FROM vote  ".
+					"WHERE vote = true AND cont_id = " .$currentContentID. " ) - ".
 					"(SELECT count(*) " .
 					"FROM Vote  ".
-					"WHERE vote != true AND cont_id = " .$req['cont_id']. " ) AS dif;";
+					"WHERE vote = false AND cont_id = " .$currentContentID. " ) AS dif;";
 
 		$result = mysqli_query($db, $sql);
 		$res_arr =  mysqli_fetch_array($result);
-		$vote = $res_arr['dif'];
-		// echo $result['dif'];
+		$voteCount = $res_arr['dif'];
+		$upCountFromUser = 0;
+		$downCountFromUser = 0;
+		$sql2 = "SELECT ". 
+				"(SELECT count(*) " .
+				"FROM vote  ".
+				"WHERE vote = true AND username = '".$username."' AND cont_id = ".$currentContentID." ) AS up;";
+		$result2 = mysqli_query($db, $sql2);
+		if ($result2){
+			$res_arr2 =  mysqli_fetch_array($result2);
+			$upCountFromUser = $res_arr2['up'];
+		}
 
+		$sql3 =  "SELECT (". 
+				"SELECT count(*) AS down " .
+				"FROM vote  ".
+				"WHERE vote = false AND username = '".$username."' AND cont_id = ".$currentContentID." ) AS down;";
+		$result3 = mysqli_query($db, $sql3);
+		if ($result3){
+			$res_arr3 =  mysqli_fetch_array($result3);
+			$downCountFromUser = $res_arr3['down'];
+		}
       	echo "<td  width='10%' style='padding:0px''> ".
-      			"<div id='vote".$voteIdCount."' class = 'upvote upvote-programmers' > ".
-      				"<a class='upvote'></a> ".
-      				"<span class='count'>".$vote."</span> ".
-      				"<a class='downvote'></a> ".
-      			"</div>";
-		echo "<script> $('#vote".$voteIdCount."').upvote(); </script>"; 	
+  			"<div id='vote".$voteIdCount."' class = 'upvote upvote-programmers' > ";
+  			if ($upCountFromUser > 0)
+  				echo "<a class='upvote upvote-on' href='add_vote.php?username=". $username ."&contid=".$currentContentID."&vote=neutral&from=".$from."'b></a> ";
+  			else{
+  				if ($downCountFromUser > 0 )
+  					echo "<a class='upvote' href='add_vote.php?username=". $username ."&contid=".$currentContentID."&vote=downtoup&from=".$from."'></a> ";
+  				else
+  					echo "<a class='upvote' href='add_vote.php?username=". $username ."&contid=".$currentContentID."&vote=up&from=".$from."'></a> ";
+  			}
+  			
+  		echo "<span class='count'>".$voteCount."</span> ";
+  			
+  			if ($downCountFromUser > 0 )
+  				echo "<a class='downvote downvote-on' href='add_vote.php?username=". $username ."&contid=".$currentContentID."&vote=neutral&from=".$from."'></a> ";
+  			else
+  				if ($upCountFromUser > 0)
+					echo "<a class='downvote' href='add_vote.php?username=". $username ."&contid=".$currentContentID."&vote=uptodown&from=".$from."'></a> ";
+  		
+  				else
+  					echo "<a class='downvote' href='add_vote.php?username=". $username ."&contid=".$currentContentID."&vote=down&from=".$from."'></a> ";
+  		echo "</div>";
+
+		//activate vote button
+		//echo "<script type='text/javascript'> $('#vote".$voteIdCount."').upvote(); </script>"; 	
 
 		echo "<td  width='60%'  style='padding: 10px'>".
-		"<a href='viewcontent.php?id=". $req['cont_id'] ."'>" .$req['post_title']. " </a></td>";	
+		"<a href='viewcontent.php?id=". $currentContentID ."'>" .$req['post_title']. " </a></td>";	
 		echo "<td  width='6%' align = 'center' style='padding: 10px'>". ($req['timestamp']) . "</td>";
 		echo "<td  width='8%' align = 'center' style='padding: 10px'>".
 		"<a href='view_category.php?category=". $req['category_name'] ."'>". ($req['category_name']) . "</td>";
@@ -134,13 +173,14 @@
 				<li class ="active"><a href="homepage.php">Home</a></li>
 				<li <input type="text" name="search" placeholder="Search.."> </li> 
 				<li class="dropdown">
-					<a class="dropdown-toggle" data-toggle="dropdown" href="#">Categories
+					<a class="dropdown-toggle" data-toggle="dropdown" href="#">Topics
 						<span class="caret"></span></a>
 						<ul class="dropdown-menu">
 						 <?php
-							 $sql =  "SELECT name " .
-									 "FROM Category;";
-						
+							 $sql =  "SELECT topic_name " .
+									 "FROM Category_Topic ".
+									 "WHERE category_name = '".$category."';";
+				
 							$result = mysqli_query($db, $sql);
 							$res_array = array();
 							if( $result->num_rows > 0)
@@ -149,13 +189,13 @@
 								
 							foreach($res_array as $req)
 							{
-								$catName = $req['name'];
-								echo "<li><a href='view_category.php?category=".$catName."'>". ($catName) . "</a></li>";
+								$topicName = $req['topic_name'];
+								echo "<li><a href='view_topic.php?topic=".$topicName."'>". ($topicName) . "</a></li>";
          					}
 						 ?>
 						</ul>
 				</li>
-				<li onclick="addCategory()" class ="active"><a href="homepage.php"><b>+</b> Add Category</a></li>
+				<li onclick="addTopic()" class ="active"><a href="homepage.php"><b>+</b> Add Topic</a></li>
 	     	</ul>
 		     <ul class="nav navbar-nav navbar-right">
 				<li
@@ -169,7 +209,7 @@
 					</form>
 				</li>
 				<li> <p class="navbar-text"> <?php if ($usermode == 1) echo "Logged in as ".$username.""; else echo "Guest"; ?>  </p></li>
-				<?php if ($usermode == 1) echo "<li><a href='logout.php'>Log out</a></li>"; ?>
+				<?php if ($usermode == 1) echo "<li><a href='logout.php'>Log out</a></li>"; else echo "<li><a href='login.php'>Log in</a></li>"; ?>
 				
 
 		     </ul>
@@ -179,7 +219,7 @@
 
 
 		<script>
-		function addCategory() {
+		function addTopic() {
 			//todo
 		}
 		</script>

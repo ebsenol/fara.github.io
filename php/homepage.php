@@ -16,7 +16,7 @@
 		$username = $_SESSION['user'];
 		
 	}
-	
+	$username = "berku";
 	$sql =  "SELECT * " .
 			"FROM Post AS P, Content AS C, Category_Topic AS CT  ".
 			"WHERE P.cont_id = C.cont_id AND P.belongs = CT.topic_name ".
@@ -45,35 +45,73 @@
 		 "</thead>";
 	echo "<tbody>";
 	$voteIdCount = 0;
+	$from = "homepage.php?username=".$username."";
 	foreach($res_array as $req)
 	{
 		echo "<tr>";
-
 		$voteIdCount++;
+		$currentContentID = $req['cont_id'];
 		$sql =  "SELECT ".
 					"(SELECT count(*) " .
-					"FROM Vote  ".
-					"WHERE vote = true AND cont_id = " .$req['cont_id']. " ) - ".
+					"FROM vote  ".
+					"WHERE vote = true AND cont_id = " .$currentContentID. " ) - ".
 					"(SELECT count(*) " .
 					"FROM Vote  ".
-					"WHERE vote != true AND cont_id = " .$req['cont_id']. " ) AS dif;";
+					"WHERE vote = false AND cont_id = " .$currentContentID. " ) AS dif;";
 
 		$result = mysqli_query($db, $sql);
 		$res_arr =  mysqli_fetch_array($result);
-		$vote = $res_arr['dif'];
+		$voteCount = $res_arr['dif'];
+		$upCountFromUser = 0;
+		$downCountFromUser = 0;
+		$sql2 = "SELECT ". 
+				"(SELECT count(*) " .
+				"FROM vote  ".
+				"WHERE vote = true AND username = '".$username."' AND cont_id = ".$currentContentID." ) AS up;";
+		$result2 = mysqli_query($db, $sql2);
+		if ($result2){
+			$res_arr2 =  mysqli_fetch_array($result2);
+			$upCountFromUser = $res_arr2['up'];
+		}
+
+		$sql3 =  "SELECT (". 
+				"SELECT count(*) AS down " .
+				"FROM vote  ".
+				"WHERE vote = false AND username = '".$username."' AND cont_id = ".$currentContentID." ) AS down;";
+		$result3 = mysqli_query($db, $sql3);
+		if ($result3){
+			$res_arr3 =  mysqli_fetch_array($result3);
+			$downCountFromUser = $res_arr3['down'];
+		}
 
       	echo "<td  width='10%' style='padding:0px''> ".
-      			"<div id='vote".$voteIdCount."' class = 'upvote upvote-programmers' > ".
-      				"<a class='upvote'></a> ".
-      				"<span class='count'>".$vote."</span> ".
-      				"<a class='downvote'></a> ".
-      			"</div>";
+  			"<div id='vote".$voteIdCount."' class = 'upvote upvote-programmers' > ";
+  			if ($upCountFromUser > 0)
+  				echo "<a class='upvote upvote-on' href='add_vote.php?username=". $username ."&contid=".$currentContentID."&vote=neutral&from=".$from."'b></a> ";
+  			else{
+  				if ($downCountFromUser > 0 )
+  					echo "<a class='upvote' href='add_vote.php?username=". $username ."&contid=".$currentContentID."&vote=downtoup&from=".$from."'></a> ";
+  				else
+  					echo "<a class='upvote' href='add_vote.php?username=". $username ."&contid=".$currentContentID."&vote=up&from=".$from."'></a> ";
+  			}
+  			
+  		echo "<span class='count'>".$voteCount."</span> ";
+  			
+  			if ($downCountFromUser > 0 )
+  				echo "<a class='downvote downvote-on' href='add_vote.php?username=". $username ."&contid=".$currentContentID."&vote=neutral&from=".$from."'></a> ";
+  			else
+  				if ($upCountFromUser > 0)
+					echo "<a class='downvote' href='add_vote.php?username=". $username ."&contid=".$currentContentID."&vote=uptodown&from=".$from."'></a> ";
+  		
+  				else
+  					echo "<a class='downvote' href='add_vote.php?username=". $username ."&contid=".$currentContentID."&vote=down&from=".$from."'></a> ";
+  		echo "</div>";
 
 		//activate vote button
 		//echo "<script type='text/javascript'> $('#vote".$voteIdCount."').upvote(); </script>"; 	
 
 		echo "<td  width='60%'  style='padding: 10px'>".
-		"<a href='viewcontent.php?id=". $req['cont_id'] ."'>" .$req['post_title']. " </a></td>";	
+		"<a href='viewcontent.php?id=". $currentContentID ."'>" .$req['post_title']. " </a></td>";	
 		echo "<td  width='6%' align = 'center' style='padding: 10px'>". ($req['timestamp']) . "</td>";
 		echo "<td  width='8%' align = 'center' style='padding: 10px'>".
 		"<a href='view_category.php?category=". $req['category_name'] ."'>". ($req['category_name']) . "</td>";
@@ -84,6 +122,20 @@
 	}
 	echo"</tbody>";
 	echo '</table></p></br></br>';
+
+	function Apply(){
+	    $sql = "INSERT INTO apply VALUES ('".$_SESSION['userName']."', '".$_POST['application']."')";
+	    if(mysqli_query($connection, $sql)){
+	        $_SESSION['course'] = $_POST['application'];
+	        mysqli_close($connection);
+	        header("location: congrats.php");
+
+	    } else{
+	        $_SESSION['course'] = 'none';
+	        mysqli_close($connection);
+	        header("location: congrats.php");
+	    }
+    }
 
 ?>
 
@@ -159,7 +211,12 @@
 						 ?>
 						</ul>
 				</li>
-				<li onclick="addCategory()" class ="active"><a href="homepage.php"><b>+</b> Add Category</a></li>
+				<li>
+					<form method='POST' action=''>
+			        <br><input type='text' name='application' size='40'><br>
+			        <input id='button' type='submit' name='submit' value='submit'></form>
+				</li>
+				<li onclick="addCategory()" class ="active"><a href="addcategory_todb?category="..""><b>+</b> Add Category</a></li>
 	     	</ul>
 		     <ul class="nav navbar-nav navbar-right">
 				<li
@@ -173,24 +230,25 @@
 					</form>
 				</li>
 				<li> <p class="navbar-text"> <?php if ($usermode == 1) echo "Logged in as ".$username.""; else echo "Guest"; ?>  </p></li>
-				<?php if ($usermode == 1) echo "<li><a href='logout.php'>Log out</a></li>"; ?>
+				<?php if ($usermode == 1) echo "<li><a href='logout.php'>Log out</a></li>"; else echo "<li><a href='login.php'>Log in</a></li>"; ?>
 				
 
 		     </ul>
 			</div>
 		</div>
 	</nav>
+	
+	<?php
+		echo "<script> function addCategory() { ";
+			
+		$sql =  "SELECT category_name " .
+			"FROM Category_Topic  ".
+			"WHERE topic_name = '".$topic."'";
 
-		
-		<script>
-		function addCategory() {
-			var person = prompt("Please enter the category you want to create:", "");
-			if (person != null) {
-				document.getElementById("demo").innerHTML =
-				"Hello " + person + "! How are you today?";
-			}
-		}
-		</script>
+		$result = mysqli_query($db, $sql);	
+		$category =implode(" ",mysqli_fetch_assoc($result));
+		echo "} </script>";
+	?>
 		
 		</body>
 </html>
