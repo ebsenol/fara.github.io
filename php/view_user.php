@@ -90,7 +90,6 @@
 						 ?>
 						</ul>
 				</li>
-				<li onclick="addCategory()" class ="active"><a href="homepage.php"><b>+</b> Add Category</a></li>
 	     	</ul>
 		     <ul class="nav navbar-nav navbar-right">
 				<li
