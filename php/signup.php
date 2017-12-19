@@ -18,7 +18,7 @@ if( isset($_POST['btn-signup']) ) {
 		}
 		else{
 			//insert user to the database
-			$res = mysqli_query($db, "Insert INTO User Values ('$username' , '$password', '$email', 'now()' );");
+			$res = mysqli_query($db, "Insert INTO User Values ('$username' , '$password', '$email', now() );");
 			$id = mysqli_insert_id($db);
 			header("location: login.php");
 		}
@@ -81,7 +81,7 @@ if( isset($_POST['btn-signup']) ) {
 				</div>
 				<div class="form-group">
 					<label class="sr-only" for="username">Username</label>
-					<input type="text" class="form-control" name = "username" id="username" placeholder="Userna" required="true">
+					<input type="text" class="form-control" name = "username" id="username" placeholder="Username" required="true">
 				</div>
 	    
 				<div class="form-group">
