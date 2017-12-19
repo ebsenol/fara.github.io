@@ -17,7 +17,7 @@
 	}
 
 	$sql =  "SELECT * " .
-			"FROM Post AS P, Content AS C, Category_Topic AS CT  ".
+			"FROM post AS P, content AS C, category_topic AS CT  ".
 			"WHERE P.cont_id = C.cont_id AND P.belongs = CT.topic_name ".
 			"ORDER BY P.post_title 	".
 			"LIMIT 10;";
