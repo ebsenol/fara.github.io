@@ -87,25 +87,35 @@
 
       	echo "<td  width='10%' style='padding:0px''> ".
   			"<div id='vote".$voteIdCount."' class = 'upvote upvote-programmers' > ";
-  			if ($upCountFromUser > 0)
-  				echo "<a class='upvote upvote-on' href='add_vote.php?username=". $username ."&contid=".$currentContentID."&vote=neutral&from=".$from."'b></a> ";
-  			else{
-  				if ($downCountFromUser > 0 )
-  					echo "<a class='upvote' href='add_vote.php?username=". $username ."&contid=".$currentContentID."&vote=downtoup&from=".$from."'></a> ";
-  				else
-  					echo "<a class='upvote' href='add_vote.php?username=". $username ."&contid=".$currentContentID."&vote=up&from=".$from."'></a> ";
+  			if ($usermode == 1 && strlen($username) > 0){
+	  			if ($upCountFromUser > 0)
+	  				echo "<a class='upvote upvote-on' href='add_vote.php?username=". $username ."&contid=".$currentContentID."&vote=neutral&from=".$from."'b></a> ";
+	  			else{
+	  				if ($downCountFromUser > 0 )
+	  					echo "<a class='upvote' href='add_vote.php?username=". $username ."&contid=".$currentContentID."&vote=downtoup&from=".$from."'></a> ";
+	  				else
+	  					echo "<a class='upvote' href='add_vote.php?username=". $username ."&contid=".$currentContentID."&vote=up&from=".$from."'></a> ";
+	  			}
+  			}
+  			else {
+  				echo "<a class='upvote'></a> ";
   			}
   			
   		echo "<span class='count'>".$voteCount."</span> ";
-  			
-  			if ($downCountFromUser > 0 )
-  				echo "<a class='downvote downvote-on' href='add_vote.php?username=". $username ."&contid=".$currentContentID."&vote=neutral&from=".$from."'></a> ";
-  			else
-  				if ($upCountFromUser > 0)
-					echo "<a class='downvote' href='add_vote.php?username=". $username ."&contid=".$currentContentID."&vote=uptodown&from=".$from."'></a> ";
-  		
-  				else
-  					echo "<a class='downvote' href='add_vote.php?username=". $username ."&contid=".$currentContentID."&vote=down&from=".$from."'></a> ";
+		if ($usermode == 1 && strlen($username) > 0){
+			if ($downCountFromUser > 0 )
+				echo "<a class='downvote downvote-on' href='add_vote.php?username=". $username ."&contid=".$currentContentID."&vote=neutral&from=".$from."'></a> ";
+			else
+				if ($upCountFromUser > 0)
+				echo "<a class='downvote' href='add_vote.php?username=". $username ."&contid=".$currentContentID."&vote=uptodown&from=".$from."'></a> ";
+		
+				else
+					echo "<a class='downvote' href='add_vote.php?username=". $username ."&contid=".$currentContentID."&vote=down&from=".$from."'></a> ";
+		}
+		else{
+  			echo "<a class='downvote'></a> ";
+
+		}
   		echo "</div>";
 
 		//activate vote button
@@ -124,20 +134,14 @@
 	echo"</tbody>";
 	echo '</table></p></br></br>';
 
-	function Apply(){
-	    $sql = "INSERT INTO apply VALUES ('".$_SESSION['userName']."', '".$_POST['application']."')";
-	    if(mysqli_query($connection, $sql)){
-	        $_SESSION['course'] = $_POST['application'];
-	        mysqli_close($connection);
-	        header("location: congrats.php");
+	if( isset($_POST['btn-addcategory']) ) {
+		$category = $_POST['category'];
 
-	    } else{
-	        $_SESSION['course'] = 'none';
-	        mysqli_close($connection);
-	        header("location: congrats.php");
-	    }
-    }
-    
+		$sql = "INSERT INTO category VALUES ('".$category."');";
+		$res = mysqli_query($db,$sql);
+		//header("location: homepage.php");
+	}
+	
 
 ?>
 
@@ -154,25 +158,27 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
 	<script src="http://code.jquery.com/jquery-latest.js"></script>
 	<link rel="stylesheet" href="/css/upvote/jquery.upvote.css" type="text/css" media="screen">
 	<script type="text/javascript" src="/css/upvote/jquery.upvote.js"></script>
 
 	<script type="text/javascript" src="/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
 	<link rel="stylesheet" href="/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
-	<title>Fara</title>
+	<title>Fara</title><link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
 
 </head>
 <body style="padding-top: 65px;">
    
    <!-- Initialize vote buttons -->
 	<?php 
-		$counter = 0;
-		while ($counter <= $voteIdCount){
-			$counter++;
-			echo "<script type='text/javascript'> $('#vote".$counter."').upvote();</script>";
-		}	
+		if ($usermode == 1 && strlen($username) > 0){
+			$counter = 0;
+			while ($counter <= $voteIdCount){
+				$counter++;
+				echo "<script type='text/javascript'> $('#vote".$counter."').upvote();</script>";
+			}	
+		}
 	?>
    <!-- Fixed navbar -->
    <nav id="navbarmain"  class="navbar navbar-inverse navbar-fixed-top">
@@ -213,15 +219,14 @@
 						 ?>
 						</ul>
 				</li>
-				<li>
-					<form method='POST' action=''>
-			        <br><input type='text' name='application' size='40'><br>
-			        <input id='button' type='submit' name='submit' value='submit'></form>
+				<?php 
+				if ($usermode == 1 && strlen($username) > 0)
+				echo "<li><a data-toggle='modal' data-target='#addCategoryModal'><span class='glyphicon'></span><b>+</b> Add Category</a>";
+				?>
 				</li>
-				<li onclick="addCategory()" class ="active"><a href="addcategory_todb?category="..""><b>+</b> Add Category</a></li>
 	     	</ul>
 		     <ul class="nav navbar-nav navbar-right">
-				<li
+				<li>
 					<form class="navbar-form navbar-left" role="search">
 					<div class="form-group">
 						<input type="text" class="form-control" placeholder="Search">
@@ -230,28 +235,49 @@
 						<span class="glyphicon glyphicon-search"></span>
 					</button>
 					</form>
+
 				</li>
-				<li> <p class="navbar-text"> <?php if ($usermode == 1) echo "Logged in as ".$username.""; else echo "Guest"; ?>  </p></li>
-				<?php if ($usermode == 1) echo "<li><a href='logout.php'>Log out</a></li>"; else echo "<li><a href='login.php'>Log in</a></li>"; ?>
+				<li> <p class="navbar-text"> <?php if ($usermode == 1 && strlen($username) > 0) echo "Logged in as ".$username.""; else echo "Guest"; ?>  </p></li>
+				<li >
+					<form action="view_user.php" class="navbar-form navbar-left" role="settings">
+					<button role="settings" type="submit"  class="btn btn-default">
+				          <span class="glyphicon glyphicon-cog"></span>
+					</button>
+					</form>
+				</li>
+					
+				<?php if ($usermode == 1 && strlen($username) > 0) echo "<li><a href='logout.php'>Log out</a></li>"; else echo "<li><a href='login.php'>Log in</a></li>"; ?>
+
 				
 
 		     </ul>
 			</div>
 		</div>
 	</nav>
-	
-	<?php
-		echo "<script> function addCategory() { ";
-			
-		$sql =  "SELECT category_name " .
-			"FROM Category_Topic  ".
-			"WHERE topic_name = '".$topic."'";
 
-		$result = mysqli_query($db, $sql);	
-		$category =implode(" ",mysqli_fetch_assoc($result));
-		echo "} </script>";
-	?>
-		
-		</body>
+
+    <div id="addCategoryModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"> &times;</button>
+                <h4>Add Category</h4>
+            </div>
+            <div class="modal-body">
+                    <form  class="form-group" method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" autocomplete="off">
+
+                       <label class="text" for="category"></label><input type="text" class="form-control input-sm" placeholder="Category" id="category" name="category">
+                       <button type="submit" class="btn btn-info btn-xs" name="btn-addcategory">Add</button>
+                       <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">Cancel</button> 
+                       </div>
+               
+                       
+
+                    </form>
+            </div>
+		 </div>
+	 </div>
+	
+	</body>
 </html>
 <?php ob_end_flush(); ?>

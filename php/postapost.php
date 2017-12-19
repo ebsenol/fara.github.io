@@ -5,7 +5,7 @@
 	ob_start();
 	$username = $_SESSION['username'];		
 	$topic = $_SESSION["topic"];
-
+	$category = $_SESSION['category'];
 	if( isset($_POST['btn-post']) ) { 
 		$title = $_POST['title'];
 		$text = $_POST['text'];
@@ -16,7 +16,6 @@
 		header("location: homepage.php");
 	}
 	
-	$category = $_GET["category"];
 ?>
 <!DOCTYPE html>
 <html lang="en">

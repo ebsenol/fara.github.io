@@ -6,16 +6,25 @@
 	//set to 1 if user logged in, 0 if guest mode
 	$usermode = 1;
 
-	if ( !isset($_SESSION['user']))
+	if ( !isset($_SESSION['username']))
 	{
 		//guest mode
 		$usermode = 0;
 		$username = "";
 	}
 	else{
-		$username = $_SESSION['user'];	
+		$username = $_SESSION['username'];	
 	}
-	$username ="berku";
+	
+	function generateRandomString($length = 10) {
+	    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+	    $charactersLength = strlen($characters);
+	    $randomString = '';
+	    for ($i = 0; $i < $length; $i++) {
+	        $randomString .= $characters[rand(0, $charactersLength - 1)];
+    	}
+    	return $randomString;
+	}	
 ?>
 
 
@@ -141,7 +150,11 @@
 				}
 
 				echo "<br>";
+
+				// TODO change refs
  				echo "<li><a href='profile_info_change.php?username=".$username."'>change information</a></li> ";
+ 				echo "<li><a href='profile_info_change.php?username=".$username."'>request adminship</a></li> ";
+ 				echo "<li><a href='profile_info_change.php?username=".$username."'>request moderatorship</a></li> ";
 			?>
 		  </ul>
 		</div>
