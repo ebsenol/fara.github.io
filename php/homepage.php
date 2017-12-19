@@ -87,25 +87,35 @@
 
       	echo "<td  width='10%' style='padding:0px''> ".
   			"<div id='vote".$voteIdCount."' class = 'upvote upvote-programmers' > ";
-  			if ($upCountFromUser > 0)
-  				echo "<a class='upvote upvote-on' href='add_vote.php?username=". $username ."&contid=".$currentContentID."&vote=neutral&from=".$from."'b></a> ";
-  			else{
-  				if ($downCountFromUser > 0 )
-  					echo "<a class='upvote' href='add_vote.php?username=". $username ."&contid=".$currentContentID."&vote=downtoup&from=".$from."'></a> ";
-  				else
-  					echo "<a class='upvote' href='add_vote.php?username=". $username ."&contid=".$currentContentID."&vote=up&from=".$from."'></a> ";
+  			if ($usermode == 1 && strlen($username) > 0){
+	  			if ($upCountFromUser > 0)
+	  				echo "<a class='upvote upvote-on' href='add_vote.php?username=". $username ."&contid=".$currentContentID."&vote=neutral&from=".$from."'b></a> ";
+	  			else{
+	  				if ($downCountFromUser > 0 )
+	  					echo "<a class='upvote' href='add_vote.php?username=". $username ."&contid=".$currentContentID."&vote=downtoup&from=".$from."'></a> ";
+	  				else
+	  					echo "<a class='upvote' href='add_vote.php?username=". $username ."&contid=".$currentContentID."&vote=up&from=".$from."'></a> ";
+	  			}
+  			}
+  			else {
+  				echo "<a class='upvote'></a> ";
   			}
   			
   		echo "<span class='count'>".$voteCount."</span> ";
-  			
-  			if ($downCountFromUser > 0 )
-  				echo "<a class='downvote downvote-on' href='add_vote.php?username=". $username ."&contid=".$currentContentID."&vote=neutral&from=".$from."'></a> ";
-  			else
-  				if ($upCountFromUser > 0)
-					echo "<a class='downvote' href='add_vote.php?username=". $username ."&contid=".$currentContentID."&vote=uptodown&from=".$from."'></a> ";
-  		
-  				else
-  					echo "<a class='downvote' href='add_vote.php?username=". $username ."&contid=".$currentContentID."&vote=down&from=".$from."'></a> ";
+		if ($usermode == 1 && strlen($username) > 0){
+			if ($downCountFromUser > 0 )
+				echo "<a class='downvote downvote-on' href='add_vote.php?username=". $username ."&contid=".$currentContentID."&vote=neutral&from=".$from."'></a> ";
+			else
+				if ($upCountFromUser > 0)
+				echo "<a class='downvote' href='add_vote.php?username=". $username ."&contid=".$currentContentID."&vote=uptodown&from=".$from."'></a> ";
+		
+				else
+					echo "<a class='downvote' href='add_vote.php?username=". $username ."&contid=".$currentContentID."&vote=down&from=".$from."'></a> ";
+		}
+		else{
+  			echo "<a class='downvote'></a> ";
+
+		}
   		echo "</div>";
 
 		//activate vote button
@@ -162,11 +172,13 @@
    
    <!-- Initialize vote buttons -->
 	<?php 
-		$counter = 0;
-		while ($counter <= $voteIdCount){
-			$counter++;
-			echo "<script type='text/javascript'> $('#vote".$counter."').upvote();</script>";
-		}	
+		if ($usermode == 1 && strlen($username) > 0){
+			$counter = 0;
+			while ($counter <= $voteIdCount){
+				$counter++;
+				echo "<script type='text/javascript'> $('#vote".$counter."').upvote();</script>";
+			}	
+		}
 	?>
    <!-- Fixed navbar -->
    <nav id="navbarmain"  class="navbar navbar-inverse navbar-fixed-top">
@@ -207,7 +219,10 @@
 						 ?>
 						</ul>
 				</li>
-				<li><a data-toggle="modal" data-target="#addCategoryModal"><span class="glyphicon"></span><b>+</b> Add Category</a>
+				<?php 
+				if ($usermode == 1 && strlen($username) > 0)
+				echo "<li><a data-toggle='modal' data-target='#addCategoryModal'><span class='glyphicon'></span><b>+</b> Add Category</a>";
+				?>
 				</li>
 	     	</ul>
 		     <ul class="nav navbar-nav navbar-right">
@@ -242,10 +257,11 @@
                     <form  class="form-group" method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" autocomplete="off">
 
                        <label class="text" for="category"></label><input type="text" class="form-control input-sm" placeholder="Category" id="category" name="category">
-                       </div>
-               
                        <button type="submit" class="btn btn-info btn-xs" name="btn-addcategory">Add</button>
                        <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">Cancel</button> 
+                       </div>
+               
+                       
 
                     </form>
             </div>

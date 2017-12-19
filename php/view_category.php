@@ -88,6 +88,8 @@
 		}
       	echo "<td  width='10%' style='padding:0px''> ".
   			"<div id='vote".$voteIdCount."' class = 'upvote upvote-programmers' > ";
+
+  		if ($usermode == 1 && strlen($username) > 0){
   			if ($upCountFromUser > 0)
   				echo "<a class='upvote upvote-on' href='add_vote.php?username=". $username ."&contid=".$currentContentID."&vote=neutral&from=".$from."'b></a> ";
   			else{
@@ -96,9 +98,13 @@
   				else
   					echo "<a class='upvote' href='add_vote.php?username=". $username ."&contid=".$currentContentID."&vote=up&from=".$from."'></a> ";
   			}
+  		}
+  		else{
+  			echo "<a class='upvote'></a>"; 
+  		}	
   			
   		echo "<span class='count'>".$voteCount."</span> ";
-  			
+  		if ($usermode == 1 && strlen($username) > 0){
   			if ($downCountFromUser > 0 )
   				echo "<a class='downvote downvote-on' href='add_vote.php?username=". $username ."&contid=".$currentContentID."&vote=neutral&from=".$from."'></a> ";
   			else
@@ -107,6 +113,11 @@
   		
   				else
   					echo "<a class='downvote' href='add_vote.php?username=". $username ."&contid=".$currentContentID."&vote=down&from=".$from."'></a> ";
+  		}
+  		else{
+  			echo "<a class='downvote'></a>"; 
+  		}	
+  			
   		echo "</div>";
 
 		//activate vote button
@@ -162,11 +173,13 @@
 <body style="padding-top: 65px;">
   <!-- Initialize vote buttons -->
 	<?php 
-		$counter = 0;
-		while ($counter <= $voteIdCount){
-			$counter++;
-			echo "<script type='text/javascript'> $('#vote".$counter."').upvote();</script>";
-		}	
+		if ($usermode == 1 && strlen($username) > 0){
+			$counter = 0;
+			while ($counter <= $voteIdCount){
+				$counter++;
+				echo "<script type='text/javascript'> $('#vote".$counter."').upvote();</script>";
+			}	
+		}
 	?>
    <!-- Fixed navbar -->
    <nav id="navbarmain"  class="navbar navbar-inverse navbar-fixed-top">
@@ -208,7 +221,12 @@
 						 ?>
 						</ul>
 				</li>
-			<li><a data-toggle="modal" data-target="#addTopicModal"><span class="glyphicon"></span><b>+</b> Add Topic</a>
+				  <!-- Initialize vote buttons -->
+			<?php 
+				if ($usermode == 1 && strlen($username) > 0)
+				echo "<li><a data-toggle='modal' data-target='#addTopicModal'><span class='glyphicon'></span><b>+</b> Add Topic</a>";
+
+			?>
 	     	</ul>
 		     <ul class="nav navbar-nav navbar-right">
 				<li
@@ -240,11 +258,10 @@
                     <form  class="form-group" method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" autocomplete="off">
 
                        <label class="text" for="topic"></label><input type="text" class="form-control input-sm" placeholder="Topic" id="topic" name="topic">
-                       </div>
-               
                        <button type="submit" class="btn btn-info btn-xs" name="btn-addtopic">Add</button>
                        <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">Cancel</button> 
-
+                       </div>
+               
                     </form>
             </div>
 		 </div>

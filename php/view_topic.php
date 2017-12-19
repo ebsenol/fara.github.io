@@ -152,13 +152,15 @@
 
 </head>
 <body style="padding-top: 65px;">
- <!-- Initialize vote buttons -->
+  <!-- Initialize vote buttons -->
 	<?php 
-		$counter = 0;
-		while ($counter <= $voteIdCount){
-			$counter++;
-			echo "<script type='text/javascript'> $('#vote".$counter."').upvote();</script>";
-		}	
+		if ($usermode == 1 && strlen($username) > 0){
+			$counter = 0;
+			while ($counter <= $voteIdCount){
+				$counter++;
+				echo "<script type='text/javascript'> $('#vote".$counter."').upvote();</script>";
+			}	
+		}
 	?>
    <!-- Fixed navbar -->
    <nav id="navbarmain"  class="navbar navbar-inverse navbar-fixed-top">
