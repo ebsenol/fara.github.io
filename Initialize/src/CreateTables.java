@@ -15,7 +15,7 @@ public class CreateTables {
         String password = "";
 
         try (
-            Connection con = DriverManager.getConnection(url, username, password)) {
+                Connection con = DriverManager.getConnection(url, username, password)) {
             System.out.println("Connected!");
 
             Statement stmt = con.createStatement();
@@ -26,7 +26,7 @@ public class CreateTables {
             String sql = null;
 
             String[] tables = {"Comment",  "Message", "Category_Topic","Vote", "Follows", "Banned",
-                                "Admin", "Moderator", "Post","Content","Category","Topic","User"};
+                    "Admin", "Moderator", "Post","Content","Category","Topic","User"};
 
             System.out.println( "\nDropping tables:");
 
