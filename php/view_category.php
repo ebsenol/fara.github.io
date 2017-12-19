@@ -1,4 +1,4 @@
-	<?php
+<?php
 	include_once 'dbconnect.php';
 	session_start();
 	ob_start();
@@ -14,20 +14,22 @@
 	else{
 		$username = $_SESSION['username'];
 	}
-	$category = $_GET["category"];
 	
-	$sql =  "SELECT * " .
+	$temp = $_GET["category"];
+	if (strlen($temp) > 0){
+		$category = $temp;	
+		$_SESSION['category'] = $category; 
+	}
+	$sql =  "SELECT * " .	
 			"FROM Post AS P, Content AS C, Category_Topic AS CT  ".
 			"WHERE P.cont_id = C.cont_id AND P.belongs = CT.topic_name AND CT.category_name = '".$category."'".
 			"ORDER BY P.post_title 	".
 			"LIMIT 10;";
 	$result = mysqli_query($db, $sql);
 	$res_array = array();
-
 	if( $result->num_rows > 0)
 		while($row = mysqli_fetch_array($result))
 			array_push($res_array, $row);
-
 	echo "<h2 align='center'><b> ".$category.": </b></h2>";
 	echo "</br>";
 	echo "<table class='table table-striped' style='width:95%'; align = 'center';  align='center' cellpadding='10'>";
@@ -38,13 +40,11 @@
 			"<th style='padding: 10px'> Category</th>".
 			"<th style='padding: 10px'> Topic</th>".
 			"<th style='padding: 10px'> User</th>".
-
 		 "</tr>".
 		 "</thead>";
 	echo "<tbody>";
 	$voteIdCount = 0;
 	$from = "view_category.php?category=".$category."";
-
 	foreach($res_array as $req)
 	{
 		echo "<tr>";
@@ -57,7 +57,6 @@
 					"(SELECT count(*) " .
 					"FROM Vote  ".
 					"WHERE vote = false AND cont_id = " .$currentContentID. " ) AS dif;";
-
 		$result = mysqli_query($db, $sql);
 		$res_arr =  mysqli_fetch_array($result);
 		$voteCount = $res_arr['dif'];
@@ -72,7 +71,6 @@
 			$res_arr2 =  mysqli_fetch_array($result2);
 			$upCountFromUser = $res_arr2['up'];
 		}
-
 		$sql3 =  "SELECT (". 
 				"SELECT count(*) AS down " .
 				"FROM vote  ".
@@ -84,6 +82,7 @@
 		}
       	echo "<td  width='10%' style='padding:0px''> ".
   			"<div id='vote".$voteIdCount."' class = 'upvote upvote-programmers' > ";
+  		if ($usermode == 1 && strlen($username) > 0){
   			if ($upCountFromUser > 0)
   				echo "<a class='upvote upvote-on' href='add_vote.php?username=". $username ."&contid=".$currentContentID."&vote=neutral&from=".$from."'b></a> ";
   			else{
@@ -92,9 +91,13 @@
   				else
   					echo "<a class='upvote' href='add_vote.php?username=". $username ."&contid=".$currentContentID."&vote=up&from=".$from."'></a> ";
   			}
+  		}
+  		else{
+  			echo "<a class='upvote'></a>"; 
+  		}	
   			
   		echo "<span class='count'>".$voteCount."</span> ";
-  			
+  		if ($usermode == 1 && strlen($username) > 0){
   			if ($downCountFromUser > 0 )
   				echo "<a class='downvote downvote-on' href='add_vote.php?username=". $username ."&contid=".$currentContentID."&vote=neutral&from=".$from."'></a> ";
   			else
@@ -103,11 +106,14 @@
   		
   				else
   					echo "<a class='downvote' href='add_vote.php?username=". $username ."&contid=".$currentContentID."&vote=down&from=".$from."'></a> ";
+  		}
+  		else{
+  			echo "<a class='downvote'></a>"; 
+  		}	
+  			
   		echo "</div>";
-
 		//activate vote button
 		//echo "<script type='text/javascript'> $('#vote".$voteIdCount."').upvote(); </script>"; 	
-
 		echo "<td  width='60%'  style='padding: 10px'>".
 		"<a href='viewcontent.php?id=". $currentContentID ."'>" .$req['post_title']. " </a></td>";	
 		echo "<td  width='6%' align = 'center' style='padding: 10px'>". ($req['timestamp']) . "</td>";
@@ -120,7 +126,15 @@
 	}
 	echo"</tbody>";
 	echo '</table></p></br></br>';
-
+	if( isset($_POST['btn-addtopic']) ) {
+		$topic = $_POST['topic'];
+		$category = $_SESSION['category'];
+		$sql = "INSERT INTO topic VALUES ('".$topic."');";
+		$res = mysqli_query($db,$sql);
+		$sql = "INSERT INTO Category_Topic VALUES ('".$category."','".$topic."');";
+		$res = mysqli_query($db,$sql);
+		header("location: view_category.php?category=".$category."");
+	}
 	?>
 
 <!DOCTYPE html>
@@ -148,11 +162,13 @@
 <body style="padding-top: 65px;">
   <!-- Initialize vote buttons -->
 	<?php 
-		$counter = 0;
-		while ($counter <= $voteIdCount){
-			$counter++;
-			echo "<script type='text/javascript'> $('#vote".$counter."').upvote();</script>";
-		}	
+		if ($usermode == 1 && strlen($username) > 0){
+			$counter = 0;
+			while ($counter <= $voteIdCount){
+				$counter++;
+				echo "<script type='text/javascript'> $('#vote".$counter."').upvote();</script>";
+			}	
+		}
 	?>
    <!-- Fixed navbar -->
    <nav id="navbarmain"  class="navbar navbar-inverse navbar-fixed-top">
@@ -194,7 +210,11 @@
 						 ?>
 						</ul>
 				</li>
-				<li onclick="addTopic()" class ="active"><a href="homepage.php"><b>+</b> Add Topic</a></li>
+				  <!-- Initialize vote buttons -->
+			<?php 
+				if ($usermode == 1 && strlen($username) > 0)
+				echo "<li><a data-toggle='modal' data-target='#addTopicModal'><span class='glyphicon'></span><b>+</b> Add Topic</a>";
+			?>
 	     	</ul>
 		     <ul class="nav navbar-nav navbar-right">
 				<li
@@ -207,22 +227,34 @@
 					</button>
 					</form>
 				</li>
-				<li> <p class="navbar-text"> <?php if ($usermode == 1) echo "Logged in as ".$username.""; else echo "Guest"; ?>  </p></li>
-				<?php if ($usermode == 1) echo "<li><a href='logout.php'>Log out</a></li>"; else echo "<li><a href='login.php'>Log in</a></li>"; ?>
+				<li> <p class="navbar-text"> <?php if ($usermode == 1 && strlen($username) > 0) echo "Logged in as ".$username.""; else echo "Guest"; ?>  </p></li>
+				<?php if ($usermode == 1 && strlen($username) > 0) echo "<li><a href='logout.php'>Log out</a></li>"; else echo "<li><a href='login.php'>Log in</a></li>"; ?>
 				
-
 		     </ul>
 			</div>
 		</div>
 	</nav>
 
+ 	<div id="addTopicModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"> &times;</button>
+                <h4>Add Topic</h4>
+            </div>
+            <div class="modal-body">
+                    <form  class="form-group" method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" autocomplete="off">
 
-		<script>
-		function addTopic() {
-			//todo
-		}
-		</script>
-
+                       <label class="text" for="topic"></label><input type="text" class="form-control input-sm" placeholder="Topic" id="topic" name="topic">
+                       <button type="submit" class="btn btn-info btn-xs" name="btn-addtopic">Add</button>
+                       <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">Cancel</button> 
+                       </div>
+               
+                    </form>
+            </div>
+		 </div>
+	 </div>
+	
 
 		
 	

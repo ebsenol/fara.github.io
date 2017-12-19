@@ -1,4 +1,4 @@
-	<?php
+<?php
 	include_once 'dbconnect.php';
 	session_start();
 	ob_start();
@@ -22,7 +22,6 @@
 		
 	$result = mysqli_query($db, $sql);	
 	$category =implode(" ",mysqli_fetch_assoc($result));
-
 	$sql =  "SELECT * " .
 			"FROM Post AS P, Content AS C, Category_Topic AS CT  ".
 			"WHERE P.cont_id = C.cont_id AND P.belongs = CT.topic_name AND CT.topic_name = '".$topic."'".
@@ -30,11 +29,9 @@
 			"LIMIT 10;";
 	$result = mysqli_query($db, $sql);
 	$res_array = array();
-
 	if( $result->num_rows > 0)
 		while($row = mysqli_fetch_array($result))
 			array_push($res_array, $row);
-
 	echo "<h2 align='center'><b>".$category."/".$topic.": </b></h2>";
 	echo "</br>";
 	echo "<table class='table table-striped' style='width:95%'; align = 'center';  align='center' cellpadding='10'>";
@@ -45,7 +42,6 @@
 			"<th style='padding: 10px'> Category</th>".
 			"<th style='padding: 10px'> Topic</th>".
 			"<th style='padding: 10px'> User</th>".
-
 		 "</tr>".
 		 "</thead>";
 	echo "<tbody>";
@@ -63,7 +59,6 @@
 					"(SELECT count(*) " .
 					"FROM Vote  ".
 					"WHERE vote = false AND cont_id = " .$currentContentID. " ) AS dif;";
-
 		$result = mysqli_query($db, $sql);
 		$res_arr =  mysqli_fetch_array($result);
 		$voteCount = $res_arr['dif'];
@@ -78,7 +73,6 @@
 			$res_arr2 =  mysqli_fetch_array($result2);
 			$upCountFromUser = $res_arr2['up'];
 		}
-
 		$sql3 =  "SELECT (". 
 				"SELECT count(*) AS down " .
 				"FROM vote  ".
@@ -110,10 +104,8 @@
   				else
   					echo "<a class='downvote' href='add_vote.php?username=". $username ."&contid=".$currentContentID."&vote=down&from=".$from."'></a> ";
   		echo "</div>";
-
 		//activate vote button
 		//echo "<script type='text/javascript'> $('#vote".$voteIdCount."').upvote(); </script>"; 	
-
 		echo "<td  width='60%'  style='padding: 10px'>".
 		"<a href='viewcontent.php?id=". $currentContentID ."'>" .$req['post_title']. " </a></td>";	
 		echo "<td  width='6%' align = 'center' style='padding: 10px'>". ($req['timestamp']) . "</td>";
@@ -126,7 +118,6 @@
 	}
 	echo"</tbody>";
 	echo '</table></p></br></br>';
-
 	?>
 
 <!DOCTYPE html>
@@ -152,13 +143,15 @@
 
 </head>
 <body style="padding-top: 65px;">
- <!-- Initialize vote buttons -->
+  <!-- Initialize vote buttons -->
 	<?php 
-		$counter = 0;
-		while ($counter <= $voteIdCount){
-			$counter++;
-			echo "<script type='text/javascript'> $('#vote".$counter."').upvote();</script>";
-		}	
+		if ($usermode == 1 && strlen($username) > 0){
+			$counter = 0;
+			while ($counter <= $voteIdCount){
+				$counter++;
+				echo "<script type='text/javascript'> $('#vote".$counter."').upvote();</script>";
+			}	
+		}
 	?>
    <!-- Fixed navbar -->
    <nav id="navbarmain"  class="navbar navbar-inverse navbar-fixed-top">
@@ -201,7 +194,8 @@
 				</li>
 	     	</ul>
 		     <ul class="nav navbar-nav navbar-right">
-				<li
+
+				<li>
 					<form class="navbar-form navbar-left" role="search">
 					<div class="form-group">
 						<input type="text" class="form-control" placeholder="Search">
@@ -211,9 +205,9 @@
 					</button>
 					</form>
 				</li>
-				<li> <p class="navbar-text"> <?php if ($usermode == 1) echo "Logged in as ".$username.""; else echo "Guest"; ?>  </p></li>
-				<?php if ($usermode == 1) echo "<li><a href='logout.php'>Log out</a></li>"; else echo "<li><a href='login.php'>Log in</a></li>"; ?>
-				
+				<li> <p class="navbar-text"> <?php if ($usermode == 1 && strlen($username) > 0) echo "Logged in as ".$username.""; else echo "Guest"; ?>  </p></li>
+				<?php if ($usermode == 1 && strlen($username) > 0) echo "<li><a href='logout.php'>Log out</a></li>"; else echo "<li><a href='login.php'>Log in</a></li>"; ?>
+			
 
 		     </ul>
 			</div>
@@ -222,6 +216,7 @@
 
 
 	<?php
+	 if ($usermode == 1 && strlen($username) > 0)
 		echo "<div class='container'> ".
 		  "<h3>Post</h3> ".
 		  "<a href='postapost.php?category=".$category."&topic=".$topic."' style='margin-right: 30px' class='btn btn-info' role='button'>Text post</a> " .

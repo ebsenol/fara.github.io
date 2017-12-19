@@ -1,11 +1,10 @@
-	<?php
+<?php
 	include_once 'dbconnect.php';
 	session_start();
 	ob_start();
 	
 	//set to 1 if user logged in, 0 if guest mode
 	$usermode = 1;
-
 	if ( !isset($_SESSION['user']))
 	{
 		//guest mode
@@ -104,7 +103,7 @@
 		</div>
 	</nav>
 	<div class="container">
-		  <h3>Profile</h3>
+		  <h3>Votes</h3>
 		  <ul class="list-inline">
 
 		    <!-- <a href='viewcontent.php?id=". $req['cont_id'] ."'>" .$req['post_title']. " </a> -->
@@ -116,17 +115,9 @@
 				echo "<li><a href='view_user_comments.php?username=".$username."'>comments</a></li> ";
 				echo "<li><a href='view_user_votes.php?username=".$username."'>votes</a></li> ";
  				echo "<br>";
- 				/*
-			    <li><a href="view_user_posts.php">posts</a></li>
-			    <li><a href="view_user_comments.php">comments</a></li>
-			    <li><a href="view_user_votes.php">votes</a></li>
-			    <li><a href="#">subscribed_topics_maybe</a></li>
-			    <br>*/
-
 		    	$sql =  "SELECT * " .
-						"FROM Post AS P, Content AS C, Category_Topic AS CT, User as U ".
-						"WHERE P.cont_id = C.cont_id AND P.belongs = CT.topic_name AND U.username= '" . $username . "' ".
-						"ORDER BY P.post_title 	".
+						"FROM Vote as V, Content AS C ".
+						"WHERE V.cont_id = C.cont_id AND V.username= '" . $username . "' ".
 						"LIMIT 10;";
 	
 				$result = mysqli_query($db, $sql);
@@ -134,14 +125,9 @@
 				if( $result->num_rows > 0)
 					while($row = mysqli_fetch_array($result))
 						array_push($res_array, $row);
-
 				echo "<table class='table table-striped' style='width:95%'; align = 'center';  align='center' cellpadding='10'>";
 				echo "<thead class='thead-inverse'>";
 				echo 	"<th style='padding: 10px' > Title</th>".
-						"<th style='padding: 10px'> Date </th>".
-						"<th style='padding: 10px'> Category</th>".
-						"<th style='padding: 10px'> Topic</th>".
-						"<th style='padding: 10px'> User</th>".
 					 "</tr>".
 					 "</thead>";
 				echo "<tbody>";
@@ -149,16 +135,11 @@
 				{	
 					echo "<tr>";
 					echo "<td  width='60%'  style='padding: 10px'>".
-					"<a href='viewcontent.php?id=". $req['cont_id'] ."'>" .$req['post_title']. " </a></td>";	
-					echo "<td  width='11%' align = 'center' style='padding: 10px'>". ($req['timestamp']) . "</td>";
-					echo "<td  width='8%' align = 'center' style='padding: 10px'>". ($req['category_name']) . "</td>";
-					echo "<td   width='8%' align = 'center' style='padding: 10px'>". ($req['belongs']) . "</td>";
-					echo "<td   width='8%' align = 'center' style='padding: 10px'>". ($req['username']) . "</td>";
+					"<a href='viewcontent.php?id=". $req['cont_id'] ."'>" .$req['content']. " </a></td>";	
 					echo "</tr>";
 				}
 				echo"</tbody>";
 				echo '</table></p></br></br>';
-
 			?>
 		  </ul>
 	
@@ -175,7 +156,6 @@
 			$('#vote1').upvote();
 			$('#vote2').upvote();
 			$('#vote3').upvote();
-
 		</script>
 		
 	</body>

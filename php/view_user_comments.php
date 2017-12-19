@@ -1,11 +1,10 @@
-	<?php
+<?php
 	include_once 'dbconnect.php';
 	session_start();
 	ob_start();
 	
 	//set to 1 if user logged in, 0 if guest mode
 	$usermode = 1;
-
 	if ( !isset($_SESSION['user']))
 	{
 		//guest mode
@@ -104,7 +103,7 @@
 		</div>
 	</nav>
 	<div class="container">
-		  <h3>Profile</h3>
+		  <h3>Comments</h3>
 		  <ul class="list-inline">
 
 		    <!-- <a href='viewcontent.php?id=". $req['cont_id'] ."'>" .$req['post_title']. " </a> -->
@@ -122,7 +121,6 @@
 			    <li><a href="view_user_votes.php">votes</a></li>
 			    <li><a href="#">subscribed_topics_maybe</a></li>
 			    <br>*/
-
 		    	$sql =  "SELECT * " .
 						"FROM Comment as COM ".
 						"WHERE COM.username= '" . $username . "' ".
@@ -156,7 +154,6 @@
 				}
 				else
 					echo "You haven't commented yet!";
-
 			?>
 		  </ul>
 	
@@ -173,7 +170,6 @@
 			$('#vote1').upvote();
 			$('#vote2').upvote();
 			$('#vote3').upvote();
-
 		</script>
 		
 	</body>

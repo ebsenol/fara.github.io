@@ -5,7 +5,7 @@
 	ob_start();
 	$username = $_SESSION['username'];		
 	$topic = $_SESSION["topic"];
-
+	$category = $_SESSION['category'];
 	if( isset($_POST['btn-post']) ) { 
 		$title = $_POST['title'];
 		$text = $_POST['text'];
@@ -16,7 +16,6 @@
 		header("location: homepage.php");
 	}
 	
-	$category = $_GET["category"];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -48,12 +47,9 @@
 <body style="padding-top: 65px;">	
 	<div class="container">
 	  <?php
-
 	  	echo "<a href='view_topic.php?topic=".$topic."' class='btn btn-info'> Go back</a>";
 	  	echo "<br>";
-
 		echo "<h2>New post</h2>";
-
 	  
 	  	echo "<p><i>Posting to ".$category." / ".$topic."</i></p>";
 	  	//echo "<form action='addlinkpost_todb.php?category=".$category."&topic=".$topic."' method='post' onsubmit='return isValid()'>";
@@ -112,6 +108,3 @@
 </body>
 </html>
 <?php ob_end_flush(); ?>
-
-
-
