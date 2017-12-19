@@ -6,17 +6,15 @@
 	//set to 1 if user logged in, 0 if guest mode
 	$usermode = 1;
 
-	if ( !isset($_SESSION['user']))
+	if ( !isset($_SESSION['username']))
 	{
 		//guest mode
 		$usermode = 0;
 		$username = "";
 	}
 	else{
-		$username = $_SESSION['user'];	
+		$username = $_SESSION['username'];	
 	}
-	// $username ="berku";
-	$username = $_GET["username"];
 ?>
 
 
@@ -96,6 +94,13 @@
 					</form>
 				</li>
 				<li> <p class="navbar-text"> <?php if ($usermode == 1) echo "Logged in as ".$username.""; else echo "Guest"; ?>  </p></li>
+				<li >
+					<form action="view_user.php" class="navbar-form navbar-left" role="settings">
+					<button role="settings" type="submit"  class="btn btn-default">
+				          <span class="glyphicon glyphicon-cog"></span>
+					</button>
+					</form>
+				</li>
 				<li><a href="logout.php">Log out</a></li>
 
 		     </ul>
@@ -103,7 +108,7 @@
 		</div>
 	</nav>
 	<div class="container">
-		  <h3>Profile</h3>
+		  <h3>Votes</h3>
 		  <ul class="list-inline">
 
 		    <!-- <a href='viewcontent.php?id=". $req['cont_id'] ."'>" .$req['post_title']. " </a> -->

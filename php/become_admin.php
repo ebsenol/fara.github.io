@@ -14,7 +14,7 @@
 	else{
 		$username = $_SESSION['username'];	
 	}
-
+	
 	function generateRandomString($length = 10) {
 	    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 	    $charactersLength = strlen($characters);
@@ -103,52 +103,51 @@
 					</form>
 				</li>
 				<li> <p class="navbar-text"> <?php if ($usermode == 1) echo "Logged in as ".$username.""; else echo "Guest"; ?>  </p></li>
-				<li >
-					<form action="view_user.php" class="navbar-form navbar-left" role="settings">
-					<button role="settings" type="submit"  class="btn btn-default">
-				          <span class="glyphicon glyphicon-cog"></span>
-					</button>
-					</form>
-				</li>
 				<li><a href="logout.php">Log out</a></li>
+
 		     </ul>
 		</div>
 		</div>
 	</nav>
 		<div class="container">
-		  <h3>Profile</h3>
+		  <h3>Adminship request</h3>
 		  <ul class="list-inline">
-			
-		    <?php
-			    echo "<li><a href='view_user.php?username=".$username."'>your profile</a></li> ";
-				echo "<li><a href='view_user_posts.php?username=".$username."'>posts</a></li> ";
-				echo "<li><a href='view_user_comments.php?username=".$username."'>comments</a></li> ";
-				echo "<li><a href='view_user_votes.php?username=".$username."'>votes</a></li> ";
-				echo "<li><a href='view_user_votes.php?username=".$username."'>subscribed?</a></li> ";
- 				echo "<br>";
 
-		    	$sql =  "SELECT username, email_address " .
-						 "FROM User " .
-						 "WHERE username = '".$username."';";
+		    <?php
+		    	$sql = "SELECT username, email_address FROM User WHERE joined_date <= (NOW() - INTERVAL 1 YEAR) AND username = '".$username."';";
 			
 				$result = mysqli_query($db, $sql);
 				$res_array = array();
-				if( $result->num_rows > 0)
+				$flag = false;
+				if( $result->num_rows > 0){
+					$flag = true;
 					while($row = mysqli_fetch_array($result))
 						array_push($res_array, $row);
-				
-				foreach($res_array as $req)
-				{	
-					$uname = $req['username'];
-					$email = $req['email_address'];
-					echo "Hi ". $uname . "<br> email: " .$email. "<br>";
 				}
-				echo "<br>";
-				// TODO change refs
- 				echo "<li><a href='profile_info_change.php?username=".$username."'>change information</a></li> ";
-
- 				echo "<li><a href='become_admin.php?username=".$username."'>request adminship</a></li> ";
- 				echo "<li><a href='profile_info_change.php?username=".$username."'>request moderatorship</a></li> ";
+				else echo "Seems like you can't become admin yet!"; 
+				if($flag == true){
+					foreach($res_array as $req)
+					{	
+						$uname = $req['username'];
+						$email = $req['email_address'];
+						
+						$to = "figalitaho@gmail.com";
+						$subject = "Hi!";
+						$body = "Hi,\n\nHow are you?";
+						$headers = "From: figalitaho@gmail.com\r\n". "X-Mailer: php" . phpversion();
+						if (mail($to, $subject, $body, $headers)) {
+							echo("<p>Email successfully sent!</p>");
+						} else {
+							echo("<p>Email delivery failed…</p>");
+						}
+						// echo "You will receive an email shortly at ".$email.".";
+						// $to = 'figalitaho@gmail.com';
+						// $subject = 'Subject test';
+						// $message = 'weeee';
+						// $headers = 'From: noreply@fara.com' . "\r\n" . 'Reply-To: webmaster@example.com' . "\r\n" . 'X-Mailer: PHP/' . phpversion();
+						// mail($to, $subject, $message, $headers);
+					}
+				}
 			?>
 		  </ul>
 		</div>
