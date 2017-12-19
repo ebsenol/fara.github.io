@@ -14,9 +14,13 @@
 	else{
 		$username = $_SESSION['username'];
 	}
-	$category = $_GET["category"];
 	
-	$sql =  "SELECT * " .
+	$temp = $_GET["category"];
+	if (strlen($temp) > 0){
+		$category = $temp;	
+		$_SESSION['category'] = $category; 
+	}
+	$sql =  "SELECT * " .	
 			"FROM Post AS P, Content AS C, Category_Topic AS CT  ".
 			"WHERE P.cont_id = C.cont_id AND P.belongs = CT.topic_name AND CT.category_name = '".$category."'".
 			"ORDER BY P.post_title 	".
@@ -121,6 +125,16 @@
 	echo"</tbody>";
 	echo '</table></p></br></br>';
 
+	if( isset($_POST['btn-addtopic']) ) {
+		$topic = $_POST['topic'];
+		$category = $_SESSION['category'];
+		$sql = "INSERT INTO topic VALUES ('".$topic."');";
+		$res = mysqli_query($db,$sql);
+		$sql = "INSERT INTO Category_Topic VALUES ('".$category."','".$topic."');";
+		$res = mysqli_query($db,$sql);
+		header("location: view_category.php?category=".$category."");
+	}
+
 	?>
 
 <!DOCTYPE html>
@@ -194,7 +208,7 @@
 						 ?>
 						</ul>
 				</li>
-				<li onclick="addTopic()" class ="active"><a href="homepage.php"><b>+</b> Add Topic</a></li>
+			<li><a data-toggle="modal" data-target="#addTopicModal"><span class="glyphicon"></span><b>+</b> Add Topic</a>
 	     	</ul>
 		     <ul class="nav navbar-nav navbar-right">
 				<li
@@ -207,22 +221,35 @@
 					</button>
 					</form>
 				</li>
-				<li> <p class="navbar-text"> <?php if ($usermode == 1) echo "Logged in as ".$username.""; else echo "Guest"; ?>  </p></li>
-				<?php if ($usermode == 1) echo "<li><a href='logout.php'>Log out</a></li>"; else echo "<li><a href='login.php'>Log in</a></li>"; ?>
+				<li> <p class="navbar-text"> <?php if ($usermode == 1 && strlen($username) > 0) echo "Logged in as ".$username.""; else echo "Guest"; ?>  </p></li>
+				<?php if ($usermode == 1 && strlen($username) > 0) echo "<li><a href='logout.php'>Log out</a></li>"; else echo "<li><a href='login.php'>Log in</a></li>"; ?>
 				
-
 		     </ul>
 			</div>
 		</div>
 	</nav>
 
+ 	<div id="addTopicModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"> &times;</button>
+                <h4>Add Topic</h4>
+            </div>
+            <div class="modal-body">
+                    <form  class="form-group" method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" autocomplete="off">
 
-		<script>
-		function addTopic() {
-			//todo
-		}
-		</script>
+                       <label class="text" for="topic"></label><input type="text" class="form-control input-sm" placeholder="Topic" id="topic" name="topic">
+                       </div>
+               
+                       <button type="submit" class="btn btn-info btn-xs" name="btn-addtopic">Add</button>
+                       <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">Cancel</button> 
 
+                    </form>
+            </div>
+		 </div>
+	 </div>
+	
 
 		
 	
