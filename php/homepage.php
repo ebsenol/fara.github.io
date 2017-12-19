@@ -136,6 +136,14 @@
 	        mysqli_close($connection);
 	        header("location: congrats.php");
 	    }
+	}
+	function Search(){
+		//	header("location: login.php");
+	}
+
+	if($_SERVER["REQUEST_METHOD"] == "POST")
+    {
+        Search();
     }
     
 
@@ -190,7 +198,8 @@
 		<div id="navbar" class="navbar-collapse collapse">
 			<ul class="nav navbar-nav">
 				<li class ="active"><a href="homepage.php">Home</a></li>
-				<li <input type="text" name="search" placeholder="Search.."> </li> 
+				<form method='POST'>
+				<li <input type="text" name="search" placeholder="Search.."> </li></form>
 				<li class="dropdown">
 					<a class="dropdown-toggle" data-toggle="dropdown" href="#">Categories
 						<span class="caret"></span></a>
@@ -221,14 +230,17 @@
 				<li onclick="addCategory()" class ="active"><a href="addcategory_todb?category="..""><b>+</b> Add Category</a></li>
 	     	</ul>
 		     <ul class="nav navbar-nav navbar-right">
+			 
 				<li
-					<form class="navbar-form navbar-left" role="search">
+				<form method='POST' action=''>
+					<form class="navbar-form navbar-left" role="search" action = 'search.php'>
 					<div class="form-group">
-						<input type="text" class="form-control" placeholder="Search">
+						<input type="text" class="form-control" name='Search' placeholder="Search" action = ''>
 					</div>
 					<button type="submit" class="btn btn-default">
 						<span class="glyphicon glyphicon-search"></span>
 					</button>
+					</form>
 					</form>
 				</li>
 				<li> <p class="navbar-text"> <?php if ($usermode == 1) echo "Logged in as ".$username.""; else echo "Guest"; ?>  </p></li>

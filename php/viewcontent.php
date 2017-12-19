@@ -53,10 +53,10 @@
 		$sql =  "SELECT ".
 					"(SELECT count(*) " .
 					"FROM vote  ".
-					"WHERE vote = true AND cont_id = " .$currentContentID. " ) - ".
+					"WHERE vote = 1 AND cont_id = " .$currentContentID. " ) - ".
 					"(SELECT count(*) " .
 					"FROM Vote  ".
-					"WHERE vote = false AND cont_id = " .$currentContentID. " ) AS dif;";
+					"WHERE vote = 0 AND cont_id = " .$currentContentID. " ) AS dif;";
 
 		$result = mysqli_query($db, $sql);
 		$res_arr =  mysqli_fetch_array($result);
@@ -66,7 +66,7 @@
 		$sql2 = "SELECT ". 
 				"(SELECT count(*) " .
 				"FROM vote  ".
-				"WHERE vote = true AND username = '".$username."' AND cont_id = ".$currentContentID." ) AS up;";
+				"WHERE vote = 1 AND username = '".$username."' AND cont_id = ".$currentContentID." ) AS up;";
 		$result2 = mysqli_query($db, $sql2);
 		if ($result2){
 			$res_arr2 =  mysqli_fetch_array($result2);
@@ -76,7 +76,7 @@
 		$sql3 =  "SELECT (". 
 				"SELECT count(*) AS down " .
 				"FROM vote  ".
-				"WHERE vote = false AND username = '".$username."' AND cont_id = ".$currentContentID." ) AS down;";
+				"WHERE vote = 0 AND username = '".$username."' AND cont_id = ".$currentContentID." ) AS down;";
 		$result3 = mysqli_query($db, $sql3);
 		if ($result3){
 			$res_arr3 =  mysqli_fetch_array($result3);
@@ -178,7 +178,7 @@
 	
 	$sq4 =  "SELECT * " .
 	"FROM comment AS C1, content AS C2".
-	"WHERE C1.cont_id = C2.cont_id AND C1.dst_cont_id = '".$cid."'; ";
+	"WHERE C1.cont_id = C2.cont_id AND C1.dst_cont_id = '".$_SESSION['cid']."'; ";
 	$result4 = mysqli_query($db, $sql);
 	$res_array4 = array();
 	
@@ -186,15 +186,15 @@
 //$result = $connection->query($query);
 // $row = mysqli_fetch_array( $query);
 // if (mysqli_num_rows($query) > 0) {
-    // output data of each row
+	// output data of each row	
+	$query4 = mysqli_query($db, $sq4);
     echo '<ul>';
     //$num_rows = mysqli_num_rows($sq4);
-
-    while($row = mysqli_fetch_assoc($sq4)) {
+    while($row = mysqli_fetch_assoc($query4)) {
         echo "<form method='POST' action=''>";
         echo "id: " . $row["content"]. " - name: " . $row["username"]."";
         echo "\t<input name = 'cancelbtn' type='submit' value= 'Cancel' > <br>";
-        echo "<input name = 'cid' type='hidden' value= ".$row['cid']."> ";
+        echo "<input name = 'cid' type='hidden' value= ".$row['cont_id']."> ";
         echo "</form>";
     }
     echo '</ul>';
@@ -273,7 +273,7 @@
 <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
 
-    <meta charset="utf-8">
+    	meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
