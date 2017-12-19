@@ -40,6 +40,17 @@
 	echo "<tbody>";
 	$voteIdCount = 0;
 	$from = "homepage.php";
+
+/*	$to = "figalitaho@gmail.com";
+    $subject = "Hi!";
+    $body = "Hi,\n\nHow are you?";
+    $headers = "From: figalitaho@gmail.com\r\n". "X-Mailer: php" . phpversion();
+    if (mail($to, $subject, $body, $headers)) {
+      echo("<p>Email successfully sent!</p>");
+    } else {
+      echo("<p>Email delivery failed…</p>");
+    }
+*/
 	$_SESSION['username'] = $username; //start session
 	foreach($res_array as $req)
 	{
@@ -224,13 +235,9 @@
 
 				</li>
 				<li> <p class="navbar-text"> <?php if ($usermode == 1 && strlen($username) > 0) echo "Logged in as ".$username.""; else echo "Guest"; ?>  </p></li>
-				<li >
-					<form action="view_user.php" class="navbar-form navbar-left" role="settings">
-					<button role="settings" type="submit"  class="btn btn-default">
-				          <span class="glyphicon glyphicon-cog"></span>
-					</button>
-					</form>
-				</li>
+				<?php if($usermode == 1 && strlen($username) > 0) echo "<li ><form action='view_user.php' class='navbar-form navbar-left' role='settings'><button role='settings' type='submit' class='btn btn-default'>
+                <span class='glyphicon glyphicon-cog'></span> </button> </form></li>";
+      		 	?>
 					
 				<?php if ($usermode == 1 && strlen($username) > 0) echo "<li><a href='logout.php'>Log out</a></li>"; else echo "<li><a href='login.php'>Log in</a></li>"; ?>
 
