@@ -152,15 +152,13 @@
 
 </head>
 <body style="padding-top: 65px;">
-  <!-- Initialize vote buttons -->
+ <!-- Initialize vote buttons -->
 	<?php 
-		if ($usermode == 1 && strlen($username) > 0){
-			$counter = 0;
-			while ($counter <= $voteIdCount){
-				$counter++;
-				echo "<script type='text/javascript'> $('#vote".$counter."').upvote();</script>";
-			}	
-		}
+		$counter = 0;
+		while ($counter <= $voteIdCount){
+			$counter++;
+			echo "<script type='text/javascript'> $('#vote".$counter."').upvote();</script>";
+		}	
 	?>
    <!-- Fixed navbar -->
    <nav id="navbarmain"  class="navbar navbar-inverse navbar-fixed-top">
@@ -203,8 +201,7 @@
 				</li>
 	     	</ul>
 		     <ul class="nav navbar-nav navbar-right">
-
-				<li>
+				<li
 					<form class="navbar-form navbar-left" role="search">
 					<div class="form-group">
 						<input type="text" class="form-control" placeholder="Search">
@@ -214,9 +211,9 @@
 					</button>
 					</form>
 				</li>
-				<li> <p class="navbar-text"> <?php if ($usermode == 1 && strlen($username) > 0) echo "Logged in as ".$username.""; else echo "Guest"; ?>  </p></li>
-				<?php if ($usermode == 1 && strlen($username) > 0) echo "<li><a href='logout.php'>Log out</a></li>"; else echo "<li><a href='login.php'>Log in</a></li>"; ?>
-			
+				<li> <p class="navbar-text"> <?php if ($usermode == 1) echo "Logged in as ".$username.""; else echo "Guest"; ?>  </p></li>
+				<?php if ($usermode == 1) echo "<li><a href='logout.php'>Log out</a></li>"; else echo "<li><a href='login.php'>Log in</a></li>"; ?>
+				
 
 		     </ul>
 			</div>
@@ -225,7 +222,6 @@
 
 
 	<?php
-	 if ($usermode == 1 && strlen($username) > 0)
 		echo "<div class='container'> ".
 		  "<h3>Post</h3> ".
 		  "<a href='postapost.php?category=".$category."&topic=".$topic."' style='margin-right: 30px' class='btn btn-info' role='button'>Text post</a> " .

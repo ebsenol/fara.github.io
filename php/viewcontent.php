@@ -15,12 +15,12 @@
 	else{
 		$username = $_SESSION['username'];		
 	}
+	$cid = $_GET["id"];
+	$_SESSION['cid'] = $cid; 
 
 	$sql =  "SELECT * " .
 			"FROM post AS P, content AS C, category_topic AS CT  ".
-			"WHERE P.cont_id = C.cont_id AND P.belongs = CT.topic_name ".
-			"ORDER BY P.post_title 	".
-			"LIMIT 10;";
+			"WHERE P.cont_id = C.cont_id AND C.cont_id = ".$cid." AND CT.topic_name = P.belongs; ";
 	
 	$result = mysqli_query($db, $sql);
 	$res_array = array();
@@ -28,30 +28,25 @@
 	if( $result->num_rows > 0)
 		while($row = mysqli_fetch_array($result))
 			array_push($res_array, $row);
-
-	echo "<h2 align='center'><b> Most recent posts: </b></h2>";
+	echo PHP_EOL;
+	echo PHP_EOL;
+	echo PHP_EOL;
 	echo "</br>";
 	echo "<table class='table table-striped' style='width:95%'; align = 'center';  align='center' cellpadding='10'>";
 	echo "<thead class='thead-inverse'>";
 	echo 	"<th style='padding: 10px' > Votes</th>".
 			"<th style='padding: 10px' > Title</th>".
-			"<th style='padding: 10px'> Date </th>".
-			"<th style='padding: 10px'> Category</th>".
-			"<th style='padding: 10px'> Topic</th>".
-			"<th style='padding: 10px'> User</th>".
+			"<th style='padding: 10px' > </th>".
 
 		 "</tr>".
 		 "</thead>";
 	echo "<tbody>";
-	$cid = $_GET["currentContentID"];
-	$_SESSION['cid'] = $cid; 
-	echo $cid;
+
 	$voteIdCount = 0;
 	$from = "homepage.php";
 	$_SESSION['username'] = $username; //start session
 
-	foreach($res_array as $req)
-	{
+	$req = $res_array[0];
 		echo "<tr>";
 		$voteIdCount++;
 		$currentContentID = $req['cont_id'];
@@ -114,8 +109,42 @@
 		//activate vote button
 		//echo "<script type='text/javascript'> $('#vote".$voteIdCount."').upvote(); </script>"; 	
 
-		echo "<td  width='60%'  style='padding: 10px'>".
+		echo "<td  width='10%'  style='padding: 0px'>".
 		"<a href='viewcontent.php?id=". $currentContentID ."'>" .$req['post_title']. " </a></td>";	
+		echo "<td  width='6%' align = 'center' style='padding: 10px'></td>";
+		echo "<td  width='8%' align = 'center' style='padding: 10px'>".
+		"<a href='view_category.php?category=". $req['category_name'] ."'></td>";
+		echo "<td   width='8%' align = 'center' style='padding: 10px'>".
+		"<a href='view_topic.php?topic=". $req['belongs'] ."'></td>";
+		echo "<td   width='8%' align = 'center' style='padding: 10px'></td>";
+		echo "<\tr>";
+		echo "<tr>";
+		echo "<\tr>";	
+		echo "<tr>";
+		echo "<td   width='8%' align = 'center' style='padding: 10px'>	</td>";
+		echo "<td   width='10%' align = 'center' style='padding: 20px'>". ($req['content']) . "</td>";
+		echo "<td  width='6%' align = 'center' style='padding: 10px'></td>";
+		echo "<td  width='8%' align = 'center' style='padding: 10px'>".
+		"<a href='view_category.php?category=". $req['category_name'] ."'></td>";
+		echo "<td   width='8%' align = 'center' style='padding: 10px'>".
+		"<a href='view_topic.php?topic=". $req['belongs'] ."'></td>";
+		echo "<td   width='8%' align = 'center' style='padding: 10px'></td>";		
+		echo "</tr>";
+		
+		"<thead class='thead-inverse'>";
+	echo 	"<th style='padding: 10px' ></th>".
+			"<th style='padding: 10px' ></th>".
+			"<th style='padding: 10px'> posted </th>".
+			"<th style='padding: 10px'> category</th>".
+			"<th style='padding: 10px'> topic</th>".
+			"<th style='padding: 10px'> posted by</th>".
+		 "</tr>".
+		 "</thead>";
+		 echo "<tr>";
+		echo "<\tr>";
+		echo "<tr>";
+		echo "<td  width='6%' align = 'center' style='padding: 10px'></td>";
+		echo "<td  width='60%' align = 'center' style='padding: 10px'></td>";
 		echo "<td  width='6%' align = 'center' style='padding: 10px'>". ($req['timestamp']) . "</td>";
 		echo "<td  width='8%' align = 'center' style='padding: 10px'>".
 		"<a href='view_category.php?category=". $req['category_name'] ."'>". ($req['category_name']) . "</td>";
@@ -123,9 +152,75 @@
 		"<a href='view_topic.php?topic=". $req['belongs'] ."'>". ($req['belongs']) . "</td>";
 		echo "<td   width='8%' align = 'center' style='padding: 10px'>". ($req['username']) . "</td>";
 		echo "</tr>";
+		echo "<tr>";
+		echo "<\tr>";
+		
+	echo"</tbody>";
+	echo '</table></p></br></br>';
+	ShowReply();
+
+	
+	
+
+	#echo "<h4 width = '10%' style ='padding-left: 90px'>Comments<h4>";
+
+	
+	echo "</br>";
+	echo "<table class='table table-striped' style='width:95%'; align = 'center';  align='center' cellpadding='10'>";
+	echo "<thead class='thead-inverse'>";
+	echo 	"<th style='padding: 10px' >Comments</th>".
+			"<th style='padding: 10px' ></th>".
+			"<th style='padding: 10px' > </th>".
+
+		 "</tr>".
+		 "</thead>";
+	echo "<tbody>";
+	
+	$sq4 =  "SELECT * " .
+	"FROM comment AS C1, content AS C2".
+	"WHERE C1.cont_id = C2.cont_id AND C1.dst_cont_id = '".$cid."'; ";
+	$result4 = mysqli_query($db, $sql);
+	$res_array4 = array();
+	
+//$row = mysqli_fetch_array( $query);
+//$result = $connection->query($query);
+// $row = mysqli_fetch_array( $query);
+// if (mysqli_num_rows($query) > 0) {
+    // output data of each row
+    echo '<ul>';
+    //$num_rows = mysqli_num_rows($sq4);
+
+    while($row = mysqli_fetch_assoc($sq4)) {
+        echo "<form method='POST' action=''>";
+        echo "id: " . $row["content"]. " - name: " . $row["username"]."";
+        echo "\t<input name = 'cancelbtn' type='submit' value= 'Cancel' > <br>";
+        echo "<input name = 'cid' type='hidden' value= ".$row['cid']."> ";
+        echo "</form>";
+    }
+    echo '</ul>';
+	if( $result4->num_rows > 0)
+		while($row = mysqli_fetch_array($result4))
+			array_push($res_array4, $row);
+	foreach($res_array4 as $req4)
+	{
+		echo $req4[0]['cont_id'];
+		echo "<tr>";
+		
+		//activate vote button
+		//echo "<script type='text/javascript'> $('#vote".$voteIdCount."').upvote(); </script>"; 	
+
+		echo "<td  width='60%'  style='padding: 10px'>".
+		"<td  width='6%' align = 'center' style='padding: 10px'></td>";	
+		echo "<td  width='6%' align = 'center' style='padding: 10px'>". ($req4['content']) . "</td>";
+		echo "<td  width='8%' align = 'center' style='padding: 10px'></td>";
+		echo "<td   width='8%' align = 'center' style='padding: 10px'></td>";
+		echo "<td   width='8%' align = 'center' style='padding: 10px'>". ($req4['username']) . "</td>";
+		echo "</tr>";
 	}
 	echo"</tbody>";
 	echo '</table></p></br></br>';
+
+
 
 	function Apply(){
 	    $sql = "INSERT INTO apply VALUES ('".$_SESSION['userName']."', '".$_POST['application']."')";
@@ -139,7 +234,32 @@
 	        mysqli_close($connection);
 	        header("location: congrats.php");
 	    }
-    }
+	}
+	function ShowReply(){
+		echo"<div data-role='main' class='ui-content' align = 'right' >".
+   	 	"<a href='#myPopup' data-rel='popup' class='ui-btn ui-btn-inline ui-corner-all ui-btn-icon-left'>Reply</a>".
+
+  	  "<div data-role='popup' id='myPopup' class='ui-content' style='min-width:250px;'>".
+      "<form method='post' action='Comment()'>".
+        "<div>".
+          "<h4>Leave your comment</h4>".
+          "<label for='usrnm' class='ui-hidden-accessible'>Text</label>".
+          "<input type='text' name='user' id='usrnm' placeholder='Text'>".
+          "<input type='submit' data-inline='true' value='Submit'>".
+       "</div>".
+      "</form>".
+    "</div>".
+  "</div>";
+	}
+	// function Comment(){
+	// 	$sql = "INSERT INTO apply VALUES ('".$_SESSION['userName']."', '".$_POST['application']."')";
+	//     if(mysqli_query($connection, $sql)){
+	//         $_SESSION['course'] = $_POST['application'];
+
+	//     } else{
+	//         $_SESSION['course'] = 'none';
+	//     }
+	// }
     
 
 ?>
@@ -148,6 +268,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -216,12 +341,7 @@
 						 ?>
 						</ul>
 				</li>
-				<li>
-					<form method='POST' action=''>
-			        <br><input type='text' name='application' size='40'><br>
-			        <input id='button' type='submit' name='submit' value='submit'></form>
-				</li>
-				<li onclick="addCategory()" class ="active"><a href="addcategory_todb?category="..""><b>+</b> Add Category</a></li>
+				
 	     	</ul>
 		     <ul class="nav navbar-nav navbar-right">
 				<li
@@ -229,7 +349,7 @@
 					<div class="form-group">
 						<input type="text" class="form-control" placeholder="Search">
 					</div>
-					<button type="submit" class="btn btn-default">
+					<button type="submit"  class="btn btn-default" style= width:15px>
 						<span class="glyphicon glyphicon-search"></span>
 					</button>
 					</form>
@@ -254,7 +374,7 @@
 		$category =implode(" ",mysqli_fetch_assoc($result));
 		echo "} </script>";
 	?>
-		
+			
 		</body>
 </html>
 <?php ob_end_flush(); ?>

@@ -6,14 +6,14 @@
 	//set to 1 if user logged in, 0 if guest mode
 	$usermode = 1;
 
-	if ( !isset($_SESSION['username']))
+	if ( !isset($_SESSION['user']))
 	{
 		//guest mode
 		$usermode = 0;
 		$username = "";
 	}
 	else{
-		$username = $_SESSION['username'];	
+		$username = $_SESSION['user'];	
 	}
 	$username ="berku";
 ?>
@@ -96,13 +96,6 @@
 					</form>
 				</li>
 				<li> <p class="navbar-text"> <?php if ($usermode == 1) echo "Logged in as ".$username.""; else echo "Guest"; ?>  </p></li>
-				<li>
-					<form action="profile_info_change.php" class="navbar-form navbar-left" role="settings">
-					<button role="settings" type="submit"  class="btn btn-default">
-				          <span class="glyphicon glyphicon-cog"></span>
-					</button>
-					</form>
-				</li>
 				<li><a href="logout.php">Log out</a></li>
 
 			 </ul>
@@ -113,6 +106,8 @@
 		  <h3>Profile</h3>
 		  <ul class="list-inline">
 
+			<!-- <a href='viewcontent.php?id=". $req['cont_id'] ."'>" .$req['post_title']. " </a> -->
+			<!-- deafult is user profile -->
 			
 			<?php
 				$sql =  "SELECT email_address, password " .
@@ -125,29 +120,27 @@
 						array_push($res_array, $row);
 				foreach($res_array as $req)
 				{
-					$email = $req['email_address'];
-					$pw = $req['password'];
-					echo "<form action='update_info.php?username=".$username."&email_address=".$email."&password=".$pw."' method='POST' type='hidden' onsubmit=\"return isValid('$email', '$pw')\">";
+					echo "<form action='update_info.php?username=".$username."&email=".$category."&topic=".$topic."' method='post' onsubmit='return isValid()'>";
 				}
 			?>
 				Change password: <br>
 				<div class="form-group" method="post" >
 					<label for="usr">old password</label>
-					<input type="text" name="old_password" class="form-control" >
+					<input type="text" id="old-password" class="form-control" >
 			  	</div>
 			  	<div class="form-group" method="post" >
 					<label for="usr">new password</label>
-					<input type="text" name="new_password" class="form-control" >
+					<input type="text" id="new-password" class="form-control" >
 			  	</div>
 
 			  	Change email: <br>
-				<div class="form-group" method="post">
+				<div class="form-group">
 					<label for="pwd">old email</label>
-					<input type="text" name="old_email" class="form-control" >
+					<input type="text" id="old-email" class="form-control" >
 			  	</div>
-			  	<div class="form-group" method="post">
+			  	<div class="form-group">
 					<label for="pwd">new email</label>
-					<input type="text" name="new_email" class="form-control" >
+					<input type="text" id="new-email" class="form-control" >
 			  	</div>
 
 				<div class="container"> 
@@ -174,45 +167,23 @@
 
 		</script>
 		<script>
-			function isValid(email, pw){
-				var old_email = document.getElementById("old-email").value;
-				var old_password = document.getElementById("old-password").value;
-				var new_email = document.getElementById("new-email").value;
-				var new_password = document.getElementById("new-password").value;
-				// only changes email 
-				if((old_email != "" && old_email != email) || (old_password != "" && old_password!= pw)){
-					alert("Your old email or password is incorrect!");
-					return false;
-				}
-				if(email == old_email && old_password == ""){
-					if(new_email == ""){
-						alert("You should add a new email");
-						return false;
-					}else{
-						if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(new_email)){
-							return true;
-						}else{
-							alert("You have entered an invalid email address!");
-							return false;	
-						}
-					}
-				}
-				// only changes password
-				else if(old_email == "" && old_password == pw){
-					if(new_password == ""){
-						alert("You should add a new password!");
-						return false;
-					}else{
-						return true;
-					}
-				}
-				// changes both 
-				else if(email == old_email && pw == old_password && (new_email == "" || new_password == "")){
-					return true;
-				}else{
-					alert("Fill in your new email and password!");
-					return false;
-				}
+			function isValid(){
+				var title = document.getElementById("title").value;
+				var link = document.getElementById("link").value;
+				return true;
+				// if( title == "" && link == ""){
+				// 	alert("Fill in the spaces!");
+				// return false;
+				// }  
+				// else if( title == ""){
+				// 	alert("Please enter a title!");
+				// return false;
+				// }
+				// else if( url == ""){
+				// 	alert("Please enter a url!");
+				// return false;
+				// }
+				// return true;
 			}
 		</script>
 

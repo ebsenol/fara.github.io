@@ -104,7 +104,7 @@
 		</div>
 	</nav>
 	<div class="container">
-		  <h3>Comments</h3>
+		  <h3>Profile</h3>
 		  <ul class="list-inline">
 
 		    <!-- <a href='viewcontent.php?id=". $req['cont_id'] ."'>" .$req['post_title']. " </a> -->
