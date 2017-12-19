@@ -212,11 +212,12 @@
 	     	</ul>
 		     <ul class="nav navbar-nav navbar-right">
 				<li>
-					<form class="navbar-form navbar-left" role="search">
+
+					<form class="navbar-form navbar-left" role="search" action = 'search.php'>
 					<div class="form-group">
-						<input type="text" class="form-control" placeholder="Search">
+						<input type="text" class="form-control" name = "Search" placeholder="Search">
 					</div>
-					<button type="submit" class="btn btn-default">
+					<button type="submit" class="btn btn-default" action =>
 						<span class="glyphicon glyphicon-search"></span>
 					</button>
 					</form>

@@ -30,7 +30,7 @@ if( $result->num_rows > 0)
     while($row = mysqli_fetch_array($result))
         array_push($res_array, $row);
 
-echo "<h2 align='center'><b> Most recent posts: </b></h2>";
+echo "<h2 align='center'><b> Search Result: </b></h2>";
 echo "</br>";
 echo "<table class='table table-striped' style='width:95%'; align = 'center';  align='center' cellpadding='10'>";
 echo "<thead class='thead-inverse'>";
@@ -155,117 +155,136 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="">
-<meta name="author" content="">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+	<script src="http://code.jquery.com/jquery-latest.js"></script>
+	<link rel="stylesheet" href="/css/upvote/jquery.upvote.css" type="text/css" media="screen">
+	<script type="text/javascript" src="/css/upvote/jquery.upvote.js"></script>
 
-<script src="http://code.jquery.com/jquery-latest.js"></script>
-<link rel="stylesheet" href="/css/upvote/jquery.upvote.css" type="text/css" media="screen">
-<script type="text/javascript" src="/css/upvote/jquery.upvote.js"></script>
-
-<script type="text/javascript" src="/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
-<link rel="stylesheet" href="/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
-<title>Fara</title>
+	<script type="text/javascript" src="/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+	<link rel="stylesheet" href="/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
+	<title>Fara</title><link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
 
 </head>
 <body style="padding-top: 65px;">
+   
+   <!-- Initialize vote buttons -->
+	<?php 
+		if ($usermode == 1 && strlen($username) > 0){
+			$counter = 0;
+			while ($counter <= $voteIdCount){
+				$counter++;
+				echo "<script type='text/javascript'> $('#vote".$counter."').upvote();</script>";
+			}	
+		}
+	?>
+   <!-- Fixed navbar -->
+   <nav id="navbarmain"  class="navbar navbar-inverse navbar-fixed-top">
+       <div class="container">
+         <div class="navbar-header">
+           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+             <span class="sr-only">Toggle navigation</span>
+             <span class="icon-bar"></span>
+             <span class="icon-bar"></span>
+             <span class="icon-bar"></span>
+			</button>
+         <a class="navbar-brand" href="index.php">Fara</a>
+		</div>
 
-<!-- Initialize vote buttons -->
-<?php 
-    $counter = 0;
-    while ($counter <= $voteIdCount){
-        $counter++;
-        echo "<script type='text/javascript'> $('#vote".$counter."').upvote();</script>";
-    }	
-?>
-<!-- Fixed navbar -->
-<nav id="navbarmain"  class="navbar navbar-inverse navbar-fixed-top">
-   <div class="container">
-     <div class="navbar-header">
-       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-         <span class="sr-only">Toggle navigation</span>
-         <span class="icon-bar"></span>
-         <span class="icon-bar"></span>
-         <span class="icon-bar"></span>
-        </button>
-     <a class="navbar-brand" href="index.php">Fara</a>
-    </div>
+		<div id="navbar" class="navbar-collapse collapse">
+			<ul class="nav navbar-nav">
+				<li class ="active"><a href="homepage.php">Home</a></li>
+				<li <input type="text" name="search" placeholder="Search.."> </li> 
+				<li class="dropdown">
+					<a class="dropdown-toggle" data-toggle="dropdown" href="#">Categories
+						<span class="caret"></span></a>
+						<ul class="dropdown-menu">
+						 <?php
+							 $sql =  "SELECT name " .
+									 "FROM Category;";
+						
+							$result = mysqli_query($db, $sql);
+							$res_array = array();
+							if( $result->num_rows > 0)
+								while($row = mysqli_fetch_array($result))
+									array_push($res_array, $row);
+								
+							foreach($res_array as $req)
+							{
+								$catName = $req['name'];
+								echo "<li><a href='view_category.php?category=".$catName."'>". ($catName) . "</a></li>";
+         					}
+						 ?>
+						</ul>
+				</li>
+				<?php 
+				if ($usermode == 1 && strlen($username) > 0)
+				echo "<li><a data-toggle='modal' data-target='#addCategoryModal'><span class='glyphicon'></span><b>+</b> Add Category</a>";
+				?>
+				</li>
+	     	</ul>
+		     <ul class="nav navbar-nav navbar-right">
+				<li>
 
-    <div id="navbar" class="navbar-collapse collapse">
-        <ul class="nav navbar-nav">
-            <li class ="active"><a href="homepage.php">Home</a></li>
-            <form method='POST'>
-            <li <input type="text" name="search" placeholder="Search.."> </li></form>
-            <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Categories
-                    <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                     <?php
-                         $sql =  "SELECT name " .
-                                 "FROM Category;";
-                    
-                        $result = mysqli_query($db, $sql);
-                        $res_array = array();
-                        if( $result->num_rows > 0)
-                            while($row = mysqli_fetch_array($result))
-                                array_push($res_array, $row);
-                            
-                        foreach($res_array as $req)
-                        {
-                            $catName = $req['name'];
-                            echo "<li><a href='view_category.php?category=".$catName."'>". ($catName) . "</a></li>";
-                         }
-                     ?>
-                    </ul>
-            </li>
-            <li>
-                <form method='POST' action=''>
-                <br><input type='text' name='application' size='40'><br>
-                <input id='button' type='submit' name='submit' value='submit'></form>
-            </li>
-            <li onclick="addCategory()" class ="active"><a href="addcategory_todb?category="..""><b>+</b> Add Category</a></li>
-         </ul>
-         <ul class="nav navbar-nav navbar-right">
-         
-            <li
-            <form method='POST' action=''>
-                <form class="navbar-form navbar-left" role="search" action = 'search.php'>
-                <div class="form-group">
-                    <input type="text" class="form-control" name='Search' placeholder="Search" action = ''>
-                </div>
-                <button type="submit" class="btn btn-default">
-                    <span class="glyphicon glyphicon-search"></span>
-                </button>
-                </form>
-                </form>
-            </li>
-            <li> <p class="navbar-text"> <?php if ($usermode == 1) echo "Logged in as ".$username.""; else echo "Guest"; ?>  </p></li>
-            <?php if ($usermode == 1) echo "<li><a href='logout.php'>Log out</a></li>"; else echo "<li><a href='login.php'>Log in</a></li>"; ?>
-            
+					<form class="navbar-form navbar-left" role="search" action = 'search.php'>
+					<div class="form-group">
+						<input type="text" class="form-control" name = "Search" placeholder="Search">
+					</div>
+					<button type="submit" class="btn btn-default" action =>
+						<span class="glyphicon glyphicon-search"></span>
+					</button>
+					</form>
 
-         </ul>
-        </div>
-    </div>
-</nav>
+				</li>
+				<li> <p class="navbar-text"> <?php if ($usermode == 1 && strlen($username) > 0) echo "Logged in as ".$username.""; else echo "Guest"; ?>  </p></li>
+				<li >
+					<form action="view_user.php" class="navbar-form navbar-left" role="settings">
+					<button role="settings" type="submit"  class="btn btn-default">
+				          <span class="glyphicon glyphicon-cog"></span>
+					</button>
+					</form>
+				</li>
+					
+				<?php if ($usermode == 1 && strlen($username) > 0) echo "<li><a href='logout.php'>Log out</a></li>"; else echo "<li><a href='login.php'>Log in</a></li>"; ?>
 
-<?php
-    echo "<script> function addCategory() { ";
-        
-    $sql =  "SELECT category_name " .
-        "FROM Category_Topic  ".
-        "WHERE topic_name = '".$topic."'";
+				
 
-    $result = mysqli_query($db, $sql);	
-    $category =implode(" ",mysqli_fetch_assoc($result));
-    echo "} </script>";
-?>
-    
-    </body>
+		     </ul>
+			</div>
+		</div>
+	</nav>
+
+
+    <div id="addCategoryModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"> &times;</button>
+                <h4>Add Category</h4>
+            </div>
+            <div class="modal-body">
+                    <form  class="form-group" method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" autocomplete="off">
+
+                       <label class="text" for="category"></label><input type="text" class="form-control input-sm" placeholder="Category" id="category" name="category">
+                       <button type="submit" class="btn btn-info btn-xs" name="btn-addcategory">Add</button>
+                       <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">Cancel</button> 
+                       </div>
+               
+                       
+
+                    </form>
+            </div>
+		 </div>
+	 </div>
+	
+	</body>
 </html>
 <?php ob_end_flush(); ?>
