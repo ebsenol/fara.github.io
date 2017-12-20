@@ -50,6 +50,7 @@ public class CreateTables {
             stmt.executeUpdate("DROP TRIGGER IF EXISTS delete_content_after_delete_comment" );
 
             System.out.println( "\nDropping views...");
+
             stmt.executeUpdate("DROP VIEW IF EXISTS homepage_view" );
             stmt.executeUpdate("DROP VIEW IF EXISTS bestofea_week_view" );
 
