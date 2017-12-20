@@ -34,6 +34,7 @@ if( $result->num_rows > 0)
 
         
 echo "<h2 align='center'><b> Search Result: </b></h2>";
+echo "<h4 align='left' style='padding-left: 30px'><b> Posts: </b></h4>";
 echo "</br>";
 echo "<table class='table table-striped' style='width:95%'; align = 'center';  align='center' cellpadding='10'>";
 echo "<thead class='thead-inverse'>";
@@ -128,7 +129,56 @@ foreach($res_array as $req)
 }
 echo"</tbody>";
 echo '</table></p></br></br>';
+///////////////////////////////////////////////////////////////////////////////////
+$sql =  "SELECT * " .
+        "FROM Category WHERE name like '%".$text."%'";
 
+$result = mysqli_query($db, $sql);
+$res_array = array();
+if( $result->num_rows > 0){
+    if( $result->num_rows > 0)
+        while($row = mysqli_fetch_array($result))
+            array_push($res_array, $row);
+    echo "<h4 align='left' style='padding-left: 30px'><b> Categories: </b></h4>";
+    echo "</br>";
+    echo "<table class='table table-striped' style='width:95%'; align = 'center';  align='center' cellpadding='10'>";
+    foreach($res_array as $req)
+    {
+        
+    echo "<tbody>";
+    echo "<td  width='60%'  style='padding: 10px'>".
+        "<a href='view_category.php?category=". $req['name'] ."'>" .$req['name']. " </a></td>";	
+    // echo "</tr>";
+    }
+    echo"</tbody>";
+    echo '</table></p></br></br>';
+}
+//////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
+$sql =  "SELECT * " .
+        "FROM Topic WHERE topic_name like '%".$text."%'";
+
+$result = mysqli_query($db, $sql);
+$res_array = array();
+if( $result->num_rows > 0){
+    if( $result->num_rows > 0)
+        while($row = mysqli_fetch_array($result))
+            array_push($res_array, $row);
+    echo "<h4 align='left' style='padding-left: 30px'><b> Topics: </b></h4>";
+    echo "</br>";
+    echo "<table class='table table-striped' style='width:95%'; align = 'center';  align='center' cellpadding='10'>";
+    foreach($res_array as $req)
+    {
+        
+    echo "<tbody>";
+    echo "<td  width='60%'  style='padding: 10px'>".
+        "<a href='view_topic.php?topic=". $req['topic_name'] ."'>" .$req['topic_name']. " </a></td>";	
+    // echo "</tr>";
+    }
+    echo"</tbody>";
+    echo '</table></p></br></br>';
+}
+//////////////////////////////////////////////////////////////////////////////////////
 function Apply(){
     $sql = "INSERT INTO apply VALUES ('".$_SESSION['userName']."', '".$_POST['application']."')";
     if(mysqli_query($connection, $sql)){
