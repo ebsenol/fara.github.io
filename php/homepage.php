@@ -14,10 +14,7 @@
 	else{
 		$username = $_SESSION['username'];		
 	}
-	$sql =  "SELECT * " .
-			"FROM Post AS P, Content AS C, Category_Topic AS CT  ".
-			"WHERE P.cont_id = C.cont_id AND P.belongs = CT.topic_name ".
-			"ORDER BY P.post_title 	".
+	$sql =  "SELECT * FROM homepage_view ".
 			"LIMIT 10;";
 	
 	$result = mysqli_query($db, $sql);
