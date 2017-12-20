@@ -28,10 +28,10 @@
 	if( $result->num_rows > 0)
 		while($row = mysqli_fetch_array($result))
 			array_push($res_array, $row);
-	echo PHP_EOL;
-	echo PHP_EOL;
-	echo PHP_EOL;
 	echo "</br>";
+	// echo "<br>";
+	// echo "</br>";
+
 	echo "<table class='table table-striped' style='width:95%'; align = 'center';  align='center' cellpadding='10'>";
 	echo "<thead class='thead-inverse'>";
 	echo 	"<th style='padding: 10px' > Votes</th>".
@@ -156,8 +156,13 @@
 		echo "<\tr>";
 		
 	echo"</tbody>";
-	echo '</table></p></br></br>';
-	ShowReply();
+	echo '</table></p>';
+	//ShowReply();
+	echo "<form action='' method='post' align = 'right' value = 'Comment' style='padding-right: 30px'>".
+	"<p><input type='text' name='comment'  placeholder = 'Leave your comment'/>".
+	"<p><input type='submit' value='submit' align = 'right'></p>".
+	"</form>";
+
 
 	
 	
@@ -168,57 +173,140 @@
 	echo "</br>";
 	echo "<table class='table table-striped' style='width:95%'; align = 'center';  align='center' cellpadding='10'>";
 	echo "<thead class='thead-inverse'>";
-	echo 	"<th style='padding: 10px' >Comments</th>".
-			"<th style='padding: 10px' ></th>".
+	echo 	"<th style='padding: 10px' >votes</th>".
+			"<th style='padding: 10px' >Comments</th>".
 			"<th style='padding: 10px' > </th>".
 
 		 "</tr>".
 		 "</thead>";
 	echo "<tbody>";
+	////////////////////////////////////////////////
+	$sql4 =  "SELECT * " .
+			"FROM Comment AS C1, content AS C2  ".
+			"WHERE C1.cont_id = C2.cont_id AND C1.dst_cont_id =".$cid.";";
 	
-	$sq4 =  "SELECT * " .
-	"FROM comment AS C1, content AS C2".
-	"WHERE C1.cont_id = C2.cont_id AND C1.dst_cont_id = '".$_SESSION['cid']."'; ";
-	$result4 = mysqli_query($db, $sql);
+	$result4 = mysqli_query($db, $sql4);
 	$res_array4 = array();
-	
-//$row = mysqli_fetch_array( $query);
-//$result = $connection->query($query);
-// $row = mysqli_fetch_array( $query);
-// if (mysqli_num_rows($query) > 0) {
-	// output data of each row	
-	$query4 = mysqli_query($db, $sq4);
-    echo '<ul>';
-    //$num_rows = mysqli_num_rows($sq4);
-    while($row = mysqli_fetch_assoc($query4)) {
-        echo "<form method='POST' action=''>";
-        echo "id: " . $row["content"]. " - name: " . $row["username"]."";
-        echo "\t<input name = 'cancelbtn' type='submit' value= 'Cancel' > <br>";
-        echo "<input name = 'cid' type='hidden' value= ".$row['cont_id']."> ";
-        echo "</form>";
-    }
-    echo '</ul>';
 	if( $result4->num_rows > 0)
 		while($row = mysqli_fetch_array($result4))
 			array_push($res_array4, $row);
-	foreach($res_array4 as $req4)
+	
+	echo "<tbody>";
+	
+	$from = "homepage.php";
+	$_SESSION['username'] = $username; //start session
+	foreach($res_array4 as $req)
 	{
-		echo $req4[0]['cont_id'];
 		echo "<tr>";
+		$voteIdCount++;
+		$currentContentID = $req['cont_id'];
+		$sql =  "SELECT ".
+					"(SELECT count(*) " .
+					"FROM vote  ".
+					"WHERE vote = true AND cont_id = " .$currentContentID. " ) - ".
+					"(SELECT count(*) " .
+					"FROM Vote  ".
+					"WHERE vote = false AND cont_id = " .$currentContentID. " ) AS dif;";
+		$result = mysqli_query($db, $sql);
+		$res_arr =  mysqli_fetch_array($result);
+		$voteCount = $res_arr['dif'];
+		$upCountFromUser = 0;
+		$downCountFromUser = 0;
+		$sql2 = "SELECT ". 
+				"(SELECT count(*) " .
+				"FROM vote  ".
+				"WHERE vote = true AND username = '".$username."' AND cont_id = ".$currentContentID." ) AS up;";
+		$result2 = mysqli_query($db, $sql2);
+		if ($result2){
+			$res_arr2 =  mysqli_fetch_array($result2);
+			$upCountFromUser = $res_arr2['up'];
+		}
+		$sql3 =  "SELECT (". 
+				"SELECT count(*) AS down " .
+				"FROM vote  ".
+				"WHERE vote = false AND username = '".$username."' AND cont_id = ".$currentContentID." ) AS down;";
+		$result3 = mysqli_query($db, $sql3);
+		if ($result3){
+			$res_arr3 =  mysqli_fetch_array($result3);
+			$downCountFromUser = $res_arr3['down'];
+		}
+      	echo "<td  width='10%' style='padding:0px''> ".
+  			"<div id='vote".$voteIdCount."' class = 'upvote upvote-programmers' > ";
+  			if ($usermode == 1 && strlen($username) > 0){
+	  			if ($upCountFromUser > 0)
+	  				echo "<a class='upvote upvote-on' href='add_vote.php?username=". $username ."&contid=".$currentContentID."&vote=neutral&from=".$from."'b></a> ";
+	  			else{
+	  				if ($downCountFromUser > 0 )
+	  					echo "<a class='upvote' href='add_vote.php?username=". $username ."&contid=".$currentContentID."&vote=downtoup&from=".$from."'></a> ";
+	  				else
+	  					echo "<a class='upvote' href='add_vote.php?username=". $username ."&contid=".$currentContentID."&vote=up&from=".$from."'></a> ";
+	  			}
+  			}
+  			else {
+  				echo "<a class='upvote'></a> ";
+  			}
+  			
+  		echo "<span class='count'>".$voteCount."</span> ";
+		if ($usermode == 1 && strlen($username) > 0){
+			if ($downCountFromUser > 0 )
+				echo "<a class='downvote downvote-on' href='add_vote.php?username=". $username ."&contid=".$currentContentID."&vote=neutral&from=".$from."'></a> ";
+			else
+				if ($upCountFromUser > 0)
+				echo "<a class='downvote' href='add_vote.php?username=". $username ."&contid=".$currentContentID."&vote=uptodown&from=".$from."'></a> ";
 		
+				else
+					echo "<a class='downvote' href='add_vote.php?username=". $username ."&contid=".$currentContentID."&vote=down&from=".$from."'></a> ";
+		}
+		else{
+  			echo "<a class='downvote'></a> ";
+		}
+  		echo "</div>";
 		//activate vote button
 		//echo "<script type='text/javascript'> $('#vote".$voteIdCount."').upvote(); </script>"; 	
-
-		echo "<td  width='60%'  style='padding: 10px'>".
-		"<td  width='6%' align = 'center' style='padding: 10px'></td>";	
-		echo "<td  width='6%' align = 'center' style='padding: 10px'>". ($req4['content']) . "</td>";
+		echo "<td  width='60%'  style='padding: 10px'>".$req['content']. "</td>";	
+		echo "<td  width='6%' align = 'center' style='padding: 10px'>". ($req['timestamp']) . "</td>";
 		echo "<td  width='8%' align = 'center' style='padding: 10px'></td>";
 		echo "<td   width='8%' align = 'center' style='padding: 10px'></td>";
-		echo "<td   width='8%' align = 'center' style='padding: 10px'>". ($req4['username']) . "</td>";
+		echo "<td   width='8%' align = 'center' style='padding: 10px'>". ($req['username']) . "</td>";
+		echo "</tr>";
+		echo "<tr>";
+		echo "<td  width='60%'  style='padding: 10px'></td>";	
+		echo "<td  width='6%' align = 'center' style='padding: 10px'></td>";
+		echo "<td  width='8%' align = 'center' style='padding: 10px'></td>";
+		echo "<td   width='8%' align = 'center' style='padding: 10px'></td>";
+		echo "<td   width='8%' align = 'center' style='padding: 10px'></td>";
+		echo "<td>";
+		//ShowReply();
+		echo "<form action='' method='post' align = 'right' value = 'Comment'>".
+		"<p><input type='text' name='comment'  placeholder = 'Leave your comment'/>".
+		"<p><input type='submit' value='submit' align = 'right' name  = 'btn-comment'></p>".
+		"<input name = 'cont_id' type='hidden' value= ".$req['cont_id']."> ".
+		"</form>";
+		echo "</td>";
 		echo "</tr>";
 	}
 	echo"</tbody>";
 	echo '</table></p></br></br>';
+	if( isset($_POST['btn-addcategory']) ) {
+		$comment = $_POST['comment'];
+		$date = date('Y-m-d H:i:s');
+		$sql = "INSERT INTO Content VALUES (NULL, now(), '".$comment."', 'comment', '".$username."', 0);";
+		$res = mysqli_query($db,$sql);
+		$sql = "INSERT INTO Comment VALUES (LAST_INSERT_ID(), ".$username."".$cid."".$date."".$comment."".$cid."');";
+		$res = mysqli_query($db,$sql);
+		//header("location: homepage.php");
+	}
+	if( isset($_POST['btn-comment']) ) {
+		$comment = $_POST['comment'];
+		$date = date('Y-m-d H:i:s');
+		$sql = "INSERT INTO Content VALUES (NULL, now(), '".$comment."', 'comment', '".$username."', 0);";
+		$res = mysqli_query($db,$sql);
+		$sql = "INSERT INTO Comment VALUES (LAST_INSERT_ID(), ".$username."".$cid."".$date."".$comment."".$cid."');";
+		$res = mysqli_query($db,$sql);
+	}
+	/////////////////////////////////////////////////////////
+	
+	
 
 
 
@@ -236,20 +324,22 @@
 	    }
 	}
 	function ShowReply(){
-		echo"<div data-role='main' class='ui-content' align = 'right' >".
-   	 	"<a href='#myPopup' data-rel='popup' class='ui-btn ui-btn-inline ui-corner-all ui-btn-icon-left'>Reply</a>".
+// 		echo"<div data-role='content' class='ui-content' align = 'right' >".
+//    	 	"<a href='#myPopup' data-rel='popup' class='ui-btn ui-btn-inline ui-corner-all ui-btn-icon-left'>Reply</a>".
 
-  	  "<div data-role='popup' id='myPopup' class='ui-content' style='min-width:250px;'>".
-      "<form method='post' action='Comment()'>".
-        "<div>".
-          "<h4>Leave your comment</h4>".
-          "<label for='usrnm' class='ui-hidden-accessible'>Text</label>".
-          "<input type='text' name='user' id='usrnm' placeholder='Text'>".
-          "<input type='submit' data-inline='true' value='Submit'>".
-       "</div>".
-      "</form>".
-    "</div>".
-  "</div>";
+//   	  "<div data-role='popup' id='myPopup' class='ui-content' style='min-width:250px;'>".
+//       "<form method='post' action='Comment()'>".
+//         "<div>".
+//           "<p4>Leave your comment</p4>".
+//           "<label for='usrnm' class='ui-hidden-accessible'>Text</label>".
+//           "<input type='text' name='user' id='usrnm' placeholder='Text'>".
+//           "<input type='submit' data-inline='true' value='Submit'>".
+//        "</div>".
+//       "</form>".
+//     "</div>".
+//   "</div>";
+		echo "<form action='' method='post'>".
+		"<p>Leave comment: <input type='text' name='comment' /><br />";
 	}
 	// function Comment(){
 	// 	$sql = "INSERT INTO apply VALUES ('".$_SESSION['userName']."', '".$_POST['application']."')";
@@ -268,12 +358,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
 <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
-<script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
-
-    	meta charset="utf-8">
+<script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script> -->
+	
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
@@ -349,7 +438,7 @@
 					<div class="form-group">
 						<input type="text" class="form-control" placeholder="Search">
 					</div>
-					<button type="submit"  class="btn btn-default" style= width:15px>
+					<button type="submit"  class="btn btn-default">
 						<span class="glyphicon glyphicon-search"></span>
 					</button>
 					</form>
