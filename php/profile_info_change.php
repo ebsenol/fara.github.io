@@ -131,21 +131,21 @@
 				Change password: <br>
 				<div class="form-group" method="post" >
 					<label for="usr">old password</label>
-					<input type="text" name="old_password" class="form-control" >
+					<input type="text" name="old_password" id="old_password" class="form-control" >
 			  	</div>
 			  	<div class="form-group" method="post" >
 					<label for="usr">new password</label>
-					<input type="text" name="new_password" class="form-control" >
+					<input type="text" name="new_password" id="new_password" class="form-control" >
 			  	</div>
 
 			  	Change email: <br>
 				<div class="form-group" method="post">
 					<label for="pwd">old email</label>
-					<input type="text" name="old_email" class="form-control" >
+					<input type="text" name="old_email" id="old_email" class="form-control" >
 			  	</div>
 			  	<div class="form-group" method="post">
 					<label for="pwd">new email</label>
-					<input type="text" name="new_email" class="form-control" >
+					<input type="text" name="new_email" id="new_email" class="form-control" >
 			  	</div>
 
 				<div class="container"> 
@@ -166,16 +166,11 @@
 		}
 		</script>
 		<script>
-			$('#vote1').upvote();
-			$('#vote2').upvote();
-			$('#vote3').upvote();
-		</script>
-		<script>
 			function isValid(email, pw){
-				var old_email = document.getElementById("old-email").value;
-				var old_password = document.getElementById("old-password").value;
-				var new_email = document.getElementById("new-email").value;
-				var new_password = document.getElementById("new-password").value;
+				var old_email = document.getElementById("old_email").value;
+				var old_password = document.getElementById("old_password").value;
+				var new_email = document.getElementById("new_email").value;
+				var new_password = document.getElementById("new_password").value;
 				// only changes email 
 				if((old_email != "" && old_email != email) || (old_password != "" && old_password!= pw)){
 					alert("Your old email or password is incorrect!");
