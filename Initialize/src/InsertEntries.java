@@ -83,16 +83,11 @@ public class InsertEntries {
             stmt.executeUpdate(sql);
 
             //Add comment
-            sql = "INSERT INTO Comment VALUES (21230, 'berku', 1230,1232);";
+            sql = "INSERT INTO Comment VALUES (21230, 'berku', 1230, now() , 'wow, nice post!',1232);";
             stmt.executeUpdate(sql);
-            sql = "INSERT INTO Comment VALUES (21231, 'berku', 1231 ,1230);";
+            sql = "INSERT INTO Comment VALUES (21231, 'berku', 1231, now() , 'hmmm such a post!',1230);";
             stmt.executeUpdate(sql);
 
-
-            sql = "INSERT INTO Content VALUES (21230,now() - interval 1 day, 'wow, nice post!','comment', 'berku', 0);";
-            stmt.executeUpdate(sql);
-            sql = "INSERT INTO Content VALUES (21231,now() - interval 1 day, 'hmmm such a post!','comment', 'berku', 0);";
-            stmt.executeUpdate(sql);
             //Add banned
             sql = "INSERT INTO Banned VALUES ('toxic', 'Science');";
             stmt.executeUpdate(sql);

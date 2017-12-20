@@ -132,6 +132,8 @@ public class CreateTables {
                     "cont_id INT NOT NULL, " +
                     "username VARCHAR(32) NOT NULL, " +
                     "dst_cont_id INT, " +
+                    "timestamp DATE, "+
+                    "comment VARCHAR(800) NOT NULL," +
                     "parent_post INT,"+
                     "PRIMARY KEY (cont_id, username), " +
 //                    "FOREIGN KEY (cont_id) REFERENCES Content(cont_id)," +
