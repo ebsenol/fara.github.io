@@ -14,9 +14,24 @@
 	else{
 		$username = $_SESSION['username'];		
 	}
-	$sql =  "SELECT * FROM homepage_view ".
+
+		// used to indicate view that user chose
+	$view ="all";
+	if (isset($_GET['view']))
+		$view = $_GET['view'];
+
+	$sql =  "SELECT * FROM homepage_view LIMIT 10;";
+	if ($view == "week")
+		$sql =  "SELECT * FROM homepage_view WHERE timestamp > now() - INTERVAL 1 WEEK ".
 			"LIMIT 10;";
-	
+	else if ($view == "today")
+		$sql =  "SELECT * FROM homepage_view WHERE timestamp > now() - INTERVAL 1 DAY ".
+			"LIMIT 10;";
+	else if ($view == "eaweek")
+		$sql =  "SELECT * FROM bestofea_week_view ".
+					"LIMIT 10;";
+
+
 	$result = mysqli_query($db, $sql);
 	$res_array = array();
 	if( $result->num_rows > 0)
@@ -37,6 +52,11 @@
 	echo "<tbody>";
 	$voteIdCount = 0;
 	$from = "homepage.php";
+	echo "<a style='margin-left: 200px;'href='homepage.php?view=today'>Top posts of today</a>"; 
+	echo "<a style='margin-left: 200px;'href='homepage.php?view=eaweek'>Top posts of each category last week</a>"; 
+	echo "<a style='margin-left: 200px;'href='homepage.php?view=week'>Top posts of all week</a>"; 
+	echo "<a style='margin-left: 200px;'href='homepage.php?view=all'>Top posts of all</a>"; 
+
 
 	$_SESSION['username'] = $username; //start session
 	foreach($res_array as $req)

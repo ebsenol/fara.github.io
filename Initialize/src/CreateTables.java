@@ -293,7 +293,8 @@ public class CreateTables {
                     " username, post_title, post_type, belongs,category_name " +
                     " FROM Post AS P, Content AS C, Category_Topic AS CT " +
                     " WHERE P.cont_id = C.cont_id AND P.belongs = CT.topic_name AND timestamp > now() - INTERVAL 1 WEEK" +
-                    " GROUP BY category_name";
+                    " GROUP BY category_name" +
+                    " ORDER BY net_vote;";
 
             stmt.executeUpdate("CREATE VIEW bestofea_week_view AS (" + sql + ")");
 
