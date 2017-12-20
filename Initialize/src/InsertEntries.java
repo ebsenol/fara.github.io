@@ -87,11 +87,11 @@ public class InsertEntries {
             stmt.executeUpdate(sql);
             sql = "INSERT INTO Comment VALUES (21231, 'berku', 1231, ,1231);";
             stmt.executeUpdate(sql);
-            
+
             //Add content
             sql = "INSERT INTO Content VALUES (21230,now() - interval 1 day, 'wow, nice post!','comment', 'berku', 0);";
             stmt.executeUpdate(sql);
-            sql = "INSERT INTO Content VALUES (21230,now() - interval 1 day, 'hmmm such a post!','comment', 'berku', 0);";
+            sql = "INSERT INTO Content VALUES (21231,now() - interval 1 day, 'hmmm such a post!','comment', 'berku', 0);";
             stmt.executeUpdate(sql);
 
             //Add comment
