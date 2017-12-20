@@ -49,8 +49,8 @@
 		$currentContentID = $req['cont_id'];
 		$sql =  "SELECT net_vote ".
 					"FROM Content  ".
-					"WHERE cont_id = " .$currentContentID. "; ";\
-		
+					"WHERE cont_id = " .$currentContentID. "; ";
+
 		$result = mysqli_query($db, $sql);
 		$res_arr =  mysqli_fetch_array($result);
 		$voteCount = $res_arr['net_vote'];
