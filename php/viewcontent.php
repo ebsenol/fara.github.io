@@ -147,6 +147,9 @@
 	echo '</table></p>';
 	//ShowReply();
 	echo "<form action='' method='post' align = 'right' value = 'Comment' style='padding-right: 30px'>".
+	"<p><input type='submit' value='delete' align = 'right' name = 'btn-delete-post'></p>".
+	"</form>";
+	echo "<form action='' method='post' align = 'right' value = 'Comment' style='padding-right: 30px'>".
 	"<p><input type='text' name='comment'  placeholder = 'Leave your comment'/>".
 	"<p><input type='submit' value='submit' align = 'right' name = 'btn-comment'></p>".
 	"</form>";
@@ -271,6 +274,10 @@
 	echo '</table></p></br></br>';
 	if( isset($_POST['btn-delete-post']) ) {
 		$sql = "DELETE FROM Content WHERE cont_id = ".$cid.";";
+		$res = mysqli_query($db,$sql);
+		$sql = "DELETE FROM Post WHERE cont_id = ".$cid.";";
+		$res = mysqli_query($db,$sql);
+		$sql = "DELETE FROM Comment WHERE parent_post = ".$cid.";";
 		$res = mysqli_query($db,$sql);
 		//header("location: homepage.php");
 	}
