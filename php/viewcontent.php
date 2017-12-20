@@ -185,14 +185,7 @@
 			"FROM Comment AS C1, content AS C2  ".
 			"WHERE C1.cont_id = C2.cont_id AND C1.dst_cont_id =".$cid.";";
 	
-<<<<<<< HEAD
 	$result4 = mysqli_query($db, $sql4);
-=======
-	$sq4 =  "SELECT * " .
-	"FROM Comment AS C1, Content AS C2".
-	"WHERE C1.cont_id = C2.cont_id AND C1.dst_cont_id = '".$_SESSION['cid']."'; ";
-	$result4 = mysqli_query($db, $sql);
->>>>>>> 378b437d3bfeed748e01be06991bfa151d23e759
 	$res_array4 = array();
 	if( $result4->num_rows > 0)
 		while($row = mysqli_fetch_array($result4))
