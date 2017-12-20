@@ -42,6 +42,12 @@ public class CreateTables {
                 }
 
             }
+            System.out.println( "\nDropping triggers...");
+
+            stmt.executeUpdate("DROP TRIGGER IF EXISTS update_netvote_after_insert" );
+            stmt.executeUpdate("DROP TRIGGER IF EXISTS update_netvote_after_delete" );
+            stmt.executeUpdate("DROP TRIGGER IF EXISTS update_netvote_after_update" );
+
             System.out.println( "\nCreating new tables...");
 
             // USER
@@ -201,6 +207,46 @@ public class CreateTables {
 
 
             System.out.println("\n\nAll tables are created!");
+
+            System.out.println( "\nCreating triggers...");
+
+            sql = "CREATE TRIGGER update_netvote_after_insert " +
+                    "AFTER INSERT ON Vote " +
+                    "FOR EACH ROW BEGIN " +
+                    "IF NEW.vote THEN SET @val = 1; " +
+                    "ELSE SET @val = -1; " +
+                    "END IF; " +
+                    "SET @cont_id = NEW.cont_id; " +
+                    "UPDATE Content SET net_vote = net_vote + @val " +
+                    "WHERE cont_id = @cont_id; "+
+                    "END;";
+            stmt.executeUpdate(sql);
+
+            sql = "CREATE TRIGGER update_netvote_after_delete " +
+                    "AFTER DELETE ON Vote " +
+                    "FOR EACH ROW BEGIN " +
+                    "IF OLD.vote THEN SET @val = -1; " +
+                    "ELSE SET @val = 1; " +
+                    "END IF; " +
+                    "SET @cont_id = OLD.cont_id; " +
+                    "UPDATE Content SET net_vote = net_vote + @val " +
+                    "WHERE cont_id = @cont_id; "+
+                    "END;";
+            stmt.executeUpdate(sql);
+
+            sql = "CREATE TRIGGER update_netvote_after_update " +
+                    "AFTER UPDATE ON Vote " +
+                    "FOR EACH ROW BEGIN " +
+                    "IF NEW.vote THEN SET @val = 2; " +
+                    "ELSE SET @val = -2; " +
+                    "END IF; " +
+                    "SET @cont_id = OLD.cont_id; " +
+                    "UPDATE Content SET net_vote = net_vote + @val " +
+                    "WHERE cont_id = @cont_id; "+
+                    "END;";
+            stmt.executeUpdate(sql);
+            System.out.println( "\nTriggers added.");
+
         } catch (SQLException e) {
             throw new IllegalStateException( e.getMessage(), e);
         }
