@@ -22,9 +22,17 @@
 		
 	$result = mysqli_query($db, $sql);	
 	$category =implode(" ",mysqli_fetch_assoc($result));
+	
+	$view ="all";
+	if (isset($_GET['view']))
+		$view = $_GET['view'];
 
-	$sql =  $sql =  "SELECT * FROM homepage_view ".
-			"WHERE belongs = '".$topic."' ".
+	$sql =  "SELECT * FROM homepage_view LIMIT 10;";
+	if ($view == "week")
+		$sql =  "SELECT * FROM homepage_view WHERE timestamp > now() - INTERVAL 1 WEEK ".
+			"LIMIT 10;";
+	else if ($view == "today")
+		$sql =  "SELECT * FROM homepage_view WHERE timestamp > now() - INTERVAL 1 DAY ".
 			"LIMIT 10;";
 
 	$result = mysqli_query($db, $sql);
@@ -47,6 +55,10 @@
 		 "</thead>";
 	echo "<tbody>";
 	$voteIdCount = 0;
+	echo "<a style='margin-left: 200px;'href='view_topic.php?topic=".$topic."&view=today'>Top posts of today</a>"; 
+	echo "<a style='margin-left: 200px;'href='view_topic.php?topic=".$topic."&view=week'>Top posts of all week</a>"; 
+	echo "<a style='margin-left: 200px;'href='view_topic.php?topic=".$topic."&view=all'>Top posts of all</a>"; 
+
 	$from = "view_topic.php?topic=".$topic."";
 	foreach($res_array as $req)
 	{
