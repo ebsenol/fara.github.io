@@ -288,23 +288,16 @@
 	echo"</tbody>";
 	echo '</table></p></br></br>';
 	if( isset($_POST['btn-addcategory']) ) {
-		$comment = $_POST['comment'];
-		$date = date('Y-m-d H:i:s');
-		$sql = "INSERT INTO Content VALUES (NULL, now(), '".$comment."', 'comment', '".$username."', 0);";
-		$res = mysqli_query($db,$sql);
-		$sql = "INSERT INTO Comment VALUES (LAST_INSERT_ID(), ".$username."".$cid."".$date."".$comment."".$cid."');";
+		$category = $_POST['category'];
+		$sql = "INSERT INTO category VALUES ('".$category."');";
 		$res = mysqli_query($db,$sql);
 		//header("location: homepage.php");
 	}
 	if( isset($_POST['btn-comment']) ) {
 		$comment = $_POST['comment'];
-<<<<<<< HEAD
 		echo $comment;
 		echo $comment_dst_id;
 		$comment_dst_id = $_POST['cont_id'];
-=======
-		$date = date('Y-m-d H:i:s');
->>>>>>> parent of 82dc274... change comment relation
 		$sql = "INSERT INTO Content VALUES (NULL, now(), '".$comment."', 'comment', '".$username."', 0);";
 		$res = mysqli_query($db,$sql);
 		$sql = "INSERT INTO Comment VALUES (LAST_INSERT_ID(), ".$username."".$comment_dst_id."".$cid."');";
