@@ -280,7 +280,7 @@
 		echo "<form action='' method='post' align = 'right' value = 'Comment'>".
 		"<p><input type='text' name='comment'  placeholder = 'Leave your comment'/>".
 		"<p><input type='submit' value='submit' align = 'right' name  = 'btn-comment'></p>".
-		"<input name = 'cont_id' type='hidden' value= ".$req['cont_id']."> ".
+		//"<input name = 'cont_id' type='hidden' value= ".$req['cont_id']."> ".
 		"</form>";
 		echo "</td>";
 		echo "</tr>";
