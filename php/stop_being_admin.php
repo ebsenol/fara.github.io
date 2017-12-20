@@ -4,11 +4,9 @@
 	ob_start();
 	
 	$username = $_GET["username"];
-	$admin_token = $_GET["admin_token"];
 
-
-    $sql_user = "SELECT username, password, email_address, joined_date ".
-    			"FROM User ".
+    $sql_user = "SELECT username ".
+    			"FROM Admin ".
     			"WHERE username = '".$username."' ;";
 
     $result = mysqli_query($db, $sql_user);
@@ -18,10 +16,7 @@
 			array_push($res_array, $row);
 		foreach($res_array as $req)
 		{	
-			$email = $req['email_address'];
-			$pass = $req['password'];
-			$joined_= $req['joined_date']; 
-			$sql =  "CALL register_admin ('".$username."', '".$pass."', '".$email."', '".$joined_."', '".$admin_token."'); ";
+			$sql =  "DELETE FROM Admin WHERE username = '".$username."' ;";
 
 			$result2 = mysqli_query($db, $sql);
 			$res_array2 = array();

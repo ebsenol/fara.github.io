@@ -124,7 +124,7 @@
 				echo "<li><a href='view_user_posts.php?username=".$username."'>posts</a></li> ";
 				echo "<li><a href='view_user_comments.php?username=".$username."'>comments</a></li> ";
 				echo "<li><a href='view_user_votes.php?username=".$username."'>votes</a></li> ";
-				echo "<li><a href='view_user_votes.php?username=".$username."'>subscribed?</a></li> ";
+				// echo "<li><a href='view_user_votes.php?username=".$username."'>subscribed?</a></li> "; // for now
  				echo "<br>";
 
 		    	$sql =  "SELECT username, email_address " .
@@ -148,18 +148,27 @@
  				echo "<li><a href='profile_info_change.php?username=".$username."'>change information</a></li> ";
 
  				$sql_user_admin_or_not_query = "SELECT * FROM Admin WHERE username = '".$username."' ;";
- 				$res = mysqli_query($db, $sql);
+ 				$res = mysqli_query($db, $sql_user_admin_or_not_query);
  				if($res->num_rows > 0){
-					echo "<li><a href='become_admin.php?username=".$username."'>stop being admin</a></li> ";
+ 					// echo "<li><a href=\"javascript:;\" onclick=\"callMeBeforeLogout();\">stop being admin</a></li>";
+					echo "<li><a href='stop_being_admin.php?username=".$username."'>stop begin admin</a></li> ";
  				}else{
 	 				echo "<li><a href='become_admin.php?username=".$username."'>request adminship</a></li> ";
  				}
-
- 				echo "<li><a href='profile_info_change.php?username=".$username."'>request moderatorship</a></li> ";
+ 				// moderatorship should be requested in category page
+ 				// echo "<li><a href='profile_info_change.php?username=".$username."'>request moderatorship</a></li> ";
 			?>
 		  </ul>
 		</div>
-	
+		
+		<script >
+			function callMeBeforeLogout(){
+				var cnfrm = confirm("Do you really want to stop being admin?");
+			    if(cnfrm) {
+			        window.location.href = 'homepage.php';
+			    }
+			}
+		</script>
 		<script>
 		function addCategory() {
 			var person = prompt("Please enter the category you want to create:", "");
