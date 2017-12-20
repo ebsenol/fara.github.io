@@ -158,9 +158,10 @@
 	echo"</tbody>";
 	echo '</table></p>';
 	//ShowReply();
+
 	echo "<form action='' method='post' align = 'right' value = 'Comment' style='padding-right: 30px'>".
 	"<p><input type='text' name='comment'  placeholder = 'Leave your comment'/>".
-	"<p><input type='submit' value='submit' align = 'right'></p>".
+	"<p><input type='submit' value='submit' align = 'right' name = 'btn-comment'></p>".
 	"</form>";
 
 
@@ -278,15 +279,19 @@
 		echo "<td>";
 		//ShowReply();
 		echo "<form action='' method='post' align = 'right' value = 'Comment'>".
-		"<p><input type='text' name='comment'  placeholder = 'Leave your comment'/>".
-		"<p><input type='submit' value='submit' align = 'right' name  = 'btn-comment'></p>".
-		//"<input name = 'cont_id' type='hidden' value= ".$req['cont_id']."> ".
+		"<p><input type='text' name='comment'  placeholder = 'Leave your comment'></p>".
+		"<p><input type='submit' value='submit' align = 'right' name = 'btn-comment'></p>".
 		"</form>";
 		echo "</td>";
 		echo "</tr>";
 	}
 	echo"</tbody>";
 	echo '</table></p></br></br>';
+	if( isset($_POST['btn-delete-post']) ) {
+		$sql = "DELETE FROM Content WHERE cont_id = ".$cid.";";
+		$res = mysqli_query($db,$sql);
+		//header("location: homepage.php");
+	}
 	if( isset($_POST['btn-addcategory']) ) {
 		$category = $_POST['category'];
 		$sql = "INSERT INTO category VALUES ('".$category."');";
@@ -294,14 +299,14 @@
 		//header("location: homepage.php");
 	}
 	if( isset($_POST['btn-comment']) ) {
-		$comment = $_POST['comment'];
-		echo $comment;
-		echo $comment_dst_id;
-		$comment_dst_id = $_POST['cont_id'];
-		$sql = "INSERT INTO Content VALUES (NULL, now(), '".$comment."', 'comment', '".$username."', 0);";
-		$res = mysqli_query($db,$sql);
-		$sql = "INSERT INTO Comment VALUES (LAST_INSERT_ID(), ".$username."".$comment_dst_id."".$cid."');";
-		$res = mysqli_query($db,$sql);
+		header("location: homepage.php");
+		// $comment = $_POST['comment'];
+		// echo "ololo";
+		// echo $comment;
+		// $sql = "INSERT INTO Content VALUES (NULL, now(), '".$comment."', 'comment', '".$username."', 0);";
+		// $res = mysqli_query($db,$sql);
+		// $sql = "INSERT INTO Comment VALUES (LAST_INSERT_ID(), '".$username."',".$cid.",".$cid.");";
+		// $res = mysqli_query($db,$sql);
 	}
 	/////////////////////////////////////////////////////////
 	
