@@ -47,13 +47,16 @@
 		echo "<tr>";
 		$voteIdCount++;
 		$currentContentID = $req['cont_id'];
-		$sql =  "SELECT net_vote ".
-					"FROM Content  ".
-					"WHERE cont_id = " .$currentContentID. "; ";
-
+		$sql =  "SELECT ".
+					"(SELECT count(*) " .
+					"FROM Vote  ".
+					"WHERE vote = true AND cont_id = " .$currentContentID. " ) - ".
+					"(SELECT count(*) " .
+					"FROM Vote  ".
+					"WHERE vote = false AND cont_id = " .$currentContentID. " ) AS dif;";
 		$result = mysqli_query($db, $sql);
 		$res_arr =  mysqli_fetch_array($result);
-		$voteCount = $res_arr['net_vote'];
+		$voteCount = $res_arr['dif'];
 		$upCountFromUser = 0;
 		$downCountFromUser = 0;
 		$sql2 = "SELECT ". 
