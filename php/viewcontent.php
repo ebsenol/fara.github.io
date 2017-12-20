@@ -5,7 +5,6 @@
 	
 	//set to 1 if user logged in, 0 if guest mode
 	$usermode = 1;
-
 	if ( !isset($_SESSION['username']))
 	{
 		//guest mode
@@ -17,35 +16,29 @@
 	}
 	$cid = $_GET["id"];
 	$_SESSION['cid'] = $cid; 
-
 	$sql =  "SELECT * " .
 			"FROM Post AS P, Content AS C, Category_Topic AS CT  ".
 			"WHERE P.cont_id = C.cont_id AND C.cont_id = ".$cid." AND CT.topic_name = P.belongs; ";
 	
 	$result = mysqli_query($db, $sql);
 	$res_array = array();
-
 	if( $result->num_rows > 0)
 		while($row = mysqli_fetch_array($result))
 			array_push($res_array, $row);
 	echo "</br>";
 	// echo "<br>";
 	// echo "</br>";
-
 	echo "<table class='table table-striped' style='width:95%'; align = 'center';  align='center' cellpadding='10'>";
 	echo "<thead class='thead-inverse'>";
 	echo 	"<th style='padding: 10px' > Votes</th>".
 			"<th style='padding: 10px' > Title</th>".
 			"<th style='padding: 10px' > </th>".
-
 		 "</tr>".
 		 "</thead>";
 	echo "<tbody>";
-
 	$voteIdCount = 0;
 	$from = "homepage.php";
 	$_SESSION['username'] = $username; //start session
-
 	$req = $res_array[0];
 		echo "<tr>";
 		$voteIdCount++;
@@ -57,7 +50,6 @@
 					"(SELECT count(*) " .
 					"FROM Vote  ".
 					"WHERE vote = 0 AND cont_id = " .$currentContentID. " ) AS dif;";
-
 		$result = mysqli_query($db, $sql);
 		$res_arr =  mysqli_fetch_array($result);
 		$voteCount = $res_arr['dif'];
@@ -72,7 +64,6 @@
 			$res_arr2 =  mysqli_fetch_array($result2);
 			$upCountFromUser = $res_arr2['up'];
 		}
-
 		$sql3 =  "SELECT (". 
 				"SELECT count(*) AS down " .
 				"FROM Vote  ".
@@ -82,7 +73,6 @@
 			$res_arr3 =  mysqli_fetch_array($result3);
 			$downCountFromUser = $res_arr3['down'];
 		}
-
       	echo "<td  width='10%' style='padding:0px''> ".
   			"<div id='vote".$voteIdCount."' class = 'upvote upvote-programmers' > ";
   			if ($upCountFromUser > 0)
@@ -105,10 +95,8 @@
   				else
   					echo "<a class='downvote' href='add_vote.php?username=". $username ."&contid=".$currentContentID."&vote=down&from=".$from."'></a> ";
   		echo "</div>";
-
 		//activate vote button
 		//echo "<script type='text/javascript'> $('#vote".$voteIdCount."').upvote(); </script>"; 	
-
 		echo "<td  width='10%'  style='padding: 0px'>".
 		"<a href='viewcontent.php?id=". $currentContentID ."'>" .$req['post_title']. " </a></td>";	
 		echo "<td  width='6%' align = 'center' style='padding: 10px'></td>";
@@ -158,18 +146,13 @@
 	echo"</tbody>";
 	echo '</table></p>';
 	//ShowReply();
-
 	echo "<form action='' method='post' align = 'right' value = 'Comment' style='padding-right: 30px'>".
 	"<p><input type='text' name='comment'  placeholder = 'Leave your comment'/>".
 	"<p><input type='submit' value='submit' align = 'right' name = 'btn-comment'></p>".
 	"</form>";
-
-
 	
 	
-
 	#echo "<h4 width = '10%' style ='padding-left: 90px'>Comments<h4>";
-
 	
 	echo "</br>";
 	echo "<table class='table table-striped' style='width:95%'; align = 'center';  align='center' cellpadding='10'>";
@@ -177,7 +160,6 @@
 	echo 	"<th style='padding: 10px' >votes</th>".
 			"<th style='padding: 10px' >Comments</th>".
 			"<th style='padding: 10px' > </th>".
-
 		 "</tr>".
 		 "</thead>";
 	echo "<tbody>";
@@ -299,28 +281,23 @@
 		//header("location: homepage.php");
 	}
 	if( isset($_POST['btn-comment']) ) {
-		header("location: homepage.php");
-		// $comment = $_POST['comment'];
-		// echo "ololo";
-		// echo $comment;
-		// $sql = "INSERT INTO Content VALUES (NULL, now(), '".$comment."', 'comment', '".$username."', 0);";
-		// $res = mysqli_query($db,$sql);
-		// $sql = "INSERT INTO Comment VALUES (LAST_INSERT_ID(), '".$username."',".$cid.",".$cid.");";
-		// $res = mysqli_query($db,$sql);
+		$comment = $_POST['comment'];
+		echo "ololo";
+		echo $comment;
+		$sql = "INSERT INTO Content VALUES (NULL, now(), '".$comment."', 'comment', '".$username."', 0);";
+		$res = mysqli_query($db,$sql);
+		$sql = "INSERT INTO Comment VALUES (LAST_INSERT_ID(), '".$username."',".$cid.",".$cid.");";
+		$res = mysqli_query($db,$sql);
 	}
 	/////////////////////////////////////////////////////////
 	
 	
-
-
-
 	function Apply(){
 	    $sql = "INSERT INTO apply VALUES ('".$_SESSION['userName']."', '".$_POST['application']."')";
 	    if(mysqli_query($connection, $sql)){
 	        $_SESSION['course'] = $_POST['application'];
 	        mysqli_close($connection);
 	        header("location: congrats.php");
-
 	    } else{
 	        $_SESSION['course'] = 'none';
 	        mysqli_close($connection);
@@ -330,7 +307,6 @@
 	function ShowReply(){
 // 		echo"<div data-role='content' class='ui-content' align = 'right' >".
 //    	 	"<a href='#myPopup' data-rel='popup' class='ui-btn ui-btn-inline ui-corner-all ui-btn-icon-left'>Reply</a>".
-
 //   	  "<div data-role='popup' id='myPopup' class='ui-content' style='min-width:250px;'>".
 //       "<form method='post' action='Comment()'>".
 //         "<div>".
@@ -349,13 +325,11 @@
 	// 	$sql = "INSERT INTO apply VALUES ('".$_SESSION['userName']."', '".$_POST['application']."')";
 	//     if(mysqli_query($connection, $sql)){
 	//         $_SESSION['course'] = $_POST['application'];
-
 	//     } else{
 	//         $_SESSION['course'] = 'none';
 	//     }
 	// }
     
-
 ?>
 
 
@@ -462,7 +436,6 @@
 		$sql =  "SELECT category_name " .
 			"FROM Category_Topic  ".
 			"WHERE topic_name = '".$topic."'";
-
 		$result = mysqli_query($db, $sql);	
 		$category =implode(" ",mysqli_fetch_assoc($result));
 		echo "} </script>";
