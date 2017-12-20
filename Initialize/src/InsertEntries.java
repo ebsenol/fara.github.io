@@ -83,9 +83,9 @@ public class InsertEntries {
             stmt.executeUpdate(sql);
 
             //Add comment
-            sql = "INSERT INTO Comment VALUES (21230, 'berku', 1230,1232);";
+            sql = "INSERT INTO Comment VALUES (21230, 'berku', 1230,1230);";
             stmt.executeUpdate(sql);
-            sql = "INSERT INTO Comment VALUES (21231, 'berku', 1231 ,1230);";
+            sql = "INSERT INTO Comment VALUES (21231, 'berku', 1231 ,1231);";
             stmt.executeUpdate(sql);
 
 

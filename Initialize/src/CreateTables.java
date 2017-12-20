@@ -47,6 +47,11 @@ public class CreateTables {
             stmt.executeUpdate("DROP TRIGGER IF EXISTS update_netvote_after_insert" );
             stmt.executeUpdate("DROP TRIGGER IF EXISTS update_netvote_after_delete" );
             stmt.executeUpdate("DROP TRIGGER IF EXISTS update_netvote_after_update" );
+            stmt.executeUpdate("DROP TRIGGER IF EXISTS delete_content_after_delete_comment" );
+
+            System.out.println( "\nDropping views...");
+            stmt.executeUpdate("DROP VIEW IF EXISTS homepage_view" );
+            stmt.executeUpdate("DROP VIEW IF EXISTS bestofea_week_view" );
 
             System.out.println("\nDropping procedures...");
 
@@ -126,7 +131,8 @@ public class CreateTables {
                     "post_type VARCHAR(50) NOT NULL," +
                     "belongs VARCHAR(50) NOT NULL," +
                     "FOREIGN KEY (belongs) REFERENCES Topic(topic_name)," +
-                    "FOREIGN KEY (cont_id) REFERENCES Content(cont_id)) ENGINE = InnoDB;";
+                    "FOREIGN KEY (cont_id) REFERENCES Content(cont_id)" + 
+                    "ON DELETE CASCADE) ENGINE = InnoDB;";
 
             stmt.executeUpdate(sql);
             System.out.println("Post created!");
@@ -248,6 +254,15 @@ public class CreateTables {
                     "WHERE cont_id = @cont_id; "+
                     "END;";
             stmt.executeUpdate(sql);
+            
+            sql =   "CREATE TRIGGER delete_content_after_delete_comment  AFTER DELETE on Comment " +
+	        		"FOR EACH ROW " +
+	        		"BEGIN " +
+	        		"DELETE FROM content " +
+	        		"WHERE Content.cont_id = Comment.cont_id; " +
+	                "END;";
+            stmt.executeUpdate(sql);
+
             System.out.println( "\nTriggers added.");
 
             System.out.println( "\nCreating procedures...");
@@ -264,6 +279,23 @@ public class CreateTables {
             
             System.out.println("\nProcedures added...");
 
+            System.out.println( "\nCreating views...");
+            sql = "SELECT net_vote, C.cont_id, timestamp, content, content_type, username, post_title, "+
+                    "post_type, belongs,category_name " +
+                    "FROM Post AS P, Content AS C, Category_Topic AS CT " +
+                    "WHERE P.cont_id = C.cont_id AND P.belongs = CT.topic_name "+
+                    "ORDER BY net_vote DESC";
+
+            stmt.executeUpdate("CREATE VIEW homepage_view AS (" + sql + ")");
+
+
+            sql = "SELECT max(net_vote) as net_vote, C.cont_id, timestamp, content, content_type," +
+                    " username, post_title, post_type, belongs,category_name " +
+                    " FROM Post AS P, Content AS C, Category_Topic AS CT " +
+                    " WHERE P.cont_id = C.cont_id AND P.belongs = CT.topic_name AND timestamp > now() - INTERVAL 1 WEEK" +
+                    " GROUP BY category_name";
+
+            stmt.executeUpdate("CREATE VIEW bestofea_week_view AS (" + sql + ")");
 
         } catch (SQLException e) {
             throw new IllegalStateException( e.getMessage(), e);

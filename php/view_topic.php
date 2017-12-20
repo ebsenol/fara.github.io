@@ -22,12 +22,13 @@
 		
 	$result = mysqli_query($db, $sql);	
 	$category =implode(" ",mysqli_fetch_assoc($result));
-	$sql =  "SELECT * " .
-			"FROM Post AS P, Content AS C, Category_Topic AS CT  ".
-			"WHERE P.cont_id = C.cont_id AND P.belongs = CT.topic_name AND CT.topic_name = '".$topic."'".
-			"ORDER BY P.post_title 	".
+
+	$sql =  $sql =  "SELECT * FROM homepage_view ".
+			"WHERE belongs = '".$topic."' ".
 			"LIMIT 10;";
+
 	$result = mysqli_query($db, $sql);
+
 	$res_array = array();
 	if( $result->num_rows > 0)
 		while($row = mysqli_fetch_array($result))
