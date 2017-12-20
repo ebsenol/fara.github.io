@@ -13,7 +13,7 @@
 		$res = mysqli_query($db,$sql);
 		$sql = "INSERT INTO Post VALUES (LAST_INSERT_ID(), '".$title."', 'link', '".$topic."');";
 		$res = mysqli_query($db,$sql);
-		header("location: homepage.php");
+		header("location: view_topic.php?topic=".$topic."");
 	}
 	
 	$category = $_GET["category"];

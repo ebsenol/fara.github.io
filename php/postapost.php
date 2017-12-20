@@ -13,8 +13,8 @@
 		$res = mysqli_query($db,$sql);
 		$sql = "INSERT INTO Post VALUES (LAST_INSERT_ID(), '".$title."', 'text', '".$topic."');";
 		$res = mysqli_query($db,$sql);
-		header("location: homepage.php");
-	}
+		header("location: view_topic.php?topic=".$topic."");
+		}
 	
 ?>
 <!DOCTYPE html>
