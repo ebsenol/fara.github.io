@@ -12,7 +12,7 @@ public class CreateTables {
 
         String url = "jdbc:mysql://localhost:3306/cs353db";
         String username = "root";
-        String password = "";
+        String password = "figalA!1";
 
         try (
                 Connection con = DriverManager.getConnection(url, username, password)) {
@@ -47,6 +47,11 @@ public class CreateTables {
             stmt.executeUpdate("DROP TRIGGER IF EXISTS update_netvote_after_insert" );
             stmt.executeUpdate("DROP TRIGGER IF EXISTS update_netvote_after_delete" );
             stmt.executeUpdate("DROP TRIGGER IF EXISTS update_netvote_after_update" );
+
+            System.out.println("\nDropping procedures...");
+
+            stmt.executeUpdate("DROP PROCEDURE IF EXISTS register_admin");
+            stmt.executeUpdate("DROP PROCEDURE IF EXISTS register_moderator");
 
             System.out.println( "\nCreating new tables...");
 
@@ -244,6 +249,21 @@ public class CreateTables {
                     "END;";
             stmt.executeUpdate(sql);
             System.out.println( "\nTriggers added.");
+
+            System.out.println( "\nCreating procedures...");
+
+            sql = "CREATE PROCEDURE register_admin " +
+                    "(username VARCHAR(32), " +
+                    "password VARCHAR(32), " +
+                    "email_address VARCHAR(32), " +
+                    "joined_date DATE, " +
+                    "admin_token VARCHAR(32)) " +
+                    "INSERT INTO Admin (username, password, email_address, joined_date) " +
+                    "VALUES (username, password, email_address, joined_date, admin_token);";
+            stmt.executeUpdate(sql);
+            
+            System.out.println("\nProcedures added...");
+
 
         } catch (SQLException e) {
             throw new IllegalStateException( e.getMessage(), e);
