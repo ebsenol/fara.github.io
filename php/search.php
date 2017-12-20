@@ -19,7 +19,9 @@ else{
 
 $sql =  "SELECT * " .
         "FROM post AS P, content AS C, category_topic AS CT  ".
-        "WHERE P.cont_id = C.cont_id AND P.belongs = CT.topic_name AND C.content like '%".$text."%'".
+        "WHERE P.cont_id = C.cont_id AND P.belongs = CT.topic_name AND ".
+        "(C.content like '%".$text."%' OR P.post_title like '%".$text."%' ".
+        " OR P.belongs like '%".$text."%' OR CT.category_name like '%".$text."%') ".
         "ORDER BY P.post_title 	".
         "LIMIT 10;";
 
@@ -30,6 +32,7 @@ if( $result->num_rows > 0)
     while($row = mysqli_fetch_array($result))
         array_push($res_array, $row);
 
+        
 echo "<h2 align='center'><b> Search Result: </b></h2>";
 echo "</br>";
 echo "<table class='table table-striped' style='width:95%'; align = 'center';  align='center' cellpadding='10'>";

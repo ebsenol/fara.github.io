@@ -273,11 +273,11 @@
 	echo"</tbody>";
 	echo '</table></p></br></br>';
 	if( isset($_POST['btn-delete-post']) ) {
+		$sql = "DELETE FROM Comment WHERE parent_post = ".$cid.";";
+		$res = mysqli_query($db,$sql);
 		$sql = "DELETE FROM Content WHERE cont_id = ".$cid.";";
 		$res = mysqli_query($db,$sql);
 		$sql = "DELETE FROM Post WHERE cont_id = ".$cid.";";
-		$res = mysqli_query($db,$sql);
-		$sql = "DELETE FROM Comment WHERE parent_post = ".$cid.";";
 		$res = mysqli_query($db,$sql);
 		header("location: homepage.php");
 	}

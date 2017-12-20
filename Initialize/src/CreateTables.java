@@ -126,8 +126,7 @@ public class CreateTables {
                     "post_type VARCHAR(50) NOT NULL," +
                     "belongs VARCHAR(50) NOT NULL," +
                     "FOREIGN KEY (belongs) REFERENCES Topic(topic_name)," +
-                    "FOREIGN KEY (cont_id) REFERENCES Content(cont_id)" + 
-                    "ON DELETE CASCADE) ENGINE = InnoDB;";
+                    "FOREIGN KEY (cont_id) REFERENCES Content(cont_id)) ENGINE = InnoDB;";
 
             stmt.executeUpdate(sql);
             System.out.println("Post created!");
