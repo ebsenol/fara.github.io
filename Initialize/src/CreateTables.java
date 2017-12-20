@@ -12,7 +12,7 @@ public class CreateTables {
 
         String url = "jdbc:mysql://localhost:3306/cs353db";
         String username = "root";
-        String password = "";
+        String password = "figalA!1";
 
         try (
                 Connection con = DriverManager.getConnection(url, username, password)) {
@@ -50,8 +50,14 @@ public class CreateTables {
             stmt.executeUpdate("DROP TRIGGER IF EXISTS delete_content_after_delete_comment" );
 
             System.out.println( "\nDropping views...");
+
             stmt.executeUpdate("DROP VIEW IF EXISTS homepage_view" );
             stmt.executeUpdate("DROP VIEW IF EXISTS bestofea_week_view" );
+
+            System.out.println("\nDropping procedures...");
+
+            stmt.executeUpdate("DROP PROCEDURE IF EXISTS register_admin");
+            stmt.executeUpdate("DROP PROCEDURE IF EXISTS register_moderator");
 
             System.out.println( "\nCreating new tables...");
 
@@ -258,6 +264,20 @@ public class CreateTables {
             stmt.executeUpdate(sql);
 
             System.out.println( "\nTriggers added.");
+
+            System.out.println( "\nCreating procedures...");
+
+            sql = "CREATE PROCEDURE register_admin " +
+                    "(username VARCHAR(32), " +
+                    "password VARCHAR(32), " +
+                    "email_address VARCHAR(32), " +
+                    "joined_date DATE, " +
+                    "admin_token VARCHAR(32)) " +
+                    "INSERT INTO Admin (username, password, email_address, joined_date) " +
+                    "VALUES (username, password, email_address, joined_date, admin_token);";
+            stmt.executeUpdate(sql);
+            
+            System.out.println("\nProcedures added...");
 
             System.out.println( "\nCreating views...");
             sql = "SELECT net_vote, C.cont_id, timestamp, content, content_type, username, post_title, "+
