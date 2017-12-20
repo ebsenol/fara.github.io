@@ -19,7 +19,7 @@
 	$_SESSION['cid'] = $cid; 
 
 	$sql =  "SELECT * " .
-			"FROM Post AS P, Content AS C, Category_Topic AS CT  ".
+			"FROM post AS P, content AS C, category_topic AS CT  ".
 			"WHERE P.cont_id = C.cont_id AND C.cont_id = ".$cid." AND CT.topic_name = P.belongs; ";
 	
 	$result = mysqli_query($db, $sql);
@@ -52,7 +52,7 @@
 		$currentContentID = $req['cont_id'];
 		$sql =  "SELECT ".
 					"(SELECT count(*) " .
-					"FROM Vote  ".
+					"FROM vote  ".
 					"WHERE vote = 1 AND cont_id = " .$currentContentID. " ) - ".
 					"(SELECT count(*) " .
 					"FROM Vote  ".
@@ -65,7 +65,7 @@
 		$downCountFromUser = 0;
 		$sql2 = "SELECT ". 
 				"(SELECT count(*) " .
-				"FROM Vote  ".
+				"FROM vote  ".
 				"WHERE vote = 1 AND username = '".$username."' AND cont_id = ".$currentContentID." ) AS up;";
 		$result2 = mysqli_query($db, $sql2);
 		if ($result2){
@@ -75,7 +75,7 @@
 
 		$sql3 =  "SELECT (". 
 				"SELECT count(*) AS down " .
-				"FROM Vote  ".
+				"FROM vote  ".
 				"WHERE vote = 0 AND username = '".$username."' AND cont_id = ".$currentContentID." ) AS down;";
 		$result3 = mysqli_query($db, $sql3);
 		if ($result3){
@@ -185,14 +185,7 @@
 			"FROM Comment AS C1, content AS C2  ".
 			"WHERE C1.cont_id = C2.cont_id AND C1.dst_cont_id =".$cid.";";
 	
-<<<<<<< HEAD
 	$result4 = mysqli_query($db, $sql4);
-=======
-	$sq4 =  "SELECT * " .
-	"FROM Comment AS C1, Content AS C2".
-	"WHERE C1.cont_id = C2.cont_id AND C1.dst_cont_id = '".$_SESSION['cid']."'; ";
-	$result4 = mysqli_query($db, $sql);
->>>>>>> 378b437d3bfeed748e01be06991bfa151d23e759
 	$res_array4 = array();
 	if( $result4->num_rows > 0)
 		while($row = mysqli_fetch_array($result4))
@@ -306,7 +299,7 @@
 	if( isset($_POST['btn-comment']) ) {
 		$comment = $_POST['comment'];
 		$date = date('Y-m-d H:i:s');
-		$sql = "INSERT INTO Content VALUES (NULL, now(), '".$comment."', 'comment', '".$username."', 0);";
+		$sql = "INSERT INTO Content VALUES (NULL, ".$date.", '".$comment."', 'comment', '".$username."', 0);";
 		$res = mysqli_query($db,$sql);
 		$sql = "INSERT INTO Comment VALUES (LAST_INSERT_ID(), ".$username."".$cid."".$date."".$comment."".$cid."');";
 		$res = mysqli_query($db,$sql);
