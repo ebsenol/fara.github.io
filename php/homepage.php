@@ -15,7 +15,7 @@
 		$username = $_SESSION['username'];		
 	}
 	$sql =  "SELECT * " .
-			"FROM post AS P, content AS C, category_topic AS CT  ".
+			"FROM Post AS P, Content AS C, Category_Topic AS CT  ".
 			"WHERE P.cont_id = C.cont_id AND P.belongs = CT.topic_name ".
 			"ORDER BY P.post_title 	".
 			"LIMIT 10;";
@@ -40,6 +40,7 @@
 	echo "<tbody>";
 	$voteIdCount = 0;
 	$from = "homepage.php";
+
 	$_SESSION['username'] = $username; //start session
 	foreach($res_array as $req)
 	{
@@ -48,7 +49,7 @@
 		$currentContentID = $req['cont_id'];
 		$sql =  "SELECT ".
 					"(SELECT count(*) " .
-					"FROM vote  ".
+					"FROM Vote  ".
 					"WHERE vote = true AND cont_id = " .$currentContentID. " ) - ".
 					"(SELECT count(*) " .
 					"FROM Vote  ".
@@ -60,7 +61,7 @@
 		$downCountFromUser = 0;
 		$sql2 = "SELECT ". 
 				"(SELECT count(*) " .
-				"FROM vote  ".
+				"FROM Vote  ".
 				"WHERE vote = true AND username = '".$username."' AND cont_id = ".$currentContentID." ) AS up;";
 		$result2 = mysqli_query($db, $sql2);
 		if ($result2){
@@ -69,7 +70,7 @@
 		}
 		$sql3 =  "SELECT (". 
 				"SELECT count(*) AS down " .
-				"FROM vote  ".
+				"FROM Vote  ".
 				"WHERE vote = false AND username = '".$username."' AND cont_id = ".$currentContentID." ) AS down;";
 		$result3 = mysqli_query($db, $sql3);
 		if ($result3){
@@ -224,13 +225,9 @@
 
 				</li>
 				<li> <p class="navbar-text"> <?php if ($usermode == 1 && strlen($username) > 0) echo "Logged in as ".$username.""; else echo "Guest"; ?>  </p></li>
-				<li >
-					<form action="view_user.php" class="navbar-form navbar-left" role="settings">
-					<button role="settings" type="submit"  class="btn btn-default">
-				          <span class="glyphicon glyphicon-cog"></span>
-					</button>
-					</form>
-				</li>
+				<?php if($usermode == 1 && strlen($username) > 0) echo "<li ><form action='view_user.php' class='navbar-form navbar-left' role='settings'><button role='settings' type='submit' class='btn btn-default'>
+                <span class='glyphicon glyphicon-cog'></span> </button> </form></li>";
+      		 	?>
 					
 				<?php if ($usermode == 1 && strlen($username) > 0) echo "<li><a href='logout.php'>Log out</a></li>"; else echo "<li><a href='login.php'>Log in</a></li>"; ?>
 
