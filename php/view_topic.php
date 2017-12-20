@@ -22,17 +22,17 @@
 		
 	$result = mysqli_query($db, $sql);	
 	$category =implode(" ",mysqli_fetch_assoc($result));
-	
+
 	$view ="all";
 	if (isset($_GET['view']))
 		$view = $_GET['view'];
 
-	$sql =  "SELECT * FROM homepage_view LIMIT 10;";
+	$sql =  "SELECT * FROM homepage_view WHERE belongs = '".$topic."' LIMIT 10;";
 	if ($view == "week")
-		$sql =  "SELECT * FROM homepage_view WHERE timestamp > now() - INTERVAL 1 WEEK ".
+		$sql =  "SELECT * FROM homepage_view WHERE timestamp > now() - INTERVAL 1 WEEK AND belongs = '".$topic."'".
 			"LIMIT 10;";
 	else if ($view == "today")
-		$sql =  "SELECT * FROM homepage_view WHERE timestamp > now() - INTERVAL 1 DAY ".
+		$sql =  "SELECT * FROM homepage_view WHERE timestamp > now() - INTERVAL 1 DAY AND belongs = '".$topic."'".
 			"LIMIT 10;";
 
 	$result = mysqli_query($db, $sql);

@@ -25,12 +25,12 @@
 	if (isset($_GET['view']))
 		$view = $_GET['view'];
 
-	$sql =  "SELECT * FROM homepage_view LIMIT 10;";
+	$sql =  "SELECT * FROM homepage_view WHERE category_name = '".$category."' LIMIT 10;";
 	if ($view == "week")
-		$sql =  "SELECT * FROM homepage_view WHERE timestamp > now() - INTERVAL 1 WEEK ".
+		$sql =  "SELECT * FROM homepage_view WHERE timestamp > now() - INTERVAL 1 WEEK AND category_name = '".$category."'".
 			"LIMIT 10;";
 	else if ($view == "today")
-		$sql =  "SELECT * FROM homepage_view WHERE timestamp > now() - INTERVAL 1 DAY ".
+		$sql =  "SELECT * FROM homepage_view WHERE timestamp > now() - INTERVAL 1 DAY AND category_name = '".$category."'".
 			"LIMIT 10;";
 
 	$result = mysqli_query($db, $sql);
