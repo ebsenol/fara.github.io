@@ -103,6 +103,13 @@
 					</form>
 				</li>
 				<li> <p class="navbar-text"> <?php if ($usermode == 1) echo "Logged in as ".$username.""; else echo "Guest"; ?>  </p></li>
+				<li >
+					<form action="view_user.php" class="navbar-form navbar-left" role="settings">
+					<button role="settings" type="submit"  class="btn btn-default">
+				          <span class="glyphicon glyphicon-cog"></span>
+					</button>
+					</form>
+				</li>
 				<li><a href="logout.php">Log out</a></li>
 
 		     </ul>
@@ -114,6 +121,7 @@
 		  <ul class="list-inline">
 
 		    <?php
+		    	// TODO: maybe change the interval here, to be more realistic, but can stay like this for DEMO
 		    	$sql = "SELECT username, email_address FROM User WHERE joined_date <= (NOW() - INTERVAL 1 YEAR) AND username = '".$username."';";
 			
 				$result = mysqli_query($db, $sql);
@@ -136,7 +144,8 @@
 						// ---------------------------------------------
 						$to = "figalitaho@gmail.com";
 						$subject = "Hi!";
-						$body = generateRandomString(8); 
+						$admin_token =  generateRandomString(8);
+						$body = "Your generated code is " .$admin_token."";
 						echo $body;
 						// uncomment to actually send body
 						
@@ -158,12 +167,42 @@
 						      echo("<p>Email delivery failed…</p>");
 						    }
 						*/
+						echo "<form action='confirm_add_adminship.php?username=".$uname."&admin_token=".$admin_token."' method='POST' type='hidden' onsubmit=\"return isTokenValid('$admin_token')\">";
+
 					}
 				}
 			?>
+
+			<br>
+			Enter token received in your email address: 
+			<br>
+			  <p>
+			  <div class="form-group" method="post" >
+				<input class="form-control" type="text" id="token_user" name="token_user">
+			  </div>
+			  </p>
+			  <p>
+			  <div class="form-group" method="post" >
+				<button type="submit" name="button_add_admin" id="button_change_adminship" class="btn btn-primary" >Submit</button>
+			  </div>
+			  </p>
 		  </ul>
 		</div>
-	
+		
+		<script>
+			function isTokenValid(generated_token){
+				var user_token = document.getElementById("token_user").value; 
+				if(user_token != "" && generated_token != ""){
+					if(user_token != generated_token){
+						alert("Please recheck the entered code!");
+						return false;
+					}else{
+						alert("Congrats!");
+						return true;
+					}
+				}
+			}
+		</script>
 		<script>
 		function addCategory() {
 			var person = prompt("Please enter the category you want to create:", "");

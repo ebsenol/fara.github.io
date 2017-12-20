@@ -147,7 +147,14 @@
 				// TODO change refs
  				echo "<li><a href='profile_info_change.php?username=".$username."'>change information</a></li> ";
 
- 				echo "<li><a href='become_admin.php?username=".$username."'>request adminship</a></li> ";
+ 				$sql_user_admin_or_not_query = "SELECT * FROM Admin WHERE username = '".$username."' ;";
+ 				$res = mysqli_query($db, $sql);
+ 				if($res->num_rows > 0){
+					echo "<li><a href='become_admin.php?username=".$username."'>stop being admin</a></li> ";
+ 				}else{
+	 				echo "<li><a href='become_admin.php?username=".$username."'>request adminship</a></li> ";
+ 				}
+
  				echo "<li><a href='profile_info_change.php?username=".$username."'>request moderatorship</a></li> ";
 			?>
 		  </ul>
