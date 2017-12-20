@@ -256,11 +256,11 @@ public class CreateTables {
             stmt.executeUpdate(sql);
             
             sql =   "CREATE TRIGGER delete_content_after_delete_comment  AFTER DELETE on Comment " +
-	        		"FOR EACH ROW " +
-	        		"BEGIN " +
-	        		"DELETE FROM content " +
-	        		"WHERE Content.cont_id = Comment.cont_id; " +
-	                "END;";
+                    "FOR EACH ROW " +
+                    "BEGIN " +
+                    "DELETE FROM content " +
+                    "WHERE Content.cont_id = Comment.cont_id; " +
+                    "END;";
             stmt.executeUpdate(sql);
 
             System.out.println( "\nTriggers added.");
@@ -273,7 +273,7 @@ public class CreateTables {
                     "email_address VARCHAR(32), " +
                     "joined_date DATE, " +
                     "admin_token VARCHAR(32)) " +
-                    "INSERT INTO Admin (username, password, email_address, joined_date) " +
+                    "INSERT INTO Admin (username, password, email_address, joined_date, admin_token) " +
                     "VALUES (username, password, email_address, joined_date, admin_token);";
             stmt.executeUpdate(sql);
             
