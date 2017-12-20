@@ -48,6 +48,10 @@ public class CreateTables {
             stmt.executeUpdate("DROP TRIGGER IF EXISTS update_netvote_after_delete" );
             stmt.executeUpdate("DROP TRIGGER IF EXISTS update_netvote_after_update" );
 
+            System.out.println( "\nDropping views...");
+            stmt.executeUpdate("DROP VIEW IF EXISTS homepage_view" );
+            stmt.executeUpdate("DROP VIEW IF EXISTS bestofea_week_view" );
+
             System.out.println( "\nCreating new tables...");
 
             // USER
@@ -244,6 +248,24 @@ public class CreateTables {
                     "END;";
             stmt.executeUpdate(sql);
             System.out.println( "\nTriggers added.");
+
+            System.out.println( "\nCreating views...");
+            sql = "SELECT net_vote, C.cont_id, timestamp, content, content_type, username, post_title, "+
+                    "post_type, belongs,category_name " +
+                    "FROM Post AS P, Content AS C, Category_Topic AS CT " +
+                    "WHERE P.cont_id = C.cont_id AND P.belongs = CT.topic_name "+
+                    "ORDER BY net_vote DESC";
+
+            stmt.executeUpdate("CREATE VIEW homepage_view AS (" + sql + ")");
+
+
+            sql = "SELECT max(net_vote) as net_vote, C.cont_id, timestamp, content, content_type," +
+                    " username, post_title, post_type, belongs,category_name " +
+                    " FROM Post AS P, Content AS C, Category_Topic AS CT " +
+                    " WHERE P.cont_id = C.cont_id AND P.belongs = CT.topic_name AND timestamp > now() - INTERVAL 1 WEEK" +
+                    " GROUP BY category_name";
+
+            stmt.executeUpdate("CREATE VIEW bestofea_week_view AS (" + sql + ")");
 
         } catch (SQLException e) {
             throw new IllegalStateException( e.getMessage(), e);
