@@ -47,6 +47,7 @@ public class CreateTables {
             stmt.executeUpdate("DROP TRIGGER IF EXISTS update_netvote_after_insert" );
             stmt.executeUpdate("DROP TRIGGER IF EXISTS update_netvote_after_delete" );
             stmt.executeUpdate("DROP TRIGGER IF EXISTS update_netvote_after_update" );
+            stmt.executeUpdate("DROP TRIGGER IF EXISTS delete_content_after_delete_comment" );
 
             System.out.println( "\nCreating new tables...");
 
@@ -121,7 +122,8 @@ public class CreateTables {
                     "post_type VARCHAR(50) NOT NULL," +
                     "belongs VARCHAR(50) NOT NULL," +
                     "FOREIGN KEY (belongs) REFERENCES Topic(topic_name)," +
-                    "FOREIGN KEY (cont_id) REFERENCES Content(cont_id)) ENGINE = InnoDB;";
+                    "FOREIGN KEY (cont_id) REFERENCES Content(cont_id)" + 
+                    "ON DELETE CASCADE) ENGINE = InnoDB;";
 
             stmt.executeUpdate(sql);
             System.out.println("Post created!");
@@ -243,6 +245,15 @@ public class CreateTables {
                     "WHERE cont_id = @cont_id; "+
                     "END;";
             stmt.executeUpdate(sql);
+            
+            sql =   "CREATE TRIGGER delete_content_after_delete_comment  AFTER DELETE on Comment " +
+	        		"FOR EACH ROW " +
+	        		"BEGIN " +
+	        		"DELETE FROM content " +
+	        		"WHERE Content.cont_id = Comment.cont_id; " +
+	                "END;";
+            stmt.executeUpdate(sql);
+
             System.out.println( "\nTriggers added.");
 
         } catch (SQLException e) {

@@ -279,7 +279,7 @@
 		$res = mysqli_query($db,$sql);
 		$sql = "DELETE FROM Comment WHERE parent_post = ".$cid.";";
 		$res = mysqli_query($db,$sql);
-		//header("location: homepage.php");
+		header("location: homepage.php");
 	}
 	if( isset($_POST['btn-addcategory']) ) {
 		$category = $_POST['category'];
