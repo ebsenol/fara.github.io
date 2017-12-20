@@ -19,7 +19,7 @@
 	$_SESSION['cid'] = $cid; 
 
 	$sql =  "SELECT * " .
-			"FROM post AS P, content AS C, category_topic AS CT  ".
+			"FROM Post AS P, Content AS C, Category_Topic AS CT  ".
 			"WHERE P.cont_id = C.cont_id AND C.cont_id = ".$cid." AND CT.topic_name = P.belongs; ";
 	
 	$result = mysqli_query($db, $sql);
@@ -52,7 +52,7 @@
 		$currentContentID = $req['cont_id'];
 		$sql =  "SELECT ".
 					"(SELECT count(*) " .
-					"FROM vote  ".
+					"FROM Vote  ".
 					"WHERE vote = 1 AND cont_id = " .$currentContentID. " ) - ".
 					"(SELECT count(*) " .
 					"FROM Vote  ".
@@ -65,7 +65,7 @@
 		$downCountFromUser = 0;
 		$sql2 = "SELECT ". 
 				"(SELECT count(*) " .
-				"FROM vote  ".
+				"FROM Vote  ".
 				"WHERE vote = 1 AND username = '".$username."' AND cont_id = ".$currentContentID." ) AS up;";
 		$result2 = mysqli_query($db, $sql2);
 		if ($result2){
@@ -75,7 +75,7 @@
 
 		$sql3 =  "SELECT (". 
 				"SELECT count(*) AS down " .
-				"FROM vote  ".
+				"FROM Vote  ".
 				"WHERE vote = 0 AND username = '".$username."' AND cont_id = ".$currentContentID." ) AS down;";
 		$result3 = mysqli_query($db, $sql3);
 		if ($result3){
@@ -177,7 +177,7 @@
 	echo "<tbody>";
 	
 	$sq4 =  "SELECT * " .
-	"FROM comment AS C1, content AS C2".
+	"FROM Comment AS C1, Content AS C2".
 	"WHERE C1.cont_id = C2.cont_id AND C1.dst_cont_id = '".$_SESSION['cid']."'; ";
 	$result4 = mysqli_query($db, $sql);
 	$res_array4 = array();

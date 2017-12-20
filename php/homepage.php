@@ -15,7 +15,7 @@
 		$username = $_SESSION['username'];		
 	}
 	$sql =  "SELECT * " .
-			"FROM post AS P, content AS C, category_topic AS CT  ".
+			"FROM Post AS P, Content AS C, Category_Topic AS CT  ".
 			"WHERE P.cont_id = C.cont_id AND P.belongs = CT.topic_name ".
 			"ORDER BY P.post_title 	".
 			"LIMIT 10;";
@@ -41,16 +41,6 @@
 	$voteIdCount = 0;
 	$from = "homepage.php";
 
-/*	$to = "figalitaho@gmail.com";
-    $subject = "Hi!";
-    $body = "Hi,\n\nHow are you?";
-    $headers = "From: figalitaho@gmail.com\r\n". "X-Mailer: php" . phpversion();
-    if (mail($to, $subject, $body, $headers)) {
-      echo("<p>Email successfully sent!</p>");
-    } else {
-      echo("<p>Email delivery failed…</p>");
-    }
-*/
 	$_SESSION['username'] = $username; //start session
 	foreach($res_array as $req)
 	{
@@ -59,7 +49,7 @@
 		$currentContentID = $req['cont_id'];
 		$sql =  "SELECT ".
 					"(SELECT count(*) " .
-					"FROM vote  ".
+					"FROM Vote  ".
 					"WHERE vote = true AND cont_id = " .$currentContentID. " ) - ".
 					"(SELECT count(*) " .
 					"FROM Vote  ".
@@ -71,7 +61,7 @@
 		$downCountFromUser = 0;
 		$sql2 = "SELECT ". 
 				"(SELECT count(*) " .
-				"FROM vote  ".
+				"FROM Vote  ".
 				"WHERE vote = true AND username = '".$username."' AND cont_id = ".$currentContentID." ) AS up;";
 		$result2 = mysqli_query($db, $sql2);
 		if ($result2){
@@ -80,7 +70,7 @@
 		}
 		$sql3 =  "SELECT (". 
 				"SELECT count(*) AS down " .
-				"FROM vote  ".
+				"FROM Vote  ".
 				"WHERE vote = false AND username = '".$username."' AND cont_id = ".$currentContentID." ) AS down;";
 		$result3 = mysqli_query($db, $sql3);
 		if ($result3){

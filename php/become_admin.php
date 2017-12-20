@@ -131,21 +131,33 @@
 						$uname = $req['username'];
 						$email = $req['email_address'];
 						
+						// -----------DISCLAIMER ----------------------
+						// this only works on berker's laptop so far :D 
+						// ---------------------------------------------
 						$to = "figalitaho@gmail.com";
 						$subject = "Hi!";
-						$body = "Hi,\n\nHow are you?";
-						$headers = "From: figalitaho@gmail.com\r\n". "X-Mailer: php" . phpversion();
-						if (mail($to, $subject, $body, $headers)) {
-							echo("<p>Email successfully sent!</p>");
-						} else {
-							echo("<p>Email delivery failed…</p>");
-						}
-						// echo "You will receive an email shortly at ".$email.".";
-						// $to = 'figalitaho@gmail.com';
-						// $subject = 'Subject test';
-						// $message = 'weeee';
-						// $headers = 'From: noreply@fara.com' . "\r\n" . 'Reply-To: webmaster@example.com' . "\r\n" . 'X-Mailer: PHP/' . phpversion();
-						// mail($to, $subject, $message, $headers);
+						$body = generateRandomString(8); 
+						echo $body;
+						// uncomment to actually send body
+						
+						// $headers = "From: figalitaho@gmail.com\r\n". "X-Mailer: php" . phpversion();
+						// if (mail($to, $subject, $body, $headers)) {
+						// 	echo("<p>Email successfully sent!</p>");
+						// } else {
+						// 	echo("<p>Email delivery failed…</p>");
+						// }
+
+						// STUB:
+						/*	$to = "figalitaho@gmail.com";
+						    $subject = "Hi!";
+						    $body = "Hi,\n\nHow are you?";
+						    $headers = "From: figalitaho@gmail.com\r\n". "X-Mailer: php" . phpversion();
+						    if (mail($to, $subject, $body, $headers)) {
+						      echo("<p>Email successfully sent!</p>");
+						    } else {
+						      echo("<p>Email delivery failed…</p>");
+						    }
+						*/
 					}
 				}
 			?>
