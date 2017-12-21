@@ -100,6 +100,8 @@
 		echo "<td  width='10%'  style='padding: 0px'>".
 		"<a href='viewcontent.php?id=". $currentContentID ."'>" .$req['post_title']. " </a></td>";	
 		echo "<td  width='6%' align = 'center' style='padding: 10px'></td>";
+		$_SESSION['post_title'] = $req['post_title'];
+		$_SESSION['content'] = $req['content'];
 		echo "<td  width='8%' align = 'center' style='padding: 10px'>".
 		"<a href='view_category.php?category=". $req['category_name'] ."'></td>";
 		echo "<td   width='8%' align = 'center' style='padding: 10px'>".
@@ -146,9 +148,19 @@
 	echo"</tbody>";
 	echo '</table></p>';
 	//ShowReply();
+	echo "<tr>";
+	echo "<td>";
+	echo "<form action='' method='post' align = 'right' value = 'Edit' style='padding-right: 100px'>".
+	"<p><input type='submit' value='edit' align = 'right' name = 'btn-edit-post'></p>".
+	"</form>";
+	echo "</td>";
+	echo "<td>";
 	echo "<form action='' method='post' align = 'right' value = 'Comment' style='padding-right: 30px'>".
 	"<p><input type='submit' value='delete' align = 'right' name = 'btn-delete-post'></p>".
 	"</form>";
+	echo "</td>";
+	echo "</tr>";
+	
 	echo "<form action='' method='post' align = 'right' value = 'Comment' style='padding-right: 30px'>".
 	"<p><input type='text' name='comment'  placeholder = 'Leave your comment'/>".
 	"<p><input type='submit' value='submit' align = 'right' name = 'btn-comment'></p>".
@@ -273,13 +285,17 @@
 	echo"</tbody>";
 	echo '</table></p></br></br>';
 	if( isset($_POST['btn-delete-post']) ) {
+		echo 'ulala';
 		$sql = "DELETE FROM Comment WHERE parent_post = ".$cid.";";
-		$res = mysqli_query($db,$sql);
-		$sql = "DELETE FROM Content WHERE cont_id = ".$cid.";";
 		$res = mysqli_query($db,$sql);
 		$sql = "DELETE FROM Post WHERE cont_id = ".$cid.";";
 		$res = mysqli_query($db,$sql);
+		$sql = "DELETE FROM Content WHERE cont_id = ".$cid.";";
+		$res = mysqli_query($db,$sql);
 		header("location: homepage.php");
+	}
+	if( isset($_POST['btn-edit-post']) ) {
+		header("location: edit_post.php");
 	}
 	if( isset($_POST['btn-addcategory']) ) {
 		$category = $_POST['category'];
