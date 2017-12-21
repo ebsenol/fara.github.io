@@ -14,7 +14,6 @@
 	else{
 		$username = $_SESSION['username'];	
 	}
-
 	function generateRandomString($length = 10) {
 	    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 	    $charactersLength = strlen($characters);
@@ -126,7 +125,6 @@
 				echo "<li><a href='view_user_votes.php?username=".$username."'>votes</a></li> ";
 				// echo "<li><a href='view_user_votes.php?username=".$username."'>subscribed?</a></li> "; // for now
  				echo "<br>";
-
 		    	$sql =  "SELECT username, email_address " .
 						 "FROM User " .
 						 "WHERE username = '".$username."';";
@@ -146,7 +144,6 @@
 				echo "<br>";
 				// TODO change refs
  				echo "<li><a href='profile_info_change.php?username=".$username."'>change information</a></li> ";
-
  				$sql_user_admin_or_not_query = "SELECT * FROM Admin WHERE username = '".$username."' ;";
  				$res = mysqli_query($db, $sql_user_admin_or_not_query);
  				if($res->num_rows > 0){
@@ -157,6 +154,13 @@
  				}
  				// moderatorship should be requested in category page
  				// echo "<li><a href='profile_info_change.php?username=".$username."'>request moderatorship</a></li> ";
+				echo "<br>";
+		
+ 				echo "<li><a href='followers.php?username=".$username."'>Followers</a></li> ";
+ 				echo "<li><a href='following.php?username=".$username."'>Following</a></li> ";
+				echo "<br>";
+				echo "<li><a href='message.php?username=".$username."'>Send Message</a></li> ";
+				
 			?>
 		  </ul>
 		</div>
