@@ -23,6 +23,15 @@
 	$result = mysqli_query($db, $sql);	
 	$category =implode(" ",mysqli_fetch_assoc($result));
 
+	// is user admin? 
+	$sql_set_admin = "SELECT * FROM Admin WHERE username = '".$username."' ;";
+	$result = mysqli_query($db, $sql_set_admin);
+	if($result->num_rows == 1){
+		$adminmis= 1;
+	}else{
+		$adminmis = 0;
+	}
+
 	// used to indicate view that user chose
 	$view ="all";
 	if (isset($_GET['view']))
@@ -175,6 +184,12 @@
 	}
 	echo "<br><br/>\n";
 
+	if( isset($_POST['btn-admin-delete']) ) {
+		$sql = "DELETE FROM User WHERE topic_name = '".$topic."' ;";
+		$res = mysqli_query($db, $sql);
+		header("Location: homepage.php"); /* Redirect browser */
+	}
+
 	?>
 
 <!DOCTYPE html>
@@ -196,7 +211,7 @@
 
 	<script type="text/javascript" src="/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
 	<link rel="stylesheet" href="/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
-	<title>reditula</title>
+	<title>Fara</title>
 
 </head>
 <body style="padding-top: 65px;">
@@ -263,6 +278,14 @@
 					</form>
 				</li>
 				<li> <p class="navbar-text"> <?php if ($usermode == 1 && strlen($username) > 0) echo "Logged in as ".$username.""; else echo "Guest"; ?>  </p></li>
+				<li> <p class="navbar-text"> <?php if ($usermode == 1) echo "Logged in as ".$username.""; else echo "Guest"; ?>  </p></li>
+					<li >
+					<form action="view_user.php" class="navbar-form navbar-left" role="settings">
+					<button role="settings" type="submit"  class="btn btn-default">
+				          <span class="glyphicon glyphicon-cog"></span>
+					</button>
+					</form>
+				</li>
 				<?php if ($usermode == 1 && strlen($username) > 0) echo "<li><a href='logout.php'>Log out</a></li>"; else echo "<li><a href='login.php'>Log in</a></li>"; ?>
 			
 
@@ -280,7 +303,12 @@
 		  "<a href='postalink.php?category=".$category."&topic=".$topic."' style='margin-right: 30px' class='btn btn-info' role='button'>Link post</a> " .
 		"</div>";
 		echo "<br><br/>\n";echo "<br><br/>\n";echo "<br><br/>\n";
-
+		if ($usermode == 1 && strlen($username) > 0){
+			if($adminmis == 1){
+				echo "<form method='post' action='".htmlspecialchars($_SERVER['PHP_SELF'])."' autocomplete='off'><div class='form-group'> ".
+					"<button type='post' class='btn btn-primary center-block'  name='btn-admin-delete'>Delete topic</button></div></form>";
+			}
+		} // else dont show 
 	?>
 
 			

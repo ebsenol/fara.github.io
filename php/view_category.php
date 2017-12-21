@@ -158,6 +158,7 @@
   		echo "</div>";
 		//activate vote button
 		//echo "<script type='text/javascript'> $('#vote".$voteIdCount."').upvote(); </script>"; 	
+
 		if ($req['post_type']=='link'){
 			echo "<td  width='60%'  style='padding: 10px'>".
 			"<a href='https://". $req['content'] ."'>" .$req['post_title']. " </a>";
