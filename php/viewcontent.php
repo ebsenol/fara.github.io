@@ -148,18 +148,33 @@
 	echo"</tbody>";
 	echo '</table></p>';
 	//ShowReply();
+	//////////////////////////////////////////////////////////
+	$sql =  "SELECT username " .
+			"FROM Moderator as M".
+			"WHERE M.category_name = ".$req['category_name']."; ";
+	
+	$result = mysqli_query($db, $sql);
+	$res_array = array();
+	if($result && $result->num_rows > 0)
+		while($row = mysqli_fetch_array($result))
+			array_push($res_array, $row);
 	echo "<tr>";
+	if($_SESSION['username'] == $req['username']){
+		echo "<td>";
+		echo "<form action='' method='post' align = 'right' value = 'Edit' style='padding-right: 100px'>".
+		"<p><input type='submit' value='edit' align = 'right' name = 'btn-edit-post'></p>".
+		"</form>";
+		echo "</td>";
+	}
+	if($_SESSION['username'] == $req['username']  or in_array($_SESSION['username'], $res_array)){
+	//////////////////////////////////////////////////////////////////
 	echo "<td>";
-	echo "<form action='' method='post' align = 'right' value = 'Edit' style='padding-right: 100px'>".
-	"<p><input type='submit' value='edit' align = 'right' name = 'btn-edit-post'></p>".
-	"</form>";
-	echo "</td>";
-	echo "<td>";
-	echo "<form action='' method='post' align = 'right' value = 'Comment' style='padding-right: 30px'>".
+	echo "<form action='' method='post' align = 'right' value = Delete style='padding-right: 30px'>".
 	"<p><input type='submit' value='delete' align = 'right' name = 'btn-delete-post'></p>".
 	"</form>";
 	echo "</td>";
 	echo "</tr>";
+	}
 	
 	echo "<form action='' method='post' align = 'right' value = 'Comment' style='padding-right: 30px'>".
 	"<p><input type='text' name='comment'  placeholder = 'Leave your comment'/>".
