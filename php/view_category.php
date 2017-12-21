@@ -161,7 +161,7 @@
 		if ($req['post_type']=='link'){
 			echo "<td  width='60%'  style='padding: 10px'>".
 			"<a href='https://". $req['content'] ."'>" .$req['post_title']. " </a>";
-			echo "<a href='viewcontent.php?id=". $currentContentID ."'>\t\t\t\tcomments </a>";	
+			echo "<a href='viewcontent.php?id=". $currentContentID ."'><b><i>comments</i></b> </a>";	
 		}	
 		else{
 			echo "<td  width='60%'  style='padding: 10px'>".
