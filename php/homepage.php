@@ -141,7 +141,6 @@
   		echo "</div>";
 		//activate vote button
 		//echo "<script type='text/javascript'> $('#vote".$voteIdCount."').upvote(); </script>"; 	
-		
 		if ($req['post_type']=='link'){
 			echo "<td  width='60%'  style='padding: 10px'>".
 			"<a href='https://". $req['content'] ."'>" .$req['post_title']. " </a>";
@@ -157,7 +156,8 @@
 		"<a href='view_category.php?category=". $req['category_name'] ."'>". ($req['category_name']) . "</td>";
 		echo "<td   width='8%' align = 'center' style='padding: 10px'>".
 		"<a href='view_topic.php?topic=". $req['belongs'] ."'>". ($req['belongs']) . "</td>";
-		echo "<td   width='8%' align = 'center' style='padding: 10px'>". ($req['username']) . "</td>";
+		echo "<td   width='8%' align = 'center' style='padding: 10px'>".
+		"<a href='view_profile.php?username=".$req['username']."'>". ($req['username']) . "</td>";
 		echo "</tr>";
 	}
 	echo"</tbody>";

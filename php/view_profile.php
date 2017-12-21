@@ -15,16 +15,31 @@
 		$username = $_SESSION['username'];	
 	
 	}
-	
-	function generateRandomString($length = 10) {
-	    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-	    $charactersLength = strlen($characters);
-	    $randomString = '';
-	    for ($i = 0; $i < $length; $i++) {
-	        $randomString .= $characters[rand(0, $charactersLength - 1)];
-    	}
-    	return $randomString;
-	}	
+	// $user $username is stalking 
+	$user = $_GET['username'];
+	$_SESSION['user'] = $user;
+	echo $user;
+	echo "lessh";
+
+	// is user admin? 
+	$sql_set_admin = "SELECT * FROM Admin WHERE username = '".$username."' ;";
+	$result = mysqli_query($db, $sql_set_admin);
+	if($result->num_rows == 1){
+		$adminmis= 1;
+	}else{
+		$adminmis = 0;
+	}
+
+	if( isset($_POST['btn-admin-delete']) ) {
+		// TODO complete this
+		$deleteuser = $_POST['delete_username'];
+		if($deleteuser != $username){
+			//  cheap trick: leave garbage around and change the password (too many fk deps)
+			$sql = "UPDATE User SET password ='dummypw' WHERE username = '".$deleteuser."' ;";
+			$res = mysqli_query($db, $sql);
+			header("Location: homepage.php"); /* Redirect browser */
+		}
+	}
 ?>
 
 
@@ -104,73 +119,59 @@
 					</form>
 				</li>
 				<li> <p class="navbar-text"> <?php if ($usermode == 1) echo "Logged in as ".$username.""; else echo "Guest"; ?>  </p></li>
+					<li >
+					<form action="view_user.php" class="navbar-form navbar-left" role="settings">
+					<button role="settings" type="submit"  class="btn btn-default">
+				          <span class="glyphicon glyphicon-cog"></span>
+					</button>
+					</form>
+				</li>
 				<li><a href="logout.php">Log out</a></li>
 
 		     </ul>
-			 
+			</div>
 		</div>
-		</div>
-		
 	</nav>
 	
-	
-	
-	
+	<div class="container">
+	  <h3>Profile</h3>
+	  <ul class="list-inline">
 
-
+	    <!-- <a href='viewcontent.php?id=". $req['cont_id'] ."'>" .$req['post_title']. " </a> -->
+	    <!-- deafult is user profile -->
+		
+	    <?php
+			echo "<li><a href='view_user_posts.php?username=".$username."'>posts</a></li> ";
+			echo "<li><a href='view_user_comments.php?username=".$username."'>comments</a></li> ";
+			echo "<li><a href='view_user_votes.php?username=".$username."'>votes</a></li> ";
+			echo "<br>";
+		?>
+	  </ul>
+	</div>
 	
-	
-	
-	
-		<div class="container">
-		  <h3>Profile</h3>
-		  <ul class="list-inline">
-
-		    <!-- <a href='viewcontent.php?id=". $req['cont_id'] ."'>" .$req['post_title']. " </a> -->
-		    <!-- deafult is user profile -->
-			
-		    <?php
-				echo "<li><a href='view_user_posts.php?username=".$username."'>posts</a></li> ";
-				echo "<li><a href='view_user_comments.php?username=".$username."'>comments</a></li> ";
-				echo "<li><a href='view_user_votes.php?username=".$username."'>votes</a></li> ";
- 				echo "<br>";
- 				/*
-			    <li><a href="view_user_posts.php">posts</a></li>
-			    <li><a href="view_user_comments.php">comments</a></li>
-			    <li><a href="view_user_votes.php">votes</a></li>
-			    <li><a href="#">subscribed_topics_maybe</a></li>
-			    <br>*/
-		    	$sql =  "SELECT username, email_address " .
-						 "FROM User " .
-						 "WHERE username = '".$username."';";
-			
-				$result = mysqli_query($db, $sql);
-				$res_array = array();
-				if( $result->num_rows > 0)
-					while($row = mysqli_fetch_array($result))
-						array_push($res_array, $row);
-
-			?>
-		  </ul>
-		</div>
-	
-	
-		<div class="container ">
-    <div class = "row">
-     
+	<div class="container ">
+    	<div class = "row">
                 <div class="form-group">
-                    
 					<button type="submit" class="btn btn-primary "  name="btn-login" }>Follow</button>
-			
 				</div>
                 <div class="form-group">
-					<button type="submit" class="btn btn-primary" name="btn-login" onclick="window.location.href = 'message.php'" }>Send Message</button
+					<button type="submit" class="btn btn-primary" name="btn-login" onclick="window.location.href = 'message.php'" }>Send Message</button>
 				</div>
-			
             </form>
         </div>
     </div>
-	
+
+	<?php
+		if ($usermode == 1 && strlen($username) > 0){
+			if($adminmis == 1){
+				echo "<form method='post' action='".htmlspecialchars($_SERVER['PHP_SELF'])."' autocomplete='off'><div class='form-group'> ".
+					"<button type='post' class='btn btn-primary center-block'  name='btn-admin-delete'>Delete user</button></div>" .
+					"<input name = 'delete_username' type='hidden' value= ".$user."> </form>";
+
+ 
+			}
+		} // else dont show 
+	?>
 
 	</body>
 </html>

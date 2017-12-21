@@ -158,16 +158,8 @@
   		echo "</div>";
 		//activate vote button
 		//echo "<script type='text/javascript'> $('#vote".$voteIdCount."').upvote(); </script>"; 	
-		if ($req['post_type']=='link'){
-			echo "<td  width='60%'  style='padding: 10px'>".
-			"<a href='https://". $req['content'] ."'>" .$req['post_title']. " </a>";
-			echo "<a href='viewcontent.php?id=". $currentContentID ."'>\t\t\t\tcomments </a>";	
-		}	
-		else{
-			echo "<td  width='60%'  style='padding: 10px'>".
-			"<a href='viewcontent.php?id=". $currentContentID ."'>" .$req['post_title']. " </a>;";	
-		}
-		echo "</td>";	
+		echo "<td  width='60%'  style='padding: 10px'>".
+		"<a href='viewcontent.php?id=". $currentContentID ."'>" .$req['post_title']. " </a></td>";	
 		echo "<td  width='6%' align = 'center' style='padding: 10px'>". ($req['timestamp']) . "</td>";
 		echo "<td  width='8%' align = 'center' style='padding: 10px'>".
 		"<a href='view_category.php?category=". $req['category_name'] ."'>". ($req['category_name']) . "</td>";
