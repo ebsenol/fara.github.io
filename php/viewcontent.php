@@ -322,7 +322,7 @@
 		// "</form>";
 		// echo "</td>";
 		// echo "</tr>";
-		showComments($currentContentID, $db);
+		showComments($currentContentID, $db, 50);
 	}
 	echo"</tbody>";
 	echo '</table></p></br></br>';
@@ -354,6 +354,7 @@
 		$res = mysqli_query($db,$sql);
 		$sql = "INSERT INTO Comment VALUES (LAST_INSERT_ID(), '".$username."',".$cid.",".$cid.");";
 		$res = mysqli_query($db,$sql);
+		header("location: viewcontent.php?id=".$cid."");	
 	}
 	if( isset($_POST['btn-comment-2']) ) {
 		$comment = $_POST['comment'];
@@ -363,6 +364,7 @@
 		$res = mysqli_query($db,$sql);
 		$sql = "INSERT INTO Comment VALUES (LAST_INSERT_ID(), '".$username."',".$_POST['comment_id'].",".$cid.");";
 		$res = mysqli_query($db,$sql);
+		header("location: viewcontent.php?id=".$cid."");
 	}
 	/////////////////////////////////////////////////////////
 	
@@ -405,7 +407,7 @@
 	//     }
 	// }
 
-	function showComments($comment_id, $db){
+	function showComments($comment_id, $db, $indent){
 		////////////////////////////////////////////////
 		global $username;
 		global $voteIdCount;
@@ -421,7 +423,7 @@
 			while($row = mysqli_fetch_array($result4))
 				array_push($res_array4, $row);
 
-			echo "<tbody>";
+
 
 			$from = "homepage.php";
 			$_SESSION['username'] = $username; //start session
@@ -493,7 +495,7 @@
 			echo "</div>";
 			//activate vote button
 			//echo "<script type='text/javascript'> $('#vote".$voteIdCount."').upvote(); </script>"; 	
-			echo "<td  width='60%'  style='margin-left:= 10px;'>".$req['content']. "</td>";	
+			echo "<td  width='60%'  style='margin-left:= ".$indent."px;'>".$req['content']. "</td>";	
 			echo "<td  width='6%' align = 'center' style='padding: 10px'>". ($req['timestamp']) . "</td>";
 			echo "<td  width='8%' align = 'center' style='padding: 10px'></td>";
 			echo "<td   width='8%' align = 'center' style='padding: 10px'></td>";
@@ -520,12 +522,10 @@
 			// "<p><input type='submit' value='submit' align = 'right' name = 'btn-comment-2'></p>".
 			// "<input name = 'comment_id' type='hidden' value= ".$currentContentID."> ".
 			// "</form>";
-			showComments($currentContentID, $db);
+			showComments($currentContentID, $db, $indent + 10);
 			echo "</td>";
 			echo "</tr>";
 			}
-			echo"</tbody>";
-			echo '</table></p></br></br>';
 		}
 
 	}
