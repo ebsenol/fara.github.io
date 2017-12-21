@@ -326,14 +326,14 @@ public class CreateTables {
                     "email_address VARCHAR(32), " +
                     "joined_date DATE, " +
                     "category_name VARCHAR(100)) " +
-                    "INSERT INTO Admin (username, password, email_address, joined_date, category_name) " +
-                    "VALUES (username, password, email_address, joined_date, admin_token, category_name);";
+                    "INSERT INTO Moderator (username, password, email_address, joined_date, category_name) " +
+                    "VALUES (username, password, email_address, joined_date, category_name);";
             stmt.executeUpdate(sql);
             
             System.out.println("\nProcedures added...");
-            
-            System.out.println("\nIndices added...");
-            
+
+            System.out.println("\nAdding indices...");
+
             stmt.executeUpdate("CREATE INDEX username_index USING BTREE ON User(username);");
             
             stmt.executeUpdate("CREATE INDEX category_name_index USING BTREE ON Category(name);");
@@ -341,7 +341,8 @@ public class CreateTables {
             stmt.executeUpdate("CREATE INDEX topic_name_index USING BTREE ON Topic(topic_name);");
             
             stmt.executeUpdate("CREATE INDEX post_title_index USING BTREE ON Post(post_title);");
-            
+            System.out.println("\nIndices added...");
+
             System.out.println( "\nCreating views...");
             sql = "SELECT net_vote, C.cont_id, timestamp, content, content_type, username, post_title, "+
                     "post_type, belongs,category_name " +
