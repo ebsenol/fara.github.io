@@ -55,19 +55,19 @@
 	  
 	  	echo "<p><i>Posting to ".$category." / ".$topic."</i></p>";
 	  ?>
-	 <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" autocomplete="off">
+	 <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" onsubmit="return isValid()">
 	    <div class="form-group">
 	      <label for="title">Title:</label>
-	      <input type="text" name="title" class="form-control" >
+	      <input type="text" name="title" id="title" class="form-control" >
 	    </div>
 	    <div class="form-group">
 	      <label for="url">Url:</label>
-	      <input type="text" name="link" class="form-control" >
+	      <input type="text" name="link" id="link" class="form-control" >
 	    </div>
 
 		<div class="form-group">
 		<?php
-			echo  "<button type='post' class='btn btn-primary center-block'  name='btn-post'}>Post</button>";
+			echo  "<button type='submit' class='btn btn-primary center-block'  name='btn-post'}>Post</button>";
 		?>
 		</div>		
 
@@ -93,6 +93,7 @@
 			}
 				else if (title.length >= 50){
 				alert("Title can be at most 50 chars. Please make it shorter.");
+				return false;
 			}
 			return true;
 			

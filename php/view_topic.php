@@ -23,20 +23,38 @@
 	$result = mysqli_query($db, $sql);	
 	$category =implode(" ",mysqli_fetch_assoc($result));
 
+	// used to indicate view that user chose
 	$view ="all";
 	if (isset($_GET['view']))
 		$view = $_GET['view'];
+	// used to indicate which page is the user on
+	$page =1;
+	if (isset($_GET['page']))
+		$page = $_GET['page'];
+	// used to indicate how many page user chooses to see
+	$pageview = 10;
+	if (isset($_GET['pageview']))
+		$pageview = $_GET['pageview'];
 
-	$sql =  "SELECT * FROM homepage_view WHERE belongs = '".$topic."' LIMIT 10;";
+	$limitbegin = ($page - 1) * $pageview;
+	$limitend = $page * $pageview;
+
+	$sql =  "SELECT * FROM homepage_view WHERE belongs = '".$topic."' ";
 	if ($view == "week")
-		$sql =  "SELECT * FROM homepage_view WHERE timestamp > now() - INTERVAL 1 WEEK AND belongs = '".$topic."'".
-			"LIMIT 10;";
+		$sql =  "SELECT * FROM homepage_view WHERE timestamp > now() - INTERVAL 1 WEEK AND belongs = '".$topic."' ";
 	else if ($view == "today")
-		$sql =  "SELECT * FROM homepage_view WHERE timestamp > now() - INTERVAL 1 DAY AND belongs = '".$topic."'".
-			"LIMIT 10;";
+		$sql =  "SELECT * FROM homepage_view WHERE timestamp > now() - INTERVAL 1 DAY AND belongs = '".$topic."' ";
+
+	$countersql =  "SELECT count(*) as count FROM ".
+					"( ".$sql.") as C;";
+
+	// add page constraints in the query:
+	$sql = "".$sql." LIMIT ".$limitbegin.",".$limitend." ;";
+	$result = mysqli_query($db, $countersql);
+	$res_arr =  mysqli_fetch_array($result);
+	$totalPostCount = $res_arr['count'];
 
 	$result = mysqli_query($db, $sql);
-
 	$res_array = array();
 	if( $result->num_rows > 0)
 		while($row = mysqli_fetch_array($result))
@@ -55,9 +73,10 @@
 		 "</thead>";
 	echo "<tbody>";
 	$voteIdCount = 0;
-	echo "<a style='margin-left: 200px;'href='view_topic.php?topic=".$topic."&view=today'>Top posts of today</a>"; 
-	echo "<a style='margin-left: 200px;'href='view_topic.php?topic=".$topic."&view=week'>Top posts of all week</a>"; 
-	echo "<a style='margin-left: 200px;'href='view_topic.php?topic=".$topic."&view=all'>Top posts of all</a>"; 
+	echo "<a style='margin-left: 200px;'href='view_topic.php?topic=".$topic."&view=today&pageview=".$pageview."&page=".$page."'>Top posts of today</a>"; 
+	echo "<a style='margin-left: 200px;'href='view_topic.php?topic=".$topic."&view=week&pageview=".$pageview."&page=".$page."'>Top posts of all week</a>"; 
+	echo "<a style='margin-left: 200px;'href='view_topic.php?topic=".$topic."&view=all&pageview=".$pageview."&page=".$page."'>Top posts of all</a>"; 
+
 
 	$from = "view_topic.php?topic=".$topic."";
 	foreach($res_array as $req)
@@ -128,6 +147,27 @@
 	}
 	echo"</tbody>";
 	echo '</table></p></br></br>';
+
+
+	echo "<a style='margin-left: 100px;".
+		"'href='view_topic.php?topic=".$topic."&view=".$view."&page=1&pageview=10'>Show 10 per page</a>"; 
+	echo "<a style='margin-left: 100px;".
+		"'href='view_topic.php?topic=".$topic."&view=".$view."&page=1&pageview=25'>Show 25 per page</a>"; 
+	echo "<a style='margin-left: 100px;".
+		"'href='view_topic.php?topic=".$topic."&view=".$view."&page=1&pageview=50'>Show 50 per page</a>"; 
+	echo "<br><br/>\n";
+
+	$pageCounter = 1;
+	$pageMax = $totalPostCount / $pageview + 1;
+	echo "<h5 style='margin-left: 100px;'><b> Pages: </b></h5>";
+
+	while ($pageCounter < $pageMax){
+		echo "<a style='margin-left: 100px;'href='view_topic.php?topic=".$topic."".
+				"&view=".$view."&page=".$pageCounter."&pageview=".$pageCounter."'>".$pageCounter."</a>"; 
+		$pageCounter++;
+	}
+	echo "<br><br/>\n";echo "<br><br/>\n";echo "<br><br/>\n";
+
 	?>
 
 <!DOCTYPE html>
@@ -232,9 +272,11 @@
 		  "<a href='postapost.php?category=".$category."&topic=".$topic."' style='margin-right: 30px' class='btn btn-info' role='button'>Text post</a> " .
 		  "<a href='postalink.php?category=".$category."&topic=".$topic."' style='margin-right: 30px' class='btn btn-info' role='button'>Link post</a> " .
 		"</div>";
+		echo "<br><br/>\n";echo "<br><br/>\n";echo "<br><br/>\n";
+
 	?>
 
-		
+			
 	
 
 

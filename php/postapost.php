@@ -94,6 +94,7 @@
 			}
 			else if (title.length >= 50){
 				alert("Title can be at most 50 chars. Please make it shorter.");
+				return false;
 			}
 			else if( text.length >= 800){
 				alert("Text can be at most 800 chars. Please make it shorter.");
