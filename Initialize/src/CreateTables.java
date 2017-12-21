@@ -325,9 +325,8 @@ public class CreateTables {
                     "password VARCHAR(32), " +
                     "email_address VARCHAR(32), " +
                     "joined_date DATE, " +
-                    "moderator_token VARCHAR(32), " +
                     "category_name VARCHAR(100)) " +
-                    "INSERT INTO Admin (username, password, email_address, joined_date, moderator_token, category_name) " +
+                    "INSERT INTO Admin (username, password, email_address, joined_date, category_name) " +
                     "VALUES (username, password, email_address, joined_date, admin_token, category_name);";
             stmt.executeUpdate(sql);
             
