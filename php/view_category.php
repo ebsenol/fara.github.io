@@ -165,42 +165,41 @@
 
 	if( isset($_POST['btn-moderator-request']) ) {
 		$category = $_SESSION['category'];
-		// header("location: view_category.php?category=".$category."");
-		$sql_user = "SELECT username, password, email_address, joined_date ".
-    				"FROM User ".
-    				"WHERE username = '".$username."' ;";
 
-	    $result = mysqli_query($db, $sql_user);
-		$res_array = array();	
-		if( $result->num_rows == 1){
-			
-			// for the user, now check if he/she can be moderator
-			// CAN BE A MODERATOR WHEN
-			// has more than 3 likes (for now-demo purpose)
-			$sql_check_votes = "SELECT SUM(net_vote) FROM Content WHERE username = '".$username."' ";
-			$result = mysqli_query($db, $sql_check_votes);
+		// for the user, now check if he/she can be moderator
+		// CAN BE A MODERATOR WHEN
+		// has more than 3 likes (for now-demo purpose)
+		$sql_check_votes = "SELECT SUM(net_vote) as sum_vote FROM Content WHERE username = '".$username."' ";
+		$result = mysqli_query($db, $sql_check_votes);
+		$row = mysqli_fetch_array($result);
+		$sumvote = $row['sum_vote'];
+		if($sumvote >= 1){
+			// has more than 3 posts
+			$sql_check_posts = "SELECT COUNT(*) as c FROM Content WHERE username = '".$username."' AND content_type='post' ;";
+			$result = mysqli_query($db, $sql_check_posts);
 			$row = mysqli_fetch_array($result);
-			if( $row > 3){
-				// has more than 3 posts
-				$sql_check_posts = "SELECT COUNT(*) FROM Content WHERE username = '".$username."' AND content_type='post' ";
-				$result = mysqli_query($db, $sql_check_posts);
-				$row = mysqli_fetch_array($result);
-				if($row > 3){
-					// register user as moderator
-					$sql =  "CALL register_moderator ('".$username."', '".$pass."', '".$email."', '".$joined_."', '".$category."'); ";
-					$result2 = mysqli_query($db, $sql);
-					$res_array2 = array();
-					if( $result2 ){
-						echo "Suceess";
-						$_SESSION['moderator'] = 1;
-					}
-					else
-						echo "There was an error"; // TODO : add link script that goes back to profile.
-					header("Location: homepage.php"); /* Redirect browser */
+			$c_stuff= $row['c'];
+			
+			if($c_stuff >= 1){
+				$sqlulla = "SELECT email_address, password, joined_date FROM User WHERE username = '".$username."' ;";
+				$r = mysqli_query($db, $sqlulla);
+				$requlla = mysqli_fetch_array($r);
+
+				$email = $requlla['email_address'];
+				$pass = $requlla['password'];
+				$joined_= $requlla['joined_date']; 
+				// // register user as moderator
+				$sql =  "CALL register_moderator ('".$username."', '".$pass."', '".$email."', '".$joined_."', '".$category."'); ";
+				$result2 = mysqli_query($db, $sql);
+				if( $result2 ){
+					echo "Suceess";
+					$_SESSION['moderator'] = 1;
 				}
-		
+				else
+					echo "There was an error"; // TODO : add link script that goes back to profile.
+				header("Location: homepage.php"); /* Redirect browser */
 			}
-		}
+		}	
 	}
 
 	if( isset($_POST['btn-moderator-deny']) ) {
@@ -209,8 +208,7 @@
 		$sql_user = "SELECT username FROM Moderator WHERE category_name = '".$category."' ;";
 
 	    $result = mysqli_query($db, $sql_user);
-		$res_array = array();	
-		if( $result->num_rows == 1){
+		if( $result){
 			$sql = "DELETE FROM Moderator WHERE username = '".$username."' ;";
 			$res = mysqli_query($db, $sql);
 			header("Location: homepage.php"); /* Redirect browser */
@@ -257,8 +255,8 @@
 
 	<script type="text/javascript" src="/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
 	<link rel="stylesheet" href="/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
-	<title>reditula</title>
-
+	<title>Fara</title>
+	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon"> 
 </head>
 <body style="padding-top: 65px;">
   <!-- Initialize vote buttons -->
@@ -329,6 +327,13 @@
 					</form>
 				</li>
 				<li> <p class="navbar-text"> <?php if ($usermode == 1 && strlen($username) > 0) echo "Logged in as ".$username.""; else echo "Guest"; ?>  </p></li>
+				<li >
+					<form action="view_user.php" class="navbar-form navbar-left" role="settings">
+					<button role="settings" type="submit"  class="btn btn-default">
+				          <span class="glyphicon glyphicon-cog"></span>
+					</button>
+					</form>
+				</li>
 				<?php if ($usermode == 1 && strlen($username) > 0) echo "<li><a href='logout.php'>Log out</a></li>"; else echo "<li><a href='login.php'>Log in</a></li>"; ?>
 				
 		     </ul>
