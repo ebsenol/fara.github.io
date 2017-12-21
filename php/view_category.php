@@ -22,6 +22,14 @@
 		$_SESSION['category'] = $category; 
 	}
 
+	$sql_set_admin = "SELECT * FROM Admin WHERE username = '".$username."' ;";
+	$result = mysqli_query($db, $sql_set_admin);
+	if($result->num_rows == 1){
+		$adminmis= 1;
+	}else{
+		$adminmis = 0;
+	}
+
 	$sql_set_moderator = "SELECT * FROM Moderator WHERE username = '".$username."' AND category_name = '".$category."' ;";
 	$result = mysqli_query($db, $sql_set_moderator);
 	if($result->num_rows == 1){
@@ -223,6 +231,13 @@
 		}
 	}
 	
+	if( isset($_POST['btn-admin-delete']) ) {
+		$category = $_SESSION['category'];
+		$sql = "DELETE FROM Category WHERE name = '".$category."' ;";
+		$res = mysqli_query($db, $sql);
+		header("Location: homepage.php"); /* Redirect browser */
+	}
+
 	echo "<a style='margin-left: 100px;".
 		"'href='view_category.php?category=".$category."&view=".$view."&page=1&pageview=10'>Show 10 per page</a>"; 
 	echo "<a style='margin-left: 100px;".
@@ -377,6 +392,13 @@
 			}else{
 				echo "<form method='post' action='".htmlspecialchars($_SERVER['PHP_SELF'])."' autocomplete='off'><div class='form-group'>".
 					"<button type='post' class='btn btn-primary center-block'  name='btn-moderator-request'>Request moderatorship</button></div></form>";
+			}
+		} // else dont show 
+
+		if ($usermode == 1 && strlen($username) > 0){
+			if($adminmis == 1){
+				echo "<form method='post' action='".htmlspecialchars($_SERVER['PHP_SELF'])."' autocomplete='off'><div class='form-group'> ".
+					"<button type='post' class='btn btn-primary center-block'  name='btn-admin-delete'>Delete category</button></div></form>";
 			}
 		} // else dont show 
 	?>
