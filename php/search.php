@@ -16,6 +16,32 @@ if ( !isset($_SESSION['username']))
 else{
     $username = $_SESSION['username'];		
 }
+echo "<h2 align='center'><b> Search Result: </b></h2>";
+///////////////////////////////////////////////////////////////////////////////////
+$sql =  "SELECT * " .
+        "FROM User WHERE username like '%".$text."%'";
+
+$result = mysqli_query($db, $sql);
+$res_array = array();
+if( $result->num_rows > 0){
+    if( $result->num_rows > 0)
+        while($row = mysqli_fetch_array($result))
+            array_push($res_array, $row);
+    echo "<h4 align='left' style='padding-left: 30px'><b> Users: </b></h4>";
+    echo "</br>";
+    echo "<table class='table table-striped' style='width:95%'; align = 'center';  align='center' cellpadding='10'>";
+    foreach($res_array as $req)
+    {
+        
+    echo "<tbody>";
+    echo "<td  width='60%'  style='padding: 10px'>".
+        "<a href='view_user.php?user=". $req['username'] ."'>" .$req['username']. " </a></td>";	
+    // echo "</tr>";
+    }
+    echo"</tbody>";
+    echo '</table></p></br></br>';
+}
+//////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////
 $sql =  "SELECT * " .
         "FROM Category WHERE name like '%".$text."%'";
@@ -82,7 +108,7 @@ if( $result->num_rows > 0){
             array_push($res_array, $row);
 
             
-    echo "<h2 align='center'><b> Search Result: </b></h2>";
+    
     echo "<h4 align='left' style='padding-left: 30px'><b> Posts: </b></h4>";
     echo "</br>";
     echo "<table class='table table-striped' style='width:95%'; align = 'center';  align='center' cellpadding='10'>";
