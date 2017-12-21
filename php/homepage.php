@@ -30,8 +30,7 @@
 		$pageview = $_GET['pageview'];
 
 	$limitbegin = ($page - 1) * $pageview;
-	$limitend = $page * $pageview;
-
+	
 	$sql =  "SELECT * FROM homepage_view";
 	if ($view == "week")
 		$sql =  "SELECT * FROM homepage_view WHERE timestamp > now() - INTERVAL 1 WEEK ";
@@ -42,18 +41,19 @@
 
 	$countersql =  "SELECT count(*) as count FROM ".
 					"( ".$sql.") as C;";
-
-	// add page constraints in the query:
-	$sql = "".$sql." LIMIT ".$limitbegin.",".$limitend." ;";
 	$result = mysqli_query($db, $countersql);
 	$res_arr =  mysqli_fetch_array($result);
 	$totalPostCount = $res_arr['count'];
 
+	// add page constraints in the query:
+	$sql = "".$sql." LIMIT ".$limitbegin.",".$pageview." ;";
 	$result = mysqli_query($db, $sql);
+	unset($res_array);
 	$res_array = array();
 	if( $result->num_rows > 0)
 		while($row = mysqli_fetch_array($result))
 			array_push($res_array, $row);
+	
 	echo "<h2 align='center'><b> Most recent posts: </b></h2>";
 	echo "</br>";
 	echo "<table class='table table-striped' style='width:95%'; align = 'center';  align='center' cellpadding='10'>";

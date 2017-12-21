@@ -44,16 +44,11 @@
 <body style="padding-top: 65px;">	
 	<div class="container">
 	  <?php
-	  	$topic = $_GET["topic"];
-		$category = $_GET["category"];
-
 	  	echo "<a href='view_topic.php?topic=".$topic."' class='btn btn-info'> Go back</a>";
 	  	echo "<br>";
 
 		echo "<h2>New post</h2>";
-
-	  
-	  	echo "<p><i>Posting to ".$category." / ".$topic."</i></p>";
+	  	echo "<p><i>Posting to ".$_GET["category"]." / ".$topic."</i></p>";
 	  ?>
 	 <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" onsubmit="return isValid()">
 	    <div class="form-group">
@@ -100,7 +95,6 @@
 		}
 		
 	</script>
-
 </body>
 </html>
 <?php ob_end_flush(); ?>

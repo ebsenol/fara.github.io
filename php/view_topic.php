@@ -37,8 +37,7 @@
 		$pageview = $_GET['pageview'];
 
 	$limitbegin = ($page - 1) * $pageview;
-	$limitend = $page * $pageview;
-
+	
 	$sql =  "SELECT * FROM homepage_view WHERE belongs = '".$topic."' ";
 	if ($view == "week")
 		$sql =  "SELECT * FROM homepage_view WHERE timestamp > now() - INTERVAL 1 WEEK AND belongs = '".$topic."' ";
@@ -49,7 +48,7 @@
 					"( ".$sql.") as C;";
 
 	// add page constraints in the query:
-	$sql = "".$sql." LIMIT ".$limitbegin.",".$limitend." ;";
+	$sql = "".$sql." LIMIT ".$limitbegin.",".$pageview." ;";
 	$result = mysqli_query($db, $countersql);
 	$res_arr =  mysqli_fetch_array($result);
 	$totalPostCount = $res_arr['count'];
@@ -166,7 +165,7 @@
 				"&view=".$view."&page=".$pageCounter."&pageview=".$pageCounter."'>".$pageCounter."</a>"; 
 		$pageCounter++;
 	}
-	echo "<br><br/>\n";echo "<br><br/>\n";echo "<br><br/>\n";
+	echo "<br><br/>\n";
 
 	?>
 

@@ -35,7 +35,6 @@
 		$pageview = $_GET['pageview'];
 
 	$limitbegin = ($page - 1) * $pageview;
-	$limitend = $page * $pageview;
 
 	$sql =  "SELECT * FROM homepage_view WHERE category_name = '".$category."' ";
 	if ($view == "week")
@@ -47,7 +46,7 @@
 					"( ".$sql.") as C;";
 
 	// add page constraints in the query:
-	$sql = "".$sql." LIMIT ".$limitbegin.",".$limitend." ;";
+	$sql = "".$sql." LIMIT ".$limitbegin.",".$pageview." ;";
 	$result = mysqli_query($db, $countersql);
 	$res_arr =  mysqli_fetch_array($result);
 	$totalPostCount = $res_arr['count'];

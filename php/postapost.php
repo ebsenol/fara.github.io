@@ -64,24 +64,21 @@ function checkform(form) {
 	  	echo "<br>";
 		echo "<h2>New post</h2>";
 	  
-	  	echo "<p><i>Posting to ".$category." / ".$topic."</i></p>";
-	  	//echo "<form action='addlinkpost_todb.php?category=".$category."&topic=".$topic."' method='post' onsubmit='return isValid()'>";
+	  	echo "<p><i>Posting to ".$_GET["category"]." / ".$topic."</i></p>";
 	  ?>
-	  <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" autocomplete="off">
+	  <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" autocomplete="off" onsubmit="return isValid()">
 
 	    <div class="form-group" >
 	      <label for="title">Title:</label>
-	      <input type="text" name="title" class="form-control" required>
+	      <input type="text" name="title" id ="title" class="form-control">
 	    </div>
 	    <div class="form-group">
 	      <label for="text">Text:</label>
-	       <textarea class="form-control" name="text" rows="5" id="comment"></textarea>
+	       <textarea class="form-control" name="text" rows="5" id="text"></textarea>
 	    </div>
 
 		<div class="form-group">
-		<?php
-			echo  "<button type='post' class='btn btn-primary center-block'  name='btn-post'}>Post</button>";
-		?>
+			<button type="post" class="btn btn-primary center-block"  name="btn-post">Post</button>
 		</div>		
 
 	  </form>
@@ -118,7 +115,6 @@ function checkform(form) {
 		}
 		
 	</script>
-
 </body>
 </html>
 <?php ob_end_flush(); ?>
