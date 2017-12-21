@@ -8,7 +8,7 @@ public class InsertEntries {
     public static void main(String[] args) {
         String url = "jdbc:mysql://localhost:3306/cs353db";
         String username = "root";
-        String password = "figalA!1";
+        String password = "";
 
         try (Connection con = DriverManager.getConnection(url, username, password)) {
             System.out.println("Connected!");
@@ -69,9 +69,9 @@ public class InsertEntries {
             stmt.executeUpdate(sql);
 
             //Add moderator
-            sql = "INSERT INTO Moderator VALUES ('messici', '123123', 'messi@barca.com', now() - interval 1 year, 'asdfgh', 'Sports');";
+            sql = "INSERT INTO Moderator VALUES ('messici', '123123', 'messi@barca.com', now() - interval 1 year, 'Sports');";
             stmt.executeUpdate(sql);
-            sql = "INSERT INTO Moderator VALUES ('darwin', '123123', 'adnan@oktar.com', now() - interval 1 year, 'weerrurjjr', 'Science');";
+            sql = "INSERT INTO Moderator VALUES ('darwin', '123123', 'adnan@oktar.com', now() - interval 1 year, 'Science');";
             stmt.executeUpdate(sql);
 
             //Add post
