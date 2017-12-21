@@ -12,7 +12,7 @@ public class CreateTables {
 
         String url = "jdbc:mysql://localhost:3306/cs353db";
         String username = "root";
-        String password = "figalA!1";
+        String password = "";
 
         try (
                 Connection con = DriverManager.getConnection(url, username, password)) {
@@ -47,7 +47,12 @@ public class CreateTables {
             stmt.executeUpdate("DROP TRIGGER IF EXISTS update_netvote_after_insert" );
             stmt.executeUpdate("DROP TRIGGER IF EXISTS update_netvote_after_delete" );
             stmt.executeUpdate("DROP TRIGGER IF EXISTS update_netvote_after_update" );
-            stmt.executeUpdate("DROP TRIGGER IF EXISTS delete_content_after_delete_comment" );
+            stmt.executeUpdate("DROP TRIGGER IF EXISTS before_delete_category" );
+            stmt.executeUpdate("DROP TRIGGER IF EXISTS after_delete_topic_cattopic" );
+            stmt.executeUpdate("DROP TRIGGER IF EXISTS after_delete_post" );
+            stmt.executeUpdate("DROP TRIGGER IF EXISTS before_delete_post" );
+            stmt.executeUpdate("DROP TRIGGER IF EXISTS after_delete_comment" );
+            stmt.executeUpdate("DROP TRIGGER IF EXISTS before_delete_comment" );
 
             System.out.println( "\nDropping views...");
 
@@ -117,7 +122,6 @@ public class CreateTables {
                     "password VARCHAR(32) NOT NULL," +
                     "email_address VARCHAR(32) NOT NULL," +
                     "joined_date DATE,"+
-                    "moderator_token VARCHAR(32) NOT NULL,"+
                     "category_name VARCHAR(100),"+
                     "FOREIGN KEY (category_name) REFERENCES Category(name))ENGINE = InnoDB;";
 
@@ -254,13 +258,52 @@ public class CreateTables {
                     "WHERE cont_id = @cont_id; "+
                     "END;";
             stmt.executeUpdate(sql);
-            
-            sql =   "CREATE TRIGGER delete_content_after_delete_comment  AFTER DELETE on Comment " +
-                    "FOR EACH ROW " +
-                    "BEGIN " +
-                    "DELETE FROM content " +
-                    "WHERE Content.cont_id = Comment.cont_id; " +
+
+
+            sql =   "CREATE TRIGGER before_delete_comment BEFORE DELETE ON Comment " +
+                    "FOR EACH ROW BEGIN " +
+                    "DELETE FROM Vote WHERE cont_id = OLD.cont_id; " +
                     "END;";
+
+            stmt.executeUpdate(sql);
+
+            sql =   "CREATE TRIGGER after_delete_comment AFTER DELETE ON Comment " +
+                    "FOR EACH ROW BEGIN " +
+                    "DELETE FROM Content WHERE cont_id = OLD.cont_id; "+
+                    "END;";
+
+            stmt.executeUpdate(sql);
+
+            sql =   "CREATE TRIGGER before_delete_post BEFORE DELETE ON Post " +
+                    "FOR EACH ROW BEGIN " +
+                    "DELETE FROM Vote WHERE cont_id = OLD.cont_id; " +
+                    "DELETE FROM Comment WHERE parent_post = OLD.cont_id; "+
+                    "END;";
+
+            stmt.executeUpdate(sql);
+
+
+            sql =   "CREATE TRIGGER after_delete_post AFTER DELETE ON Post " +
+                    "FOR EACH ROW BEGIN " +
+                    "DELETE FROM Content WHERE cont_id = OLD.cont_id; "+
+                    "END;";
+
+            stmt.executeUpdate(sql);
+
+            sql =   "CREATE TRIGGER after_delete_topic_cattopic AFTER DELETE ON Category_Topic " +
+                    "FOR EACH ROW BEGIN " +
+                    "DELETE FROM Post WHERE belongs = OLD.topic_name; "+
+                    "DELETE FROM Topic WHERE topic_name = OLD.topic_name; " +
+                    "END;";
+
+            stmt.executeUpdate(sql);
+            sql =   "CREATE TRIGGER before_delete_category BEFORE DELETE ON Category " +
+                    "FOR EACH ROW BEGIN "+
+                    "DELETE FROM Moderator WHERE category_name = OLD.name; " +
+                    "DELETE FROM Banned WHERE category_name = OLD.name; "+
+                    "DELETE FROM Category_Topic WHERE category_name = OLD.name; "+
+                    "END;";
+
             stmt.executeUpdate(sql);
 
             System.out.println( "\nTriggers added.");
@@ -294,9 +337,9 @@ public class CreateTables {
                     " FROM Post AS P, Content AS C, Category_Topic AS CT " +
                     " WHERE P.cont_id = C.cont_id AND P.belongs = CT.topic_name AND timestamp > now() - INTERVAL 1 WEEK" +
                     " GROUP BY category_name" +
-                    " ORDER BY net_vote;";
+                    " ORDER BY net_vote";
 
-            stmt.executeUpdate("CREATE VIEW bestofea_week_view AS (" + sql + ")");
+            stmt.executeUpdate("CREATE VIEW bestofea_week_view AS (" + sql + ");");
 
         } catch (SQLException e) {
             throw new IllegalStateException( e.getMessage(), e);
