@@ -1,4 +1,17 @@
-
+<script>
+function checkform(form) {
+    var inputs = form.getElementsByTagName('input');
+    for (var i = 0; i < inputs.length; i++) {
+        if(inputs[i].hasAttribute("required")){
+            if(inputs[i].value == ""){
+                alert("Please fill all required fields");
+                return false;
+            }
+        }
+    }
+    return true;
+}
+</script>
 <?php
 	include_once 'dbconnect.php';
 	session_start();
@@ -58,7 +71,7 @@
 
 	    <div class="form-group" >
 	      <label for="title">Title:</label>
-	      <input type="text" name="title" class="form-control">
+	      <input type="text" name="title" class="form-control" required>
 	    </div>
 	    <div class="form-group">
 	      <label for="text">Text:</label>
