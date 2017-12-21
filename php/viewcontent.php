@@ -187,13 +187,14 @@
 	echo "<br>";
 	echo "<br>";
 	echo "<td>";
-	echo "<form action='' method='post' align = 'right' value = 'Comment'>".
-	"<p><input type='text' name='comment'  placeholder = 'Leave your comment' clase = 'form-control' style='padding-right: 10px'/>".
+	echo "</td>";
+	echo "<form action='' method='post' align = 'right' value = 'Comment'style='padding-right: 50px' >".
+	"<input type='text' name='comment'  placeholder = 'Leave your comment'  style='width:35%'  style='padding-right: 10px'/>".
 	//"<p><input type='submit' value='submit' align = 'right' name = 'btn-comment'></p>".
 	"<button type='post' class='btn btn-primary left-block'  name='btn-comment'>submit</button>".
 	"</form>";
-	echo "</br>";
-	echo "</td>";
+	//echo "</br>";
+
 
 	
 	
@@ -305,17 +306,27 @@
 		echo "<td   width='8%' align = 'center' style='padding: 10px'></td>";
 		echo "<td>";
 		//ShowReply();
-		echo "<form action='' method='post' align = 'right' value = 'Comment'>".
-		"<p><input type='text' name='comment'  placeholder = 'Leave your comment'></p>".
-		"<p><input type='submit' value='submit' align = 'right' name = 'btn-comment-2'></p>".
+		echo "<form action='' method='post' align = 'right' value = 'Comment'style='padding-right: 50px' >".
+		"<input type='text' name='comment'  placeholder = 'Leave your comment'  style='width:200%' class = 'form-control' style='padding-right: 10px'/>".
+		//"<p><input type='submit' value='submit' align = 'right' name = 'btn-comment'></p>".
+		"<button type='post' class='btn btn-primary left-block'  name='btn-comment-2'>submit</button>".
 		"<input name = 'comment_id' type='hidden' value= ".$currentContentID."> ".
 		"</form>";
-		echo "</td>";
+		//echo "</br>";
 		echo "</tr>";
+
+		// echo "<form action='' method='post' align = 'right' value = 'Comment'>".
+		// "<p><input type='text' name='comment'  placeholder = 'Leave your comment'></p>".
+		// "<p><input type='submit' value='submit' align = 'right' name = 'btn-comment-2'></p>".
+		// "<input name = 'comment_id' type='hidden' value= ".$currentContentID."> ".
+		// "</form>";
+		// echo "</td>";
+		// echo "</tr>";
 		showComments($currentContentID, $db);
 	}
 	echo"</tbody>";
 	echo '</table></p></br></br>';
+	
 	if( isset($_POST['btn-delete-post']) ) {
 		echo 'ulala';
 		$sql = "DELETE FROM Comment WHERE parent_post = ".$cid.";";
@@ -496,11 +507,19 @@
 			echo "<td   width='8%' align = 'center' style='padding: 10px'></td>";
 			echo "<td>";
 			//ShowReply();
-			echo "<form action='' method='post' align = 'right' value = 'Comment'>".
-			"<p><input type='text' name='comment'  placeholder = 'Leave your comment'></p>".
-			"<p><input type='submit' value='submit' align = 'right' name = 'btn-comment-2'></p>".
+			echo "<form action='' method='post' align = 'right' value = 'Comment'style='padding-right: 50px' >".
+			"<input type='text' name='comment'  placeholder = 'Leave your comment'  style='width:200%' class = 'form-control' style='padding-right: 10px'/>".
+			//"<p><input type='submit' value='submit' align = 'right' name = 'btn-comment'></p>".
+			"<button type='post' class='btn btn-primary left-block'  name='btn-comment-2'>submit</button>".
 			"<input name = 'comment_id' type='hidden' value= ".$currentContentID."> ".
 			"</form>";
+			//echo "</br>";
+			echo "</tr>";
+			// echo "<form action='' method='post' align = 'right' value = 'Comment'>".
+			// "<p><input type='text' name='comment'  placeholder = 'Leave your comment'></p>".
+			// "<p><input type='submit' value='submit' align = 'right' name = 'btn-comment-2'></p>".
+			// "<input name = 'comment_id' type='hidden' value= ".$currentContentID."> ".
+			// "</form>";
 			showComments($currentContentID, $db);
 			echo "</td>";
 			echo "</tr>";
