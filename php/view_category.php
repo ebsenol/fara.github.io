@@ -16,11 +16,19 @@
 	}
 	
 	$temp = $_GET["category"];
+
 	if (strlen($temp) > 0){
 		$category = $temp;	
 		$_SESSION['category'] = $category; 
 	}
-	
+
+	$sql_set_moderator = "SELECT * FROM Moderator WHERE username = '".$username."' AND category_name = '".$category."' ;";
+	$result = mysqli_query($db, $sql_set_moderator);
+	if($result->num_rows == 1){
+		$moderatormus = 1;
+	}else{
+		$moderatormus = 0;
+	}
 	// used to indicate view that user chose
 	$view ="all";
 	if (isset($_GET['view']))
@@ -154,16 +162,61 @@
 	}
 	echo"</tbody>";
 	echo '</table></p></br></br>';
-	if( isset($_POST['btn-addtopic']) ) {
-		$topic = $_POST['topic'];
+
+	if( isset($_POST['btn-moderator-request']) ) {
 		$category = $_SESSION['category'];
-		$sql = "INSERT INTO topic VALUES ('".$topic."');";
-		$res = mysqli_query($db,$sql);
-		$sql = "INSERT INTO Category_Topic VALUES ('".$category."','".$topic."');";
-		$res = mysqli_query($db,$sql);
-		header("location: view_category.php?category=".$category."");
+		// header("location: view_category.php?category=".$category."");
+		$sql_user = "SELECT username, password, email_address, joined_date ".
+    				"FROM User ".
+    				"WHERE username = '".$username."' ;";
+
+	    $result = mysqli_query($db, $sql_user);
+		$res_array = array();	
+		if( $result->num_rows == 1){
+			
+			// for the user, now check if he/she can be moderator
+			// CAN BE A MODERATOR WHEN
+			// has more than 3 likes (for now-demo purpose)
+			$sql_check_votes = "SELECT SUM(net_vote) FROM Content WHERE username = '".$username."' ";
+			$result = mysqli_query($db, $sql_check_votes);
+			$row = mysqli_fetch_array($result);
+			if( $row > 3){
+				// has more than 3 posts
+				$sql_check_posts = "SELECT COUNT(*) FROM Content WHERE username = '".$username."' AND content_type='post' ";
+				$result = mysqli_query($db, $sql_check_posts);
+				$row = mysqli_fetch_array($result);
+				if($row > 3){
+					// register user as moderator
+					$sql =  "CALL register_moderator ('".$username."', '".$pass."', '".$email."', '".$joined_."', '".$category."'); ";
+					$result2 = mysqli_query($db, $sql);
+					$res_array2 = array();
+					if( $result2 ){
+						echo "Suceess";
+						$_SESSION['moderator'] = 1;
+					}
+					else
+						echo "There was an error"; // TODO : add link script that goes back to profile.
+					header("Location: homepage.php"); /* Redirect browser */
+				}
+		
+			}
+		}
 	}
 
+	if( isset($_POST['btn-moderator-deny']) ) {
+		$category = $_SESSION['category'];
+		// header("location: view_category.php?category=".$category."");
+		$sql_user = "SELECT username FROM Moderator WHERE category_name = '".$category."' ;";
+
+	    $result = mysqli_query($db, $sql_user);
+		$res_array = array();	
+		if( $result->num_rows == 1){
+			$sql = "DELETE FROM Moderator WHERE username = '".$username."' ;";
+			$res = mysqli_query($db, $sql);
+			header("Location: homepage.php"); /* Redirect browser */
+		}
+	}
+	
 	echo "<a style='margin-left: 100px;".
 		"'href='view_category.php?category=".$category."&view=".$view."&page=1&pageview=10'>Show 10 per page</a>"; 
 	echo "<a style='margin-left: 100px;".
@@ -182,7 +235,8 @@
 		$pageCounter++;
 	}
 	echo "<br><br/>\n";echo "<br><br/>\n";echo "<br><br/>\n";
-	?>
+
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -301,11 +355,18 @@
             </div>
 		 </div>
 	 </div>
-	
 
-		
-	
-
+	<?php 
+		if ($usermode == 1 && strlen($username) > 0){
+			if($moderatormus == 1){
+				echo "<form method='post' action='".htmlspecialchars($_SERVER['PHP_SELF'])."' autocomplete='off'><div class='form-group'> ".
+					"<button type='post' class='btn btn-primary center-block'  name='btn-moderator-deny'>Stop being moderator</button></div></form>";
+			}else{
+				echo "<form method='post' action='".htmlspecialchars($_SERVER['PHP_SELF'])."' autocomplete='off'><div class='form-group'>".
+					"<button type='post' class='btn btn-primary center-block'  name='btn-moderator-request'>Request moderatorship</button></div></form>";
+			}
+		} // else dont show 
+	?>
 
 		</body>
 </html>
