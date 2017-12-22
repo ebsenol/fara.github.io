@@ -161,6 +161,8 @@
  				echo "<li><a href='following.php?username=".$username."'>Following</a></li> ";
 				echo "<br>";
 				echo "<li><a href='message.php?username=".$username."'>Send Message</a></li> ";
+				echo "<br>";
+				echo "<li><a href='inbox.php?username=".$username."'>Check Inbox</a></li> ";
 				
 			?>
 		  </ul>
