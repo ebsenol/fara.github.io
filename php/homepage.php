@@ -54,7 +54,7 @@
 		while($row = mysqli_fetch_array($result))
 			array_push($res_array, $row);
 	
-	echo "<h2 align='center'><b> Most recent posts: </b></h2>";
+	echo "<h4 align='center'><b> recent posts </b></h4>";
 	echo "</br>";
 	echo "<table class='table table-striped' style='width:95%'; align = 'center';  align='center' cellpadding='10'>";
 	echo "<thead class='thead-inverse'>";
@@ -139,19 +139,34 @@
   			echo "<a class='downvote'></a> ";
 		}
   		echo "</div>";
-		//activate vote button
-		//echo "<script type='text/javascript'> $('#vote".$voteIdCount."').upvote(); </script>"; 	
 		if ($req['post_type']=='link'){
-			echo "<td  width='60%'  style='padding: 10px'>".
+			echo "<td  width='50%'  style='padding: 10px'>".
 			"<a href='https://". $req['content'] ."'>" .$req['post_title']. " </a>";
 			echo "<a href='viewcontent.php?id=". $currentContentID ."'><b><i>comments</i></b> </a>";	
 		}	
 		else{
-			echo "<td  width='60%'  style='padding: 10px'>".
+			echo "<td  width='50%'  style='padding: 10px'>".
 			"<a href='viewcontent.php?id=". $currentContentID ."'>" .$req['post_title']. " </a>;";	
 		}
 		echo "</td>";
-		echo "<td  width='6%' align = 'center' style='padding: 10px'>". ($req['timestamp']) . "</td>";
+
+		// get minutes
+		$ago = date("i", (time()-$req['timestamp']));
+		$time = ""; 
+		echo $ago;
+		if ($ago < 60){
+			$time = "".$ago." minutes ago";
+		}
+		else if ($ago > 60 && $ago < 1440){
+			$ago = date("h", (time()-$req['timestamp']));
+			$time = "".$ago." hours ago";
+		}
+		else if ($ago > 1440){
+			$ago = date("d", (time()-$req['timestamp']));
+			$time = "".$ago." days ago";
+		}
+
+		echo "<td  width='15%' align = 'center' style='padding: 10px'>". $req['timestamp'] . "</td>";
 		echo "<td  width='8%' align = 'center' style='padding: 10px'>".
 		"<a href='view_category.php?category=". $req['category_name'] ."'>". ($req['category_name']) . "</td>";
 		echo "<td   width='8%' align = 'center' style='padding: 10px'>".
@@ -220,7 +235,7 @@
 		}
 	?>
    <!-- Fixed navbar -->
-   <nav id="navbarmain"  class="navbar navbar-inverse navbar-fixed-top">
+   <nav id="navbarmain" style = 'background-color:#4D2C73'  class="navbar navbar-inverse navbar-fixed-top">
        <div class="container">
          <div class="navbar-header">
            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">

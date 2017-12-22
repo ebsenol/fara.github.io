@@ -71,7 +71,7 @@ public class CreateTables {
                     "username VARCHAR(32) PRIMARY KEY," +
                     "password VARCHAR(32) NOT NULL," +
                     "email_address VARCHAR(32) NOT NULL," +
-                    "joined_date DATE) ENGINE = InnoDB;";
+                    "joined_date  DATETIME ) ENGINE = InnoDB;";
 
             stmt.executeUpdate(sql);
             System.out.println( "User created!");
@@ -82,7 +82,7 @@ public class CreateTables {
                     "username VARCHAR(32) PRIMARY KEY," +
                     "password VARCHAR(32) NOT NULL," +
                     "email_address VARCHAR(32) NOT NULL," +
-                    "joined_date DATE," +
+                    "joined_date  DATETIME ," +
                     "admin_token VARCHAR(32) NOT NULL) ENGINE = InnoDB;";
 
             stmt.executeUpdate(sql);
@@ -91,7 +91,7 @@ public class CreateTables {
             //CONTENT
             sql = "CREATE TABLE Content (" +
                     "cont_id  INT AUTO_INCREMENT PRIMARY KEY, "+
-                    "timestamp DATE,"+
+                    "timestamp  DATETIME ,"+
                     "content VARCHAR(800) NOT NULL,"+
                     "content_type VARCHAR(10) NOT NULL,"+
                     "username VARCHAR(32) NOT NULL,"+
@@ -121,7 +121,7 @@ public class CreateTables {
                     "username VARCHAR(32) PRIMARY KEY," +
                     "password VARCHAR(32) NOT NULL," +
                     "email_address VARCHAR(32) NOT NULL," +
-                    "joined_date DATE,"+
+                    "joined_date  DATETIME ,"+
                     "category_name VARCHAR(100),"+
                     "FOREIGN KEY (category_name) REFERENCES Category(name))ENGINE = InnoDB;";
 
@@ -163,7 +163,7 @@ public class CreateTables {
                     "message_id INT AUTO_INCREMENT PRIMARY KEY, "+
                     "dst_name VARCHAR(32) NOT NULL," +
                     "rcv_name VARCHAR(32) NOT NULL," +
-                    "timestamp DATE," +
+                    "timestamp  DATETIME ," +
                     "message VARCHAR(32) NOT NULL," +
                     "FOREIGN KEY (dst_name) REFERENCES User(username)," +
                     "FOREIGN KEY (rcv_name) REFERENCES User(username)) ENGINE = InnoDB;";
@@ -304,7 +304,6 @@ public class CreateTables {
                     "DELETE FROM Category_Topic WHERE category_name = OLD.name; "+
                     "END;";
 
-            stmt.executeUpdate(sql);
 
             System.out.println( "\nTriggers added.");
 
@@ -314,7 +313,7 @@ public class CreateTables {
                     "(username VARCHAR(32), " +
                     "password VARCHAR(32), " +
                     "email_address VARCHAR(32), " +
-                    "joined_date DATE, " +
+                    "joined_date  DATETIME , " +
                     "admin_token VARCHAR(32)) " +
                     "INSERT INTO Admin (username, password, email_address, joined_date, admin_token) " +
                     "VALUES (username, password, email_address, joined_date, admin_token);";
@@ -324,7 +323,7 @@ public class CreateTables {
                     "(username VARCHAR(32), " +
                     "password VARCHAR(32), " +
                     "email_address VARCHAR(32), " +
-                    "joined_date DATE, " +
+                    "joined_date  DATETIME , " +
                     "category_name VARCHAR(100)) " +
                     "INSERT INTO Moderator (username, password, email_address, joined_date, category_name) " +
                     "VALUES (username, password, email_address, joined_date, category_name);";

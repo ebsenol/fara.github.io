@@ -67,7 +67,7 @@
 	if( $result->num_rows > 0)
 		while($row = mysqli_fetch_array($result))
 			array_push($res_array, $row);
-	echo "<h2 align='center'><b>".$category."/".$topic.": </b></h2>";
+	echo "<h4 align='center'><b>".$category." - ".$topic." </b></h4>";
 	echo "</br>";
 	echo "<table class='table table-striped' style='width:95%'; align = 'center';  align='center' cellpadding='10'>";
 	echo "<thead class='thead-inverse'>";
@@ -158,7 +158,8 @@
 		"<a href='view_category.php?category=". $req['category_name'] ."'>". ($req['category_name']) . "</td>";
 		echo "<td   width='8%' align = 'center' style='padding: 10px'>".
 		"<a href='view_topic.php?topic=". $req['belongs'] ."'>". ($req['belongs']) . "</td>";
-		echo "<td   width='8%' align = 'center' style='padding: 10px'>". ($req['username']) . "</td>";
+		echo "<td   width='8%' align = 'center' style='padding: 10px'>".
+		"<a href='view_profile.php?username=".$req['username']."'>". ($req['username']) . "</td>";		
 		echo "</tr>";
 	}
 	echo"</tbody>";
@@ -226,7 +227,7 @@
 		}
 	?>
    <!-- Fixed navbar -->
-   <nav id="navbarmain"  class="navbar navbar-inverse navbar-fixed-top">
+   <nav id="navbarmain" style='background-color:#1A237E' class="navbar navbar-inverse navbar-fixed-top">
        <div class="container">
          <div class="navbar-header">
            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -241,7 +242,6 @@
 		<div id="navbar" class="navbar-collapse collapse">
 			<ul class="nav navbar-nav">
 				<li class ="active"><a href="homepage.php">Home</a></li>
-				<li <input type="text" name="search" placeholder="Search.."> </li> 
 				<li class="dropdown">
 					<a class="dropdown-toggle" data-toggle="dropdown" href="#">Categories
 						<span class="caret"></span></a>
@@ -266,18 +266,18 @@
 				</li>
 	     	</ul>
 		     <ul class="nav navbar-nav navbar-right">
+			<li>
 
-				<li>
-					<form class="navbar-form navbar-left" role="search">
+					<form class="navbar-form navbar-left" role="search" action = 'search.php'>
 					<div class="form-group">
-						<input type="text" class="form-control" placeholder="Search">
+						<input type="text" class="form-control" name = "Search" placeholder="Search">
 					</div>
-					<button type="submit" class="btn btn-default">
+					<button type="submit" class="btn btn-default" action =>
 						<span class="glyphicon glyphicon-search"></span>
 					</button>
 					</form>
+
 				</li>
-				<li> <p class="navbar-text"> <?php if ($usermode == 1 && strlen($username) > 0) echo "Logged in as ".$username.""; else echo "Guest"; ?>  </p></li>
 				<li> <p class="navbar-text"> <?php if ($usermode == 1) echo "Logged in as ".$username.""; else echo "Guest"; ?>  </p></li>
 					<li >
 					<form action="view_user.php" class="navbar-form navbar-left" role="settings">

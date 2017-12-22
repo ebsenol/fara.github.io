@@ -58,40 +58,19 @@
 			<ul class="nav navbar-nav">
 				<li class ="active"><a href="homepage.php">Home</a></li>
 				<li <input type="text" name="search" placeholder="Search.."> </li> 
-				<li class="dropdown">
-					<a class="dropdown-toggle" data-toggle="dropdown" href="#">Categories
-						<span class="caret"></span></a>
-						<ul class="dropdown-menu">
-						 <?php
-							 $sql =  "SELECT name " .
-									 "FROM Category;";
-						
-							$result = mysqli_query($db, $sql);
-							$res_array = array();
-							if( $result->num_rows > 0)
-								while($row = mysqli_fetch_array($result))
-									array_push($res_array, $row);
-								
-							foreach($res_array as $req)
-							{
-								$catName = $req['name'];
-								echo "<li><a href='view_category.php?'>". ($catName) . "</a></li>";
-							}
-						 ?>
-						</ul>
-				</li>
-				<li onclick="addCategory()" class ="active"><a href="homepage.php"><b>+</b> Add Category</a></li>
-			</ul>
+				</ul>
 			 <ul class="nav navbar-nav navbar-right">
-				<li
-					<form class="navbar-form navbar-left" role="search">
+					<li>
+
+					<form class="navbar-form navbar-left" role="search" action = 'search.php'>
 					<div class="form-group">
-						<input type="text" class="form-control" placeholder="Search">
+						<input type="text" class="form-control" name = "Search" placeholder="Search">
 					</div>
-					<button type="submit" class="btn btn-default">
+					<button type="submit" class="btn btn-default" action =>
 						<span class="glyphicon glyphicon-search"></span>
 					</button>
 					</form>
+
 				</li>
 				<li> <p class="navbar-text"> <?php if ($usermode == 1) echo "Logged in as ".$username.""; else echo "Guest"; ?>  </p></li>
 				<li >

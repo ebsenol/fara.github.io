@@ -42,7 +42,7 @@
 <body style="padding-top: 65px;">
    
    <!-- Fixed navbar -->
-   <nav id="navbarmain"  class="navbar navbar-inverse navbar-fixed-top">
+   <nav id="navbarmain" style = 'background-color:#3F51B5'  class="navbar navbar-inverse navbar-fixed-top">
        <div class="container">
          <div class="navbar-header">
            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -57,7 +57,6 @@
 		<div id="navbar" class="navbar-collapse collapse">
 			<ul class="nav navbar-nav">
 				<li class ="active"><a href="homepage.php">Home</a></li>
-				<li <input type="text" name="search" placeholder="Search.."> </li> 
 				<li class="dropdown">
 					<a class="dropdown-toggle" data-toggle="dropdown" href="#">Categories
 						<span class="caret"></span></a>
@@ -75,22 +74,24 @@
 							foreach($res_array as $req)
 							{
 								$catName = $req['name'];
-								echo "<li><a href='view_category.php?'>". ($catName) . "</a></li>";
+								echo "<li><a href='view_category.php?category=".$catName."'>". ($catName) . "</a></li>";
 							}
 						 ?>
 						</ul>
 				</li>
 	     	</ul>
 		     <ul class="nav navbar-nav navbar-right">
-				<li
-					<form class="navbar-form navbar-left" role="search">
+							<li>
+
+					<form class="navbar-form navbar-left" role="search" action = 'search.php'>
 					<div class="form-group">
-						<input type="text" class="form-control" placeholder="Search">
+						<input type="text" class="form-control" name = "Search" placeholder="Search">
 					</div>
-					<button type="submit" class="btn btn-default">
+					<button type="submit" class="btn btn-default" action =>
 						<span class="glyphicon glyphicon-search"></span>
 					</button>
 					</form>
+
 				</li>
 				<li> <p class="navbar-text"> <?php if ($usermode == 1) echo "Logged in as ".$username.""; else echo "Guest"; ?>  </p></li>
 				<li >
@@ -110,24 +111,15 @@
 		  <h3>Comments</h3>
 		  <ul class="list-inline">
 
-		    <!-- <a href='viewcontent.php?id=". $req['cont_id'] ."'>" .$req['post_title']. " </a> -->
-		    <!-- deafult is user profile -->
-			
 		    <?php
 			    echo "<li><a href='view_user.php?username=".$username."'>your profile</a></li> ";
 				echo "<li><a href='view_user_posts.php?username=".$username."'>posts</a></li> ";
 				echo "<li><a href='view_user_comments.php?username=".$username."'>comments</a></li> ";
 				echo "<li><a href='view_user_votes.php?username=".$username."'>votes</a></li> ";
  				echo "<br>";
- 				/*
-			    <li><a href="view_user_posts.php">posts</a></li>
-			    <li><a href="view_user_comments.php">comments</a></li>
-			    <li><a href="view_user_votes.php">votes</a></li>
-			    <li><a href="#">subscribed_topics_maybe</a></li>
-			    <br>*/
 		    	$sql =  "SELECT * " .
-						"FROM Comment as COM ".
-						"WHERE COM.username= '" . $username . "' ".
+						"FROM Comment as M , Content as N ".
+						"WHERE M.username = '".$username."' AND M.cont_id = N.cont_id ".
 						"LIMIT 10;";
 	
 				$result = mysqli_query($db, $sql);
@@ -146,10 +138,7 @@
 					{	
 						echo "<tr>";
 						
-						// TODO
-						// echo "<td  width='11%'>".
-						// 	"<a href='viewpost.php?id=". $req['cont_id'] ."'>" .$req['content']. " </a></td>";	
-						echo "<td  width='11%' align = 'center' style='padding: 10px'>". ($req['comment']) . "</td>";
+							echo "<td  width='11%' align = 'center' style='padding: 10px'>". ($req['content']) . "</td>";
 						echo "<td  width='11%' align = 'center' style='padding: 10px'>". ($req['timestamp']) . "</td>";
 						echo "</tr>";
 					}
@@ -160,22 +149,6 @@
 					echo "You haven't commented yet!";
 			?>
 		  </ul>
-	
-		<script>
-		function addCategory() {
-			var person = prompt("Please enter the category you want to create:", "");
-			if (person != null) {
-				document.getElementById("demo").innerHTML =
-				"Hello " + person + "! How are you today?";
-			}
-		}
-		</script>
-		<script>
-			$('#vote1').upvote();
-			$('#vote2').upvote();
-			$('#vote3').upvote();
-		</script>
-		
 	</body>
 </html>
 <?php ob_end_flush(); ?>

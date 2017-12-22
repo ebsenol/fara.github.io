@@ -96,7 +96,7 @@
   					echo "<a class='downvote' href='add_vote.php?username=". $username ."&contid=".$currentContentID."&vote=down&from=".$from."'></a> ";
   		echo "</div>";
 		//activate vote button
-		//echo "<script type='text/javascript'> $('#vote".$voteIdCount."').upvote(); </script>"; 	
+		echo "<script type='text/javascript'> $('#vote".$voteIdCount."').upvote(); </script>"; 	
 		echo "<td  width='10%'  style='padding: 0px'>".
 		"<a href='viewcontent.php?id=". $currentContentID ."'>" .$req['post_title']. " </a></td>";	
 		echo "<td  width='6%' align = 'center' style='padding: 10px'></td>";
@@ -291,7 +291,7 @@
 		}
   		echo "</div>";
 		//activate vote button
-		//echo "<script type='text/javascript'> $('#vote".$voteIdCount."').upvote(); </script>"; 	
+		echo "<script type='text/javascript'> $('#vote".$voteIdCount."').upvote(); </script>"; 	
 		echo "<td  width='60%'  style='padding: 10px'>".$req['content']. "</td>";	
 		echo "<td  width='6%' align = 'center' style='padding: 10px'>". ($req['timestamp']) . "</td>";
 		echo "<td  width='8%' align = 'center' style='padding: 10px'></td>";
@@ -328,7 +328,6 @@
 	echo '</table></p></br></br>';
 	
 	if( isset($_POST['btn-delete-post']) ) {
-		echo 'ulala';
 		$sql = "DELETE FROM Comment WHERE parent_post = ".$cid.";";
 		$res = mysqli_query($db,$sql);
 		$sql = "DELETE FROM Post WHERE cont_id = ".$cid.";";
@@ -494,7 +493,7 @@
 			}
 			echo "</div>";
 			//activate vote button
-			//echo "<script type='text/javascript'> $('#vote".$voteIdCount."').upvote(); </script>"; 	
+			echo "<script type='text/javascript'> $('#vote".$voteIdCount."').upvote(); </script>"; 	
 			echo "<td  width='60%'  style='margin-left:= ".$indent."px;'>".$req['content']. "</td>";	
 			echo "<td  width='6%' align = 'center' style='padding: 10px'>". ($req['timestamp']) . "</td>";
 			echo "<td  width='8%' align = 'center' style='padding: 10px'></td>";
