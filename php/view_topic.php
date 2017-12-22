@@ -203,7 +203,8 @@
 	echo "<br><br/>\n";
 
 	if( isset($_POST['btn-admin-delete']) ) {
-		$sql = "DELETE FROM User WHERE topic_name = '".$topic."' ;";
+		$topic = $_POST['topic'];
+		$sql = "DELETE FROM Category_Topic WHERE topic_name = '".$topic."' ;";
 		$res = mysqli_query($db, $sql);
 		header("Location: homepage.php"); /* Redirect browser */
 	}
@@ -323,7 +324,8 @@
 		if ($usermode == 1 && strlen($username) > 0){
 			if($adminmis == 1){
 				echo "<form method='post' action='".htmlspecialchars($_SERVER['PHP_SELF'])."' autocomplete='off'><div class='form-group'> ".
-					"<button type='post' class='btn btn-primary center-block'  name='btn-admin-delete'>Delete topic</button></div></form>";
+					"<button type='post' class='btn btn-primary center-block'  name='btn-admin-delete'>Delete topic</button></div>
+					<input type='hidden' value=".$topic." name='topic' method='post'></form>";
 			}
 		} // else dont show 
 	?>
