@@ -151,22 +151,23 @@
 		echo "</td>";
 
 		// get minutes
-		$ago = date("i", (time()-$req['timestamp']));
-		$time = ""; 
-		echo $ago;
+		$postdate = new DateTime($req['timestamp']);
+		$now = new DateTime();
+		$ago =  $postdate->diff($now)->format("%i");
+
 		if ($ago < 60){
 			$time = "".$ago." minutes ago";
 		}
 		else if ($ago > 60 && $ago < 1440){
-			$ago = date("h", (time()-$req['timestamp']));
+			$ago =  $postdate->diff($now)->format("%h");
 			$time = "".$ago." hours ago";
 		}
 		else if ($ago > 1440){
-			$ago = date("d", (time()-$req['timestamp']));
+			$ago =  $postdate->diff($now)->format("%d");
 			$time = "".$ago." days ago";
 		}
 
-		echo "<td  width='15%' align = 'center' style='padding: 10px'>". $req['timestamp'] . "</td>";
+		echo "<td  width='15%' align = 'center' style='padding: 10px'>". $time . "</td>";
 		echo "<td  width='8%' align = 'center' style='padding: 10px'>".
 		"<a href='view_category.php?category=". $req['category_name'] ."'>". ($req['category_name']) . "</td>";
 		echo "<td   width='8%' align = 'center' style='padding: 10px'>".

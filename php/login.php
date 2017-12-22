@@ -56,11 +56,10 @@ if( isset($_POST) & !empty($_POST) ){
          </button>
          <a class="navbar-brand" href="index.php">Fara</a>
      </div>
-
-     <div id="navbar" class="navbar-collapse collapse">
-       <ul class="nav navbar-nav">
-         <li><a href="#">About</a></li>
-     </ul>
+    <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class ="active"><a href="homepage.php">Home</a></li>
+        </ul>
      <ul class="nav navbar-nav navbar-right">
          <li  class="active" ><a href="signup.php">Sign up</a></li>
 
