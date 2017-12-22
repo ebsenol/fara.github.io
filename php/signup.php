@@ -60,11 +60,10 @@ if( isset($_POST['btn-signup']) ) {
 				</button>
 				<a class="navbar-brand" href="index.php">Fara</a>
 			</div>
-
-			<div id="navbar" class="navbar-collapse collapse">
-				<ul class="nav navbar-nav">
-					<li><a href="#">About</a></li>
-			</div>
+ 			<div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                 <li class ="active"><a href="homepage.php">Home</a></li>
+        </ul>
 		</div>
 	</nav>
 
@@ -72,7 +71,7 @@ if( isset($_POST['btn-signup']) ) {
 
 	<!--Sign up form-->
 	<div class="container col-md-4 col-md-offset-5">
-		<h2 style="margin-left:25px;" ><strong> Join now!  </strong></h2><br>
+		<h3 style="margin-left:25px;" ><strong> Join now!  </strong></h3><br>
 		<div class="container col-md-7">
 			<form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" autocomplete="off">
 				<div class="form-group">
@@ -110,7 +109,7 @@ if( isset($_POST['btn-signup']) ) {
     ?>
         </div>
 				<!--log in-->
-				<h2 style="margin-left: 5px;"><strong>Already a User?</strong></h2><br>
+				<h4 style="margin-left: 5px;" <a href="login.php">  Already a User? </a> </strong></h4><br>
 				<div>
 					<button class="btn btn-primary center-block" onclick="window.location.href = 'login.php' ">Log in</button>
 				</div>	

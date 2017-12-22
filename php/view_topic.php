@@ -146,14 +146,31 @@
 		if ($req['post_type']=='link'){
 			echo "<td  width='60%'  style='padding: 10px'>".
 			"<a href='https://". $req['content'] ."'>" .$req['post_title']. " </a>";
-			echo "<a href='viewcontent.php?id=". $currentContentID ."'><b><i>comments</i></b> </a>";	
+			echo "<a href='viewcontent.php?id=". $currentContentID ."&category=".$category."'><b><i>comments</i></b> </a>";	
 		}	
 		else{
 			echo "<td  width='60%'  style='padding: 10px'>".
-			"<a href='viewcontent.php?id=". $currentContentID ."'>" .$req['post_title']. " </a>;";	
+			"<a href='viewcontent.php?id=". $currentContentID ."&category=".$category."'>" .$req['post_title']. " </a>";	
 		}
 		echo "</td>";
-		echo "<td  width='6%' align = 'center' style='padding: 10px'>". ($req['timestamp']) . "</td>";
+		// get minutes
+		$postdate = new DateTime($req['timestamp']);
+		$now = new DateTime();
+		$ago =  $postdate->diff($now)->format("%i");
+
+		if ($ago < 60){
+			$time = "".$ago." minutes ago";
+		}
+		else if ($ago > 60 && $ago < 1440){
+			$ago =  $postdate->diff($now)->format("%h");
+			$time = "".$ago." hours ago";
+		}
+		else if ($ago > 1440){
+			$ago =  $postdate->diff($now)->format("%d");
+			$time = "".$ago." days ago";
+		}
+
+		echo "<td  width='15%' align = 'center' style='padding: 10px'>". $time . "</td>";
 		echo "<td  width='8%' align = 'center' style='padding: 10px'>".
 		"<a href='view_category.php?category=". $req['category_name'] ."'>". ($req['category_name']) . "</td>";
 		echo "<td   width='8%' align = 'center' style='padding: 10px'>".

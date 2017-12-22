@@ -142,11 +142,11 @@
 		if ($req['post_type']=='link'){
 			echo "<td  width='50%'  style='padding: 10px'>".
 			"<a href='https://". $req['content'] ."'>" .$req['post_title']. " </a>";
-			echo "<a href='viewcontent.php?id=". $currentContentID ."'><b><i>comments</i></b> </a>";	
+			echo "<a href='viewcontent.php?id=". $currentContentID ."&category=".$req['category_name']."'><b><i>comments</i></b> </a>";	
 		}	
 		else{
 			echo "<td  width='50%'  style='padding: 10px'>".
-			"<a href='viewcontent.php?id=". $currentContentID ."'>" .$req['post_title']. " </a>;";	
+			"<a href='viewcontent.php?id=". $currentContentID ."&category=".$req['category_name']."'>" .$req['post_title']. " </a>";	
 		}
 		echo "</td>";
 

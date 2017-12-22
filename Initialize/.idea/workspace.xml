@@ -12,11 +12,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="CreateTables.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="CreateTables.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/CreateTables.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="371">
-              <caret line="100" column="36" lean-forward="true" selection-start-line="100" selection-start-column="36" selection-end-line="100" selection-end-column="36" />
+            <state relative-caret-position="552">
+              <caret line="305" column="0" lean-forward="true" selection-start-line="305" selection-start-column="0" selection-end-line="305" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <marker date="1513900974107" expanded="true" signature="1391:1424" ph="DROP TABLE `... " />
@@ -62,7 +62,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="InsertEntries.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="InsertEntries.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/InsertEntries.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="237">
@@ -119,7 +119,6 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>category</find>
-      <find>banned</find>
       <find>parent</find>
       <find>references</find>
       <find>REFERENCES TOP</find>
@@ -131,11 +130,12 @@
       <find>Comment</find>
       <find>references User</find>
       <find>Date</find>
-      <find>basketball post</find>
       <find>content</find>
       <find>DATE</find>
       <find>DAte</find>
       <find>DAte</find>
+      <find>basketball post</find>
+      <find>banned</find>
     </findStrings>
   </component>
   <component name="GradleLocalSettings">
@@ -307,12 +307,12 @@
       <workItem from="1513701475962" duration="3036000" />
       <workItem from="1513790226989" duration="1207000" />
       <workItem from="1513794325849" duration="6752000" />
-      <workItem from="1513871592582" duration="16715000" />
+      <workItem from="1513871592582" duration="18360000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="27710000" />
+    <option name="totallyTimeSpent" value="29355000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-6" y="-6" width="1513" height="973" extended-state="6" />
@@ -632,10 +632,53 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Main.java" />
+    <entry file="file://$PROJECT_DIR$/src/InsertEntries.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="237">
+          <caret line="23" column="32" lean-forward="false" selection-start-line="23" selection-start-column="32" selection-end-line="23" selection-end-column="32" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <marker date="1513881218218" expanded="true" signature="669:751" ph="INSERT INTO User... " />
+            <marker date="1513881218218" expanded="true" signature="811:897" ph="INSERT INTO User... " />
+            <marker date="1513881218218" expanded="true" signature="957:1042" ph="INSERT INTO User... " />
+            <marker date="1513881218218" expanded="true" signature="1102:1191" ph="INSERT INTO User... " />
+            <marker date="1513881218218" expanded="true" signature="1251:1338" ph="INSERT INTO User... " />
+            <marker date="1513881218218" expanded="true" signature="1424:1528" ph="INSERT INTO Admin... " />
+            <marker date="1513881218218" expanded="true" signature="1616:1654" ph="INSERT INTO Category... " />
+            <marker date="1513881218218" expanded="true" signature="1714:1753" ph="INSERT INTO Category... " />
+            <marker date="1513881218218" expanded="true" signature="1839:1876" ph="INSERT INTO Topic... " />
+            <marker date="1513881218218" expanded="true" signature="1936:1975" ph="INSERT INTO Topic... " />
+            <marker date="1513881218218" expanded="true" signature="2035:2071" ph="INSERT INTO Topic... " />
+            <marker date="1513881218218" expanded="true" signature="2131:2176" ph="INSERT INTO Topic... " />
+            <marker date="1513881218218" expanded="true" signature="2270:2325" ph="INSERT INTO Category_Topic... " />
+            <marker date="1513881218218" expanded="true" signature="2385:2449" ph="INSERT INTO Category_Topic... " />
+            <marker date="1513881218218" expanded="true" signature="2509:2564" ph="INSERT INTO Category_Topic... " />
+            <marker date="1513881218218" expanded="true" signature="2624:2681" ph="INSERT INTO Category_Topic... " />
+            <marker date="1513881218218" expanded="true" signature="2769:2880" ph="INSERT INTO Content... " />
+            <marker date="1513881218218" expanded="true" signature="2940:3050" ph="INSERT INTO Content... " />
+            <marker date="1513881218218" expanded="true" signature="3110:3210" ph="INSERT INTO Content... " />
+            <marker date="1513881218218" expanded="true" signature="3299:3403" ph="INSERT INTO Moderator... " />
+            <marker date="1513881218218" expanded="true" signature="3463:3567" ph="INSERT INTO Moderator... " />
+            <marker date="1513881218218" expanded="true" signature="3651:3717" ph="INSERT INTO Post... " />
+            <marker date="1513881218218" expanded="true" signature="3777:3848" ph="INSERT INTO Post... " />
+            <marker date="1513881218218" expanded="true" signature="3908:3981" ph="INSERT INTO Post... " />
+            <marker date="1513881218218" expanded="true" signature="4068:4120" ph="INSERT INTO Comment... " />
+            <marker date="1513881218218" expanded="true" signature="4068:4122" ph="INSERT INTO Comment... " />
+            <marker date="1513881218218" expanded="true" signature="4182:4237" ph="INSERT INTO Comment... " />
+            <marker date="1513881218218" expanded="true" signature="4236:4237" ph="INSERT INTO Comment... " />
+            <marker date="1513881218218" expanded="true" signature="4299:4397" ph="INSERT INTO Content... " />
+            <marker date="1513881218218" expanded="true" signature="4457:4557" ph="INSERT INTO Content... " />
+            <marker date="1513881218218" expanded="true" signature="4642:4688" ph="INSERT INTO Banned... " />
+            <marker date="1513881218218" expanded="true" signature="4773:4817" ph="INSERT INTO Vote... " />
+            <marker date="1513881218218" expanded="true" signature="4877:4920" ph="INSERT INTO Vote... " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/CreateTables.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="371">
-          <caret line="100" column="36" lean-forward="true" selection-start-line="100" selection-start-column="36" selection-end-line="100" selection-end-column="36" />
+        <state relative-caret-position="552">
+          <caret line="305" column="0" lean-forward="true" selection-start-line="305" selection-start-column="0" selection-end-line="305" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
             <marker date="1513900974107" expanded="true" signature="1391:1424" ph="DROP TABLE `... " />
@@ -676,49 +719,6 @@
             <marker date="1513900974107" expanded="true" signature="14949:15399" ph="SELECT max(n... " />
             <marker date="1513900974107" expanded="true" signature="15435:15470" ph="CREATE VIEW bestofea_week_view... " />
             <marker date="1513900974107" expanded="true" signature="15435:15482" ph="CREATE VIEW bestfromeach_week... " />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/InsertEntries.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="237">
-          <caret line="23" column="32" lean-forward="false" selection-start-line="23" selection-start-column="32" selection-end-line="23" selection-end-column="32" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <marker date="1513881218218" expanded="true" signature="669:751" ph="INSERT INTO User... " />
-            <marker date="1513881218218" expanded="true" signature="811:897" ph="INSERT INTO User... " />
-            <marker date="1513881218218" expanded="true" signature="957:1042" ph="INSERT INTO User... " />
-            <marker date="1513881218218" expanded="true" signature="1102:1191" ph="INSERT INTO User... " />
-            <marker date="1513881218218" expanded="true" signature="1251:1338" ph="INSERT INTO User... " />
-            <marker date="1513881218218" expanded="true" signature="1424:1528" ph="INSERT INTO Admin... " />
-            <marker date="1513881218218" expanded="true" signature="1616:1654" ph="INSERT INTO Category... " />
-            <marker date="1513881218218" expanded="true" signature="1714:1753" ph="INSERT INTO Category... " />
-            <marker date="1513881218218" expanded="true" signature="1839:1876" ph="INSERT INTO Topic... " />
-            <marker date="1513881218218" expanded="true" signature="1936:1975" ph="INSERT INTO Topic... " />
-            <marker date="1513881218218" expanded="true" signature="2035:2071" ph="INSERT INTO Topic... " />
-            <marker date="1513881218218" expanded="true" signature="2131:2176" ph="INSERT INTO Topic... " />
-            <marker date="1513881218218" expanded="true" signature="2270:2325" ph="INSERT INTO Category_Topic... " />
-            <marker date="1513881218218" expanded="true" signature="2385:2449" ph="INSERT INTO Category_Topic... " />
-            <marker date="1513881218218" expanded="true" signature="2509:2564" ph="INSERT INTO Category_Topic... " />
-            <marker date="1513881218218" expanded="true" signature="2624:2681" ph="INSERT INTO Category_Topic... " />
-            <marker date="1513881218218" expanded="true" signature="2769:2880" ph="INSERT INTO Content... " />
-            <marker date="1513881218218" expanded="true" signature="2940:3050" ph="INSERT INTO Content... " />
-            <marker date="1513881218218" expanded="true" signature="3110:3210" ph="INSERT INTO Content... " />
-            <marker date="1513881218218" expanded="true" signature="3299:3403" ph="INSERT INTO Moderator... " />
-            <marker date="1513881218218" expanded="true" signature="3463:3567" ph="INSERT INTO Moderator... " />
-            <marker date="1513881218218" expanded="true" signature="3651:3717" ph="INSERT INTO Post... " />
-            <marker date="1513881218218" expanded="true" signature="3777:3848" ph="INSERT INTO Post... " />
-            <marker date="1513881218218" expanded="true" signature="3908:3981" ph="INSERT INTO Post... " />
-            <marker date="1513881218218" expanded="true" signature="4068:4120" ph="INSERT INTO Comment... " />
-            <marker date="1513881218218" expanded="true" signature="4068:4122" ph="INSERT INTO Comment... " />
-            <marker date="1513881218218" expanded="true" signature="4182:4237" ph="INSERT INTO Comment... " />
-            <marker date="1513881218218" expanded="true" signature="4236:4237" ph="INSERT INTO Comment... " />
-            <marker date="1513881218218" expanded="true" signature="4299:4397" ph="INSERT INTO Content... " />
-            <marker date="1513881218218" expanded="true" signature="4457:4557" ph="INSERT INTO Content... " />
-            <marker date="1513881218218" expanded="true" signature="4642:4688" ph="INSERT INTO Banned... " />
-            <marker date="1513881218218" expanded="true" signature="4773:4817" ph="INSERT INTO Vote... " />
-            <marker date="1513881218218" expanded="true" signature="4877:4920" ph="INSERT INTO Vote... " />
           </folding>
         </state>
       </provider>

@@ -20,14 +20,24 @@
 			"FROM Post AS P, Content AS C, Category_Topic AS CT  ".
 			"WHERE P.cont_id = C.cont_id AND C.cont_id = ".$cid." AND CT.topic_name = P.belongs; ";
 	
+	$category = $_GET['category'];
+
 	$result = mysqli_query($db, $sql);
 	$res_array = array();
 	if( $result->num_rows > 0)
 		while($row = mysqli_fetch_array($result))
 			array_push($res_array, $row);
 	echo "</br>";
-	// echo "<br>";
-	// echo "</br>";
+	
+	// check if moderator
+	$sql_set_moderator = "SELECT * FROM Moderator WHERE username = '".$username."' AND category_name = '".$category."' ;";
+	$result = mysqli_query($db, $sql_set_moderator);
+	if($result->num_rows == 1){
+		$moderatormus = 1;
+	}else{
+		$moderatormus = 0;
+	}
+
 	echo "<table class='table table-striped' style='width:95%'; align = 'center';  align='center' cellpadding='10'>";
 	echo "<thead class='thead-inverse'>";
 	echo 	"<th style='padding: 10px' > Votes</th>".
@@ -150,14 +160,14 @@
 	//ShowReply();
 	//////////////////////////////////////////////////////////
 	$sql =  "SELECT username " .
-			"FROM Moderator as M".
-			"WHERE M.category_name = ".$req['category_name']."; ";
+			"FROM Moderator ".
+			"WHERE category_name = '".$category."'; ";
+
 	
 	$result = mysqli_query($db, $sql);
-	$res_array = array();
-	if($result && $result->num_rows > 0)
-		while($row = mysqli_fetch_array($result))
-			array_push($res_array, $row);
+	$res_arr =  mysqli_fetch_array($result);
+	$modname = $res_arr['username'];
+
 	echo "<table align = right>";
 	echo "<tr>";
 	echo "<div class='name'>";
@@ -167,12 +177,10 @@
 		echo "<form action='' method='post'  value = 'Edit' style='padding-right: 10px'>".
 			"<button type='post' class='btn btn-primary left-block'  name='btn-edit-post'>edit</button>";
 		echo "</form>";
-		// echo "<form action='' method='post'  value = 'Edit' style='padding-right: 100px'>".
-		// "<p><input type='submit' value='edit' align = 'right' name = 'btn-edit-post'></p>".
-		// "</form>";
+
 		echo "</td>";
 	}
-	if($_SESSION['username'] == $req['username']  or in_array($_SESSION['username'], $res_array)){
+	if($_SESSION['username'] == $req['username']  or $_SESSION['username'] == $modname  ){
 	//////////////////////////////////////////////////////////////////
 	echo "<td>";
 	echo "<form action='' method='post' value = Delete style='padding-right: 50px'>".
@@ -193,13 +201,7 @@
 	//"<p><input type='submit' value='submit' align = 'right' name = 'btn-comment'></p>".
 	"<button type='post' class='btn btn-primary left-block'  name='btn-comment'>submit</button>".
 	"</form>";
-	//echo "</br>";
 
-
-	
-	
-	#echo "<h4 width = '10%' style ='padding-left: 90px'>Comments<h4>";
-	
 	echo "</br>";
 	echo "<table class='table table-striped' style='width:95%'; align = 'center';  align='center' cellpadding='10'>";
 	echo "<thead class='thead-inverse'>";
@@ -340,8 +342,8 @@
 		header("location: edit_post.php");
 	}
 	if( isset($_POST['btn-addcategory']) ) {
-		$category = $_POST['category'];
-		$sql = "INSERT INTO category VALUES ('".$category."');";
+		$category_ = $_POST['category'];
+		$sql = "INSERT INTO category VALUES ('".$category_."');";
 		$res = mysqli_query($db,$sql);
 		//header("location: homepage.php");
 	}
