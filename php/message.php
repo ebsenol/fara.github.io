@@ -18,7 +18,7 @@ if(isset($_POST['dst_name'], $_POST['message'])){
 		if($count ==1){//exists
 			//$_SESSION['username'] = $username; //start session
 			//header("location: homepage.php");
-			echo 'username exist';
+			
 		}else{//doesnt exists
 			$errors[] ='Username you entered does not exist';
 		}
@@ -32,18 +32,11 @@ if(isset($_POST['dst_name'], $_POST['message'])){
 		$message = mysqli_real_escape_string($db,$_POST['message']);
 		
 		
-		$sql = "INSERT INTO message VALUES(NULL, '".$rcv_name."', '".$dst_name."', now(), '".$message."');";
+		$sql = "INSERT INTO message VALUES(NULL, '".$dst_name."', '".$rcv_name."', now(), '".$message."');";
 		
-		echo $sql;
+		
 		$res = mysqli_query($db, $sql);
 		$id = mysqli_insert_id($db);
-		
-		
-		echo'inside empty errors';
-		echo $rcv_name;
-		echo $dst_name;
-		echo $message_id;
-		echo $message;
 
 	}
 }
