@@ -11,3 +11,4 @@ Team:<br />
 [Project proposal report](https://github.com/ebsenol/fara.github.io/blob/master/database-proposal.pdf)
 <br />
 [Project design report](https://github.com/ebsenol/fara.github.io/blob/master/project-design-report.pdf)
+[Final report](https://github.com/ebsenol/fara.github.io/blob/master/final-report.pdf)
