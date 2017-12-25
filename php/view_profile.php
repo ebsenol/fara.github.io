@@ -56,6 +56,19 @@
 			header("Location: homepage.php"); /* Redirect browser */
 		}
 	}
+
+	if( isset($_POST['follow']) ) {
+		$username = $_SESSION['username'];
+		$smth = $_GET['username'];
+		// header("location: view_category.php?category=".$category."");
+		$sql_user = "SELECT username FROM follows WHERE username = '".$username."' ;";
+	    $result = mysqli_query($db, $sql_user);
+		if( $result){
+			$sql = "DELETE FROM follows WHERE username = '".$username."' AND following = '".$smth."' ;";
+			$res = mysqli_query($db, $sql);
+		}
+	}
+	
 ?>
 
 
@@ -176,7 +189,7 @@
 	<div class="container ">
     	<div class = "row">
                 <div class="form-group">
-					<button type="submit" class="btn btn-primary "  name="btn-login" }>Follow</button>
+					<input onclick="change()" type="submit" class="btn btn-primary "  value="Follow" id="Follow" name="follow" }></button>
 				</div>
                 <div class="form-group">
 					<button type="submit" class="btn btn-primary" name="btn-login" onclick="window.location.href = 'message.php'" }>Send Message</button>
@@ -196,6 +209,29 @@
 			}
 		} // else dont show 
 	?>
+		<div class="container ">
+    <div class = "row">
+ 
+                <div class="form-group">
+                   
+
+				<script type="text/javascript">
+				function change()
+				{
+					var button = document.getElementById("Follow");
+					if (button.value=="Follow"){
+						button.value = "Following";
+						button.style.color = "green";
+						
+					}
+					
+				}
+				</script>
+					
+				</div>			
+            </form>
+        </div>
+</div>
 
 	</body>
 </html>
