@@ -61,7 +61,7 @@
              <span class="icon-bar"></span>
              <span class="icon-bar"></span>
 			</button>
-          <a class="navbar-brand" href="index.php">Fara</a>
+          <a class="navbar-brand" href="homepage.php">Fara</a>
 		 </div>
 
 		<div id="navbar" class="navbar-collapse collapse">
@@ -145,28 +145,28 @@
 						$to = "figalitaho@gmail.com";
 						$subject = "Hi!";
 						$admin_token =  generateRandomString(8);
-						$body = "Your generated code is " .$admin_token."";
-						echo $body;
+						$body = "Congrats on unlocking your admin token! \nYour generated code is " .$admin_token."";
+						// echo $body;
 						// uncomment to actually send body
 						
-						// $headers = "From: figalitaho@gmail.com\r\n". "X-Mailer: php" . phpversion();
-						// if (mail($to, $subject, $body, $headers)) {
-						// 	echo("<p>Email successfully sent!</p>");
-						// } else {
-						// 	echo("<p>Email delivery failed…</p>");
-						// }
+						$headers = "From: figalitaho@gmail.com\r\n". "X-Mailer: php" . phpversion();
+						if (mail($to, $subject, $body, $headers)) {
+							echo("<p>Email successfully sent!</p>");
+						} else {
+							echo("<p>Email delivery failed…</p>");
+						}
 
 						// STUB:
-						/*	$to = "figalitaho@gmail.com";
-						    $subject = "Hi!";
-						    $body = "Hi,\n\nHow are you?";
-						    $headers = "From: figalitaho@gmail.com\r\n". "X-Mailer: php" . phpversion();
-						    if (mail($to, $subject, $body, $headers)) {
-						      echo("<p>Email successfully sent!</p>");
-						    } else {
-						      echo("<p>Email delivery failed…</p>");
-						    }
-						*/
+						// $to = "figalitaho@gmail.com";
+					 //    $subject = "Hi!";
+					 //    $body = "Hi,\n\nHow are you?";
+					 //    $headers = "From: figalitaho@gmail.com\r\n". "X-Mailer: php" . phpversion();
+					 //    if (mail($to, $subject, $body, $headers)) {
+					 //      echo("<p>Email successfully sent!</p>");
+					 //    } else {
+					 //      echo("<p>Email delivery failed…</p>");
+					 //    }
+						
 						echo "<form action='confirm_add_adminship.php?username=".$uname."&admin_token=".$admin_token."' method='POST' type='hidden' onsubmit=\"return isTokenValid('$admin_token')\">";
 
 					}

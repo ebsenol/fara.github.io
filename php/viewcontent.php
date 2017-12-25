@@ -142,24 +142,26 @@
 		echo "<tr>";
 		echo "<tr>";
 
+				
 		// get minutes
 		$postdate = new DateTime($req['timestamp']);
 		$now = new DateTime();
 		// timezone problem
 		$now = $now->modify('+2 hour');
-		$ago = date_diff($now, $postdate);
+		$agoDate = date_diff($now, $postdate);
+		$ago = "";
 
-		if ($ago->d > 0){
-			$ago = $ago->d.' days';
+		if ($agoDate->d > 0){
+			$ago = "".$agoDate->d." days";
 		}
-		else if ($ago->h > 0){
-			$ago = $ago->h.' hours';
+		else if ($agoDate->h > 0){
+			$ago = "".$agoDate->h." hours";
 		}
-		else if ($ago->i > 0){
-			$ago = $ago->i.' minutes';
+		else if ($agoDate->i > 0){
+			$ago = "".$agoDate->i." minutes";
 		}
-		else if ($ago->s > 0){
-			$ago = $ago->s.' seconds';
+		else if ($agoDate->s > 0){
+			$ago = "".$agoDate->s." seconds";
 		}
 
 		echo "<td  width='6%' align = 'center' style='padding: 10px'></td>";
@@ -311,9 +313,30 @@
 		}
   		echo "</div>";
 		//activate vote button
+					
+		// get minutes
+		$postdate = new DateTime($req['timestamp']);
+		$now = new DateTime();
+		// timezone problem
+		$now = $now->modify('+2 hour');
+		$agoDate = date_diff($now, $postdate);
+		$ago = "";
+
+		if ($agoDate->d > 0){
+			$ago = "".$agoDate->d." days";
+		}
+		else if ($agoDate->h > 0){
+			$ago = "".$agoDate->h." hours";
+		}
+		else if ($agoDate->i > 0){
+			$ago = "".$agoDate->i." minutes";
+		}
+		else if ($agoDate->s > 0){
+			$ago = "".$agoDate->s." seconds";
+		}
 		echo "<script type='text/javascript'> $('#vote".$voteIdCount."').upvote(); </script>"; 	
 		echo "<td  width='60%'  style='padding: 10px'>".$req['content']. "</td>";	
-		echo "<td  width='6%' align = 'center' style='padding: 10px'>". ($req['timestamp']) . "</td>";
+		echo "<td  width='6%' align = 'center' style='padding: 10px'>". ($ago ) . "</td>";
 		echo "<td  width='8%' align = 'center' style='padding: 10px'></td>";
 		echo "<td   width='8%' align = 'center' style='padding: 10px'></td>";
 		echo "<td   width='8%' align = 'center' style='padding: 10px'>". ($req['username']) . "</td>";
@@ -515,24 +538,25 @@
 			//activate vote button
 			echo "<script type='text/javascript'> $('#vote".$voteIdCount."').upvote(); </script>"; 	
 
+					
 			// get minutes
 			$postdate = new DateTime($req['timestamp']);
 			$now = new DateTime();
 			// timezone problem
 			$now = $now->modify('+2 hour');
-			$ago = date_diff($now, $postdate);
+			$agoDate = date_diff($now, $postdate);
 
-			if ($ago->d > 0){
-				$ago = $ago->d.' days';
+			if ($agoDate->d > 0){
+				$ago = "".$agoDate->d." days";
 			}
-			else if ($ago->h > 0){
-				$ago = $ago->h.' hours';
+			else if ($agoDate->h > 0){
+				$ago = "".$agoDate->h." hours";
 			}
-			else if ($ago->i > 0){
-				$ago = $ago->i.' minutes';
+			else if ($agoDate->i > 0){
+				$ago = "".$agoDate->i." minutes";
 			}
-			else if ($ago->s > 0){
-				$ago = $ago->s.' seconds';
+			else if ($agoDate->s > 0){
+				$ago = "".$agoDate->s." seconds";
 			}
 			echo "<td  width='60%'  style='margin-left:= ".$indent."px;'>".$req['content']. "</td>";	
 			echo "<td  width='6%' align = 'center' style='padding: 10px'>". ($ago) . "</td>";
@@ -618,7 +642,7 @@
              <span class="icon-bar"></span>
              <span class="icon-bar"></span>
 			</button>
-         <a class="navbar-brand" href="index.php">Fara</a>
+         <a class="navbar-brand" href="homepage.php">Fara</a>
 		</div>
 
 		<div id="navbar" class="navbar-collapse collapse">

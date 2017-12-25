@@ -3,6 +3,16 @@
 	session_start();
 	ob_start();
 	$click = false;
+
+	function generateRandomString($length = 10) {
+	    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+	    $charactersLength = strlen($characters);
+	    $randomString = '';
+	    for ($i = 0; $i < $length; $i++) {
+	        $randomString .= $characters[rand(0, $charactersLength - 1)];
+    	}
+    	return $randomString;
+	}
 	//set to 1 if user logged in, 0 if guest mode
 	$usermode = 1;
 	if ( !isset($_SESSION['username']))
@@ -18,8 +28,14 @@
 	// $user $username is stalking 
 	$user = $_GET['username'];
 	$_SESSION['user'] = $user;
-
-
+	$sql = "SELECT password FROM User WHERE username = '".$user."';";
+	$result = mysqli_query($db, $sql);
+	$res_arr =  mysqli_fetch_array($result);
+	$pass = $res_arr['password'];
+	$user_caput = false;
+	if(strlen($pass) == 15 && substr($pass, 10, 5) == "$#@#!"){
+		$user_caput = true;
+	}
 	// is user admin? 
 	$sql_set_admin = "SELECT * FROM Admin WHERE username = '".$username."' ;";
 	$result = mysqli_query($db, $sql_set_admin);
@@ -34,7 +50,8 @@
 		$deleteuser = $_POST['delete_username'];
 		if($deleteuser != $username){
 			//  cheap trick: leave garbage around and change the password (too many fk deps)
-			$sql = "UPDATE User SET password ='dummypw' WHERE username = '".$deleteuser."' ;";
+			$string_random = "".generateRandomString()."$#@#!";
+			$sql = "UPDATE User SET password ='".$string_random."' WHERE username = '".$deleteuser."' ;";
 			$res = mysqli_query($db, $sql);
 			header("Location: homepage.php"); /* Redirect browser */
 		}
@@ -76,7 +93,7 @@
              <span class="icon-bar"></span>
              <span class="icon-bar"></span>
 			</button>
-          <a class="navbar-brand" href="index.php">Fara</a>
+          <a class="navbar-brand" href="homepage.php">Fara</a>
 		 </div>
 
 		<div id="navbar" class="navbar-collapse collapse">
@@ -134,7 +151,14 @@
 	</nav>
 	
 	<div class="container">
-	  <h3>Profile</h3>
+	  <?php 
+	  if($user_caput)
+	  {
+	  	echo "<h3>".$user." does not exist because it was removed by admin.</h3>";
+	  	return;
+	  }
+	  echo "<h4>profile</h4>"; 
+	  echo "<h3>".$user."</h3>";?>
 	  <ul class="list-inline">
 
 	    <!-- <a href='viewcontent.php?id=". $req['cont_id'] ."'>" .$req['post_title']. " </a> -->

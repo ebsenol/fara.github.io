@@ -191,10 +191,30 @@ if( $result->num_rows > 0){
 
         //activate vote button
         //echo "<script type='text/javascript'> $('#vote".$voteIdCount."').upvote(); </script>"; 	
+            
+        // get minutes
+        $postdate = new DateTime($req['timestamp']);
+        $now = new DateTime();
+        // timezone problem
+        $now = $now->modify('+2 hour');
+        $agoDate = date_diff($now, $postdate);
+        $ago = "";
 
+        if ($agoDate->d > 0){
+            $ago = "".$agoDate->d." days";
+        }
+        else if ($agoDate->h > 0){
+            $ago = "".$agoDate->h." hours";
+        }
+        else if ($agoDate->i > 0){
+            $ago = "".$agoDate->i." minutes";
+        }
+        else if ($agoDate->s > 0){
+            $ago = "".$agoDate->s." seconds";
+        }
         echo "<td  width='60%'  style='padding: 10px'>".
         "<a href='viewcontent.php?id=". $currentContentID ."'>" .$req['post_title']. " </a></td>";	
-        echo "<td  width='6%' align = 'center' style='padding: 10px'>". ($req['timestamp']) . "</td>";
+        echo "<td  width='6%' align = 'center' style='padding: 10px'>".$ago."</td>";
         echo "<td  width='8%' align = 'center' style='padding: 10px'>".
         "<a href='view_category.php?category=". $req['category_name'] ."'>". ($req['category_name']) . "</td>";
         echo "<td   width='8%' align = 'center' style='padding: 10px'>".
@@ -276,7 +296,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
              <span class="icon-bar"></span>
              <span class="icon-bar"></span>
 			</button>
-         <a class="navbar-brand" href="index.php">Fara</a>
+         <a class="navbar-brand" href="homepage.php">Fara</a>
 		</div>
 
 		<div id="navbar" class="navbar-collapse collapse">

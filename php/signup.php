@@ -58,7 +58,7 @@ if( isset($_POST['btn-signup']) ) {
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="index.php">Fara</a>
+				<a class="navbar-brand" href="homepage.php">Fara</a>
 			</div>
  			<div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">

@@ -53,7 +53,9 @@
 	$limitbegin = ($page - 1) * $pageview;
 
 	$sql =  "SELECT * FROM homepage_view WHERE category_name = '".$category."' ";
-	if ($view == "week")
+	if ($view == "recent")
+		$sql =  "SELECT * FROM homepage_view ORDER BY timestamp DESC ";
+	else if ($view == "week")
 		$sql =  "SELECT * FROM homepage_view WHERE timestamp > now() - INTERVAL 1 WEEK AND category_name = '".$category."'";
 	else if ($view == "today")
 		$sql =  "SELECT * FROM homepage_view WHERE timestamp > now() - INTERVAL 1 DAY AND category_name = '".$category."'";
@@ -86,9 +88,10 @@
 		 "</thead>";
 	echo "<tbody>";
 	$voteIdCount = 0;
-	echo "<a style='margin-left: 200px;'href='view_category.php?category=".$category."&view=today&pageview=".$pageview."&page=".$page."'>Top posts of today</a>"; 
-	echo "<a style='margin-left: 200px;'href='view_category.php?category=".$category."&view=week&pageview=".$pageview."&page=".$page."'>Top posts of all week</a>"; 
-	echo "<a style='margin-left: 200px;'href='view_category.php?category=".$category."&view=all&pageview=".$pageview."&page=".$page."'>Top posts of all</a>"; 
+	echo "<a style='margin-left: 140px;'href='view_category.php?category=".$category."&view=recent&pageview=".$pageview."&page=".$page."'>Most recent posts</a>"; 
+	echo "<a style='margin-left: 140px;'href='view_category.php?category=".$category."&view=today&pageview=".$pageview."&page=".$page."'>Top posts of today</a>"; 
+	echo "<a style='margin-left: 140px;'href='view_category.php?category=".$category."&view=week&pageview=".$pageview."&page=".$page."'>Top posts of all week</a>"; 
+	echo "<a style='margin-left: 140px;'href='view_category.php?category=".$category."&view=all&pageview=".$pageview."&page=".$page."'>Top posts of all</a>"; 
 
 
 	$from = "view_category.php?category=".$category."";
@@ -169,26 +172,27 @@
 			"<a href='viewcontent.php?id=". $currentContentID ."&category=".$category."'>" .$req['post_title']. " </a>";	
 		}
 		echo "</td>";
+						
 		// get minutes
 		$postdate = new DateTime($req['timestamp']);
 		$now = new DateTime();
 		// timezone problem
 		$now = $now->modify('+2 hour');
-		$ago = date_diff($now, $postdate);
+		$agoDate = date_diff($now, $postdate);
+		$ago = "";
 
-		if ($ago->d > 0){
-			$ago = $ago->d.' days';
+		if ($agoDate->d > 0){
+			$ago = "".$agoDate->d." days";
 		}
-		else if ($ago->h > 0){
-			$ago = $ago->h.' hours';
+		else if ($agoDate->h > 0){
+			$ago = "".$agoDate->h." hours";
 		}
-		else if ($ago->i > 0){
-			$ago = $ago->i.' minutes';
+		else if ($agoDate->i > 0){
+			$ago = "".$agoDate->i." minutes";
 		}
-		else if ($ago->s > 0){
-			$ago = $ago->s.' seconds';
+		else if ($agoDate->s > 0){
+			$ago = "".$agoDate->s." seconds";
 		}
-
 		echo "<td  width='15%' align = 'center' style='padding: 10px'>". $ago . "</td>";
 		echo "<td  width='8%' align = 'center' style='padding: 10px'>".
 		"<a href='view_category.php?category=". $req['category_name'] ."'>". ($req['category_name']) . "</td>";
@@ -278,6 +282,17 @@
 	}
 	echo "<br><br/>\n";echo "<br><br/>\n";echo "<br><br/>\n";
 
+
+	if( isset($_POST['btn-addtopic']) ) {
+		$topic = $_POST['topic'];
+		$category = $_SESSION['category'];
+		$sql = "INSERT INTO Topic VALUES ('".$topic."');";
+		$res = mysqli_query($db,$sql);
+		$sql = "INSERT INTO Category_Topic VALUES ('".$category."','".$topic."');";
+		$res = mysqli_query($db,$sql);
+		
+		header("location: view_category.php?category=".$category."");
+	}
 ?>
 
 <!DOCTYPE html>
@@ -323,7 +338,7 @@
              <span class="icon-bar"></span>
              <span class="icon-bar"></span>
 			</button>
-         <a class="navbar-brand" href="index.php">Fara</a>
+         <a class="navbar-brand" href="homepage.php">Fara</a>
 		</div>
 
 		<div id="navbar"  class="navbar-collapse collapse">
@@ -396,7 +411,8 @@
             <div class="modal-body">
                     <form  class="form-group" method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" autocomplete="off">
 
-                       <label class="text" for="topic"></label><input type="text" class="form-control input-sm" placeholder="Topic" id="topic" name="topic">
+                       <label class="text" for="topic"></label>
+                       <input type="text" class="form-control input-sm" placeholder="Topic" id="topic" name="topic">
                        <button type="submit" class="btn btn-info btn-xs" name="btn-addtopic">Add</button>
                        <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">Cancel</button> 
                        </div>

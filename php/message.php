@@ -18,7 +18,7 @@ if(isset($_POST['dst_name'], $_POST['message'])){
 		if($count ==1){//exists
 			//$_SESSION['username'] = $username; //start session
 			//header("location: homepage.php");
-			
+			echo 'username exist';
 		}else{//doesnt exists
 			$errors[] ='Username you entered does not exist';
 		}
@@ -32,11 +32,18 @@ if(isset($_POST['dst_name'], $_POST['message'])){
 		$message = mysqli_real_escape_string($db,$_POST['message']);
 		
 		
-		$sql = "INSERT INTO message VALUES(NULL, '".$dst_name."', '".$rcv_name."', now(), '".$message."');";
+		$sql = "INSERT INTO message VALUES(NULL, '".$rcv_name."', '".$dst_name."', now(), '".$message."');";
 		
-		
+		echo $sql;
 		$res = mysqli_query($db, $sql);
 		$id = mysqli_insert_id($db);
+		
+		
+		echo'inside empty errors';
+		echo $rcv_name;
+		echo $dst_name;
+		echo $message_id;
+		echo $message;
 
 	}
 }
@@ -88,7 +95,7 @@ if(isset($errors)){
              <span class="icon-bar"></span>
              <span class="icon-bar"></span>
 			</button>
-          <a class="navbar-brand" href="index.php">Fara</a>
+          <a class="navbar-brand" href="homepage.php">Fara</a>
 		 </div>
 
 		<div id="navbar" class="navbar-collapse collapse">
@@ -121,30 +128,22 @@ if(isset($errors)){
 			<div class="container ">
     <div class = "row">
 	
-	
-<form action ="" method="post">
-	<div>
-		<label for="dst_name,">To</label>
-		<br>
-		<input type="text" name="dst_name" id= "dst_name"/>
-	</div>
- <!--  	<div>
-		<label for="subject">Subject</label>
-		<br>
-		<input type="text" name="subject" id= "subject"/>
-	
-	</div>	-->
-	<div>
-		<br>
-		<textarea name="message" id = "message_id" rows="15" cols= "80"></textarea>
-	</div>	
-	<div>
-		<input type="submit" value="Send"/>
-	</div>	
-	
-</form>
+ <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" autocomplete="off" onsubmit="return isValid()">
 
- 
+	    <div class="form-group" >
+	      <label for="title">To:</label>
+	      <input type="text" name="title" id ="title" class="form-control">
+	    </div>
+	    <div class="form-group">
+	      <label for="text">Message:</label>
+	       <textarea class="form-control" name="text" rows="5" id="text"></textarea>
+	    </div>
+
+		<div class="form-group">
+			<button type="post" class="btn btn-primary center-block"  name="btn-post">Send</button>
+		</div>		
+
+	  </form>
 	
 		
 	</body>

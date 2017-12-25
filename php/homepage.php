@@ -32,7 +32,9 @@
 	$limitbegin = ($page - 1) * $pageview;
 	
 	$sql =  "SELECT * FROM homepage_view";
-	if ($view == "week")
+	if ($view == "recent")
+		$sql =  "SELECT * FROM homepage_view ORDER BY timestamp DESC ";
+	else if ($view == "week")
 		$sql =  "SELECT * FROM homepage_view WHERE timestamp > now() - INTERVAL 1 WEEK ";
 	else if ($view == "today")
 		$sql =  "SELECT * FROM homepage_view WHERE timestamp > now() - INTERVAL 1 DAY ";
@@ -69,10 +71,12 @@
 	echo "<tbody>";
 	$voteIdCount = 0;
 	$from = "homepage.php";
-	echo "<a style='margin-left: 200px;'href='homepage.php?view=today&pageview=".$pageview."&page=".$page."'>Top posts of today</a>"; 
-	echo "<a style='margin-left: 200px;'href='homepage.php?view=eaweek&pageview=".$pageview."&page=".$page."'>Top posts of each category last week</a>"; 
-	echo "<a style='margin-left: 200px;'href='homepage.php?view=week&pageview=".$pageview."&page=".$page."'>Top posts of all week</a>"; 
-	echo "<a style='margin-left: 200px;'href='homepage.php?view=all&pageview=".$pageview."&page=".$page."'>Top posts of all</a>"; 
+	echo "<a style='margin-left: 140px;'href='homepage.php?view=recent&pageview=".$pageview."&page=".$page."'>Most recent posts</a>"; 
+	echo "<a style='margin-left: 140px;'href='homepage.php?view=today&pageview=".$pageview."&page=".$page."'>Top posts of today</a>"; 
+	echo "<a style='margin-left: 140px;'href='homepage.php?view=eaweek&pageview=".$pageview."&page=".$page."'>Top posts of each category last week</a>"; 
+	echo "<a style='margin-left: 140px;'href='homepage.php?view=week&pageview=".$pageview."&page=".$page."'>Top posts of all week</a>"; 
+	echo "<a style='margin-left: 140px;'href='homepage.php?view=all&pageview=".$pageview."&page=".$page."'>Top posts of all</a>"; 
+
 
 
 	$_SESSION['username'] = $username; //start session
@@ -150,26 +154,27 @@
 		}
 		echo "</td>";
 
+			
 		// get minutes
 		$postdate = new DateTime($req['timestamp']);
 		$now = new DateTime();
 		// timezone problem
 		$now = $now->modify('+2 hour');
-		$ago = date_diff($now, $postdate);
+		$agoDate = date_diff($now, $postdate);
+		$ago = "";
 
-		if ($ago->d > 0){
-			$ago = $ago->d.' days';
+		if ($agoDate->d > 0){
+			$ago = "".$agoDate->d." days";
 		}
-		else if ($ago->h > 0){
-			$ago = $ago->h.' hours';
+		else if ($agoDate->h > 0){
+			$ago = "".$agoDate->h." hours";
 		}
-		else if ($ago->i > 0){
-			$ago = $ago->i.' minutes';
+		else if ($agoDate->i > 0){
+			$ago = "".$agoDate->i." minutes";
 		}
-		else if ($ago->s > 0){
-			$ago = $ago->s.' seconds';
+		else if ($agoDate->s > 0){
+			$ago = "".$agoDate->s." seconds";
 		}
-
 		echo "<td  width='15%' align = 'center' style='padding: 10px'>". $ago . "</td>";
 		echo "<td  width='8%' align = 'center' style='padding: 10px'>".
 		"<a href='view_category.php?category=". $req['category_name'] ."'>". ($req['category_name']) . "</td>";
@@ -181,11 +186,12 @@
 	}
 	echo"</tbody>";
 	echo '</table></p></br></br>';
+
 	if( isset($_POST['btn-addcategory']) ) {
 		$category = $_POST['category'];
 		$sql = "INSERT INTO category VALUES ('".$category."');";
 		$res = mysqli_query($db,$sql);
-		//header("location: homepage.php");
+		header("location: homepage.php");
 	}
 	echo "<a style='margin-left: 100px;'href='homepage.php?view=".$view."&page=1&pageview=10'>Show 10 per page</a>"; 
 	echo "<a style='margin-left: 100px;'href='homepage.php?view=".$view."&page=1&pageview=25'>Show 25 per page</a>"; 
@@ -248,7 +254,7 @@
              <span class="icon-bar"></span>
              <span class="icon-bar"></span>
 			</button>
-         <a class="navbar-brand" href="index.php">Fara</a>
+         <a class="navbar-brand" href="homepage.php">Fara</a>
 		</div>
 
 		<div id="navbar" class="navbar-collapse collapse">
