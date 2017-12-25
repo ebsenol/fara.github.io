@@ -153,24 +153,27 @@
 			"<a href='viewcontent.php?id=". $currentContentID ."&category=".$category."'>" .$req['post_title']. " </a>";	
 		}
 		echo "</td>";
+		
 		// get minutes
 		$postdate = new DateTime($req['timestamp']);
 		$now = new DateTime();
-		$ago =  $postdate->diff($now)->format("%i");
+		// timezone problem
+		$now = $now->modify('+2 hour');
+		$ago = date_diff($now, $postdate);
 
-		if ($ago < 60){
-			$time = "".$ago." minutes ago";
+		if ($ago->d > 0){
+			$ago = $ago->d.' days';
 		}
-		else if ($ago > 60 && $ago < 1440){
-			$ago =  $postdate->diff($now)->format("%h");
-			$time = "".$ago." hours ago";
+		else if ($ago->h > 0){
+			$ago = $ago->h.' hours';
 		}
-		else if ($ago > 1440){
-			$ago =  $postdate->diff($now)->format("%d");
-			$time = "".$ago." days ago";
+		else if ($ago->i > 0){
+			$ago = $ago->i.' minutes';
 		}
-
-		echo "<td  width='15%' align = 'center' style='padding: 10px'>". $time . "</td>";
+		else if ($ago->s > 0){
+			$ago = $ago->s.' seconds';
+		}
+		echo "<td  width='15%' align = 'center' style='padding: 10px'>". $ago . "</td>";
 		echo "<td  width='8%' align = 'center' style='padding: 10px'>".
 		"<a href='view_category.php?category=". $req['category_name'] ."'>". ($req['category_name']) . "</td>";
 		echo "<td   width='8%' align = 'center' style='padding: 10px'>".

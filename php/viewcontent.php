@@ -117,9 +117,8 @@
 		echo "<td   width='8%' align = 'center' style='padding: 10px'>".
 		"<a href='view_topic.php?topic=". $req['belongs'] ."'></td>";
 		echo "<td   width='8%' align = 'center' style='padding: 10px'></td>";
-		echo "<\tr>";
 		echo "<tr>";
-		echo "<\tr>";	
+		
 		echo "<tr>";
 		echo "<td   width='8%' align = 'center' style='padding: 10px'>	</td>";
 		echo "<td   width='10%' align = 'center' style='padding: 20px'>". ($req['content']) . "</td>";
@@ -132,20 +131,40 @@
 		echo "</tr>";
 		
 		"<thead class='thead-inverse'>";
-	echo 	"<th style='padding: 10px' ></th>".
-			"<th style='padding: 10px' ></th>".
-			"<th style='padding: 10px'> posted </th>".
-			"<th style='padding: 10px'> category</th>".
-			"<th style='padding: 10px'> topic</th>".
-			"<th style='padding: 10px'> posted by</th>".
-		 "</tr>".
-		 "</thead>";
-		 echo "<tr>";
-		echo "<\tr>";
+		echo 	"<th style='padding: 10px' ></th>".
+				"<th style='padding: 10px' ></th>".
+				"<th style='padding: 10px'> posted </th>".
+				"<th style='padding: 10px'> category</th>".
+				"<th style='padding: 10px'> topic</th>".
+				"<th style='padding: 10px'> posted by</th>".
+			 "</tr>".
+			 "</thead>";
 		echo "<tr>";
+		echo "<tr>";
+
+		// get minutes
+		$postdate = new DateTime($req['timestamp']);
+		$now = new DateTime();
+		// timezone problem
+		$now = $now->modify('+2 hour');
+		$ago = date_diff($now, $postdate);
+
+		if ($ago->d > 0){
+			$ago = $ago->d.' days';
+		}
+		else if ($ago->h > 0){
+			$ago = $ago->h.' hours';
+		}
+		else if ($ago->i > 0){
+			$ago = $ago->i.' minutes';
+		}
+		else if ($ago->s > 0){
+			$ago = $ago->s.' seconds';
+		}
+
 		echo "<td  width='6%' align = 'center' style='padding: 10px'></td>";
 		echo "<td  width='60%' align = 'center' style='padding: 10px'></td>";
-		echo "<td  width='6%' align = 'center' style='padding: 10px'>". ($req['timestamp']) . "</td>";
+		echo "<td  width='6%' align = 'center' style='padding: 10px'>". ($ago) . "</td>";
 		echo "<td  width='8%' align = 'center' style='padding: 10px'>".
 		"<a href='view_category.php?category=". $req['category_name'] ."'>". ($req['category_name']) . "</td>";
 		echo "<td   width='8%' align = 'center' style='padding: 10px'>".
@@ -153,7 +172,6 @@
 		echo "<td   width='8%' align = 'center' style='padding: 10px'>". ($req['username']) . "</td>";
 		echo "</tr>";
 		echo "<tr>";
-		echo "<\tr>";
 		
 	echo"</tbody>";
 	echo '</table></p>';
@@ -496,8 +514,28 @@
 			echo "</div>";
 			//activate vote button
 			echo "<script type='text/javascript'> $('#vote".$voteIdCount."').upvote(); </script>"; 	
+
+			// get minutes
+			$postdate = new DateTime($req['timestamp']);
+			$now = new DateTime();
+			// timezone problem
+			$now = $now->modify('+2 hour');
+			$ago = date_diff($now, $postdate);
+
+			if ($ago->d > 0){
+				$ago = $ago->d.' days';
+			}
+			else if ($ago->h > 0){
+				$ago = $ago->h.' hours';
+			}
+			else if ($ago->i > 0){
+				$ago = $ago->i.' minutes';
+			}
+			else if ($ago->s > 0){
+				$ago = $ago->s.' seconds';
+			}
 			echo "<td  width='60%'  style='margin-left:= ".$indent."px;'>".$req['content']. "</td>";	
-			echo "<td  width='6%' align = 'center' style='padding: 10px'>". ($req['timestamp']) . "</td>";
+			echo "<td  width='6%' align = 'center' style='padding: 10px'>". ($ago) . "</td>";
 			echo "<td  width='8%' align = 'center' style='padding: 10px'></td>";
 			echo "<td   width='8%' align = 'center' style='padding: 10px'></td>";
 			echo "<td   width='8%' align = 'center' style='padding: 10px'>". ($req['username']) . "</td>";
