@@ -3,54 +3,26 @@ include_once 'dbconnect.php';
 session_start();
 ob_start();
 
-
-$message_id = 0;
-
-if(isset($_POST['dst_name'], $_POST['message'])){
-	$errors = array();
-		
-	if(empty($_POST['dst_name'])){
-		$errors[] ='Please enter the username of the person to whom you want to sent the message!';
-	}else{
-		$dst_name = trim($_POST['dst_name']);
-		$res=mysqli_query($db, "SELECT * FROM User WHERE username = '$dst_name'"); 
-		$count = mysqli_num_rows($res);
-		if($count ==1){//exists
-			//$_SESSION['username'] = $username; //start session
-			//header("location: homepage.php");
-			
-		}else{//doesnt exists
-			$errors[] ='Username you entered does not exist';
-		}
-	}
-	if(empty($_POST['message'])){
-		$errors[] ='Message body cannot be empty!';
-	}
-	if(empty($errors)){
-		$rcv_name = $_SESSION['username'];	
-		$dst_name = mysqli_real_escape_string($db,$_POST['dst_name']);
-		$message = mysqli_real_escape_string($db,$_POST['message']);
-		
-		
-		$sql = "INSERT INTO message VALUES(NULL, '".$dst_name."', '".$rcv_name."', now(), '".$message."');";
-		
-		
-		$res = mysqli_query($db, $sql);
-		$id = mysqli_insert_id($db);
-
-	}
-}
-if(isset($errors)){
-	if(empty ($errors)){
-		echo '<div class="msg success">Your message has been send!';
-	}else{
-		foreach($errors as $error){
-			echo '<div class="msg error">', $error, '</div>';
-		}
-	}
-
-}
+$dst_name = $_SESSION['username'];	
+	echo "<h4 align='left'><b> Inbox </b></h4>";
+	$res=mysqli_query($db,"SELECT * FROM message WHERE dst_name ='".$dst_name."'");
 	
+	 $res_array = array();
+	
+	//$count = mysqli_num_rows($res);
+	if($res->num_rows >0)
+		while($row = mysqli_fetch_array($res))
+			array_push($res_array, $row);
+		
+		foreach($res_array as $message){
+			$body = $message['message'];
+			$from = $message['rcv_name'];
+			echo "From  $from :  $body <a href='message.php?username=".$dst_name."'>Reply</a>  <br> ";
+			
+		}
+
+
+
 ?>
 
 
@@ -116,37 +88,25 @@ if(isset($errors)){
 		</div>
 		
 	</nav>
-	
 
 			<div class="container ">
     <div class = "row">
 	
 	
-<form action ="" method="post">
-	<div>
-		<label for="dst_name,">To</label>
-		<br>
-		<input type="text" name="dst_name" id= "dst_name"/>
-	</div>
- <!--  	<div>
-		<label for="subject">Subject</label>
-		<br>
-		<input type="text" name="subject" id= "subject"/>
-	
-	</div>	-->
-	<div>
-		<br>
-		<textarea name="message" id = "message_id" rows="15" cols= "80"></textarea>
-	</div>	
-	<div>
-		<input type="submit" value="Send"/>
-	</div>	
-	
-</form>
 
- 
+
+       </div>
+    </div>
+<!--  
+<div class="inboxes">
+	<?php
+		foreach($inboxes as $inbox){
+			?>
+			<?php
+		}
+	?>
 	
-		
+</div>-->	
 	</body>
 </html>
 <?php ob_end_flush(); ?>	
